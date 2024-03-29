@@ -31,7 +31,7 @@ const MyApp = ({ Component, pageProps }: AppPropsWithLayout) => {
         <link rel="icon" href="/favicon.ico" />
         <meta name="viewport" content="initial-scale=1.0, width=device-width" />
       </Head>
-      <div className={`font-sans ${inter.variable}`}>
+      <div className={`flex min-h-screen flex-col font-sans ${inter.variable}`}>
         <MainLayout>{getLayout(<Component {...pageProps} />)}</MainLayout>
       </div>
     </>
