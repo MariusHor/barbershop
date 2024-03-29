@@ -8,6 +8,7 @@
     "dev": "next dev",
     "check-types": "tsc --noemit",
     "lint": "next lint && npm run check-types",
+    "sanity-generate": "npx sanity schema extract && npx sanity typegen generate",
     "start": "next start"
   },
   "dependencies": {

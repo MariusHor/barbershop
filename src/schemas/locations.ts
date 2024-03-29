@@ -57,6 +57,18 @@ const locatii = {
         },
       ],
     },
+    {
+      name: "timetables",
+      type: "array",
+      title: "Orar",
+      of: [
+        {
+          name: "timetable",
+          type: "string",
+          title: "Orar",
+        },
+      ],
+    },
   ],
 };
 
