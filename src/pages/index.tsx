@@ -2,6 +2,19 @@ import Head from "next/head";
 
 import type { NextPageWithLayout } from "./_app";
 import { getPageTitle } from "@/utils/helpers";
+import { getSSGHelper } from "@/utils/getSSGHelper";
+
+export const getServerSideProps = async () => {
+  const ssg = getSSGHelper();
+
+  await ssg.locations.getAll.prefetch();
+
+  return {
+    props: {
+      trpcState: ssg.dehydrate(),
+    },
+  };
+};
 
 const Page: NextPageWithLayout = () => {
   return (

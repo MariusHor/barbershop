@@ -4,6 +4,7 @@ import Link from "next/link";
 
 import { BaseLogo, SocialLinks, ScheduleButton } from "@/components";
 import { capitalize, cn } from "@/utils/helpers";
+import { api } from "@/utils/api";
 
 type Props = {
   children: React.ReactNode;
@@ -55,25 +56,9 @@ const Header = (): React.JSX.Element => {
 };
 
 const Footer = (): React.JSX.Element => {
-  const EMAIL = "sergiu.barbershop@gmail.com";
-  const PHONE = "+40761874555";
-  const CONTACTS_LIST = [
-    {
-      href: `tel:${PHONE}`,
-      title: `${PHONE.slice(0, 3)} ${PHONE.slice(3)}`,
-    },
-    {
-      href: `mailto:${EMAIL}`,
-      title: EMAIL,
-    },
-  ];
-  const ADDRESS = {
-    street: "Strada Aurel Vlaicu 54",
-    city: "Iași",
-    ZipCode: "707252",
-  };
+  const { data: locationsData } = api.locations.getAll.useQuery();
 
-  const TIMETABLE = ["08:00 - 22:00: Luni - Vineri", "08:00 - 18:00: Sambata"];
+  if (!locationsData) return <></>;
 
   return (
     <footer className="bg-slate-200">
@@ -83,16 +68,22 @@ const Footer = (): React.JSX.Element => {
           <Column title="Contact">
             <div className="flex flex-col gap-4">
               <p className="w-fit text-2xl font-thin">
-                {ADDRESS.street}
+                {locationsData[0]?.street}
                 <br />
-                {ADDRESS.city} {ADDRESS.ZipCode}
+                {locationsData[0]?.city} {locationsData[0]?.zip}
               </p>
               <ul className="w-fit items-start">
-                {CONTACTS_LIST.map((item) => (
-                  <li key={item.title} className="md:p-lg w-fit">
-                    <a href={item.href}>{item.title}</a>
-                  </li>
-                ))}
+                {[locationsData[0]?.phone, locationsData[0]?.email].map(
+                  (item) => (
+                    <li key={item} className="md:p-lg w-fit">
+                      <a
+                        href={`${item?.includes("@") ? "mailto:" : "tel:"}${item}`}
+                      >
+                        {item}
+                      </a>
+                    </li>
+                  ),
+                )}
               </ul>
               <SocialLinks />
               <ScheduleButton className="mt-4" />
@@ -100,7 +91,7 @@ const Footer = (): React.JSX.Element => {
           </Column>
           <Column title="Orar">
             <div>
-              {TIMETABLE.map((entry) => (
+              {locationsData[0]?.timetables?.map((entry) => (
                 <p key={entry}>{entry}</p>
               ))}
             </div>
