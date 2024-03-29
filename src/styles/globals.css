@@ -1,3 +1,37 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer components {
+  .logo {
+    @apply w-fit font-bold;
+    @apply leading-none !important;
+  }
+}
+
+@layer utilities {
+  .container-lg {
+    @apply container mx-auto w-full px-2 sm:px-0;
+  }
+
+  .container-md {
+    @apply container mx-auto w-full px-2 md:px-4;
+  }
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  padding: 0;
+  margin: 0;
+  line-height: 1.6;
+  min-height: 100vh;
+}
+
+img {
+  max-width: 100%;
+  display: block;
+}
