@@ -29,7 +29,7 @@ export const BaseLogo = ({
   size,
 }: Props): React.JSX.Element => {
   return (
-    <Link href="/">
+    <Link href="/" className="w-fit">
       <h2 className={cn(className, logoVariants({ variant, size, className }))}>
         Sergiu <br /> Barbershop
       </h2>

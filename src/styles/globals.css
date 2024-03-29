@@ -68,16 +68,17 @@
 
 @layer base {
   * {
-    @apply border-border box-border;
+    @apply box-border border-border;
   }
 
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background leading-7 text-foreground;
   }
 
   html,
-  body {
-    @apply m-0 min-h-screen p-0 leading-7;
+  body,
+  #__next {
+    @apply m-0 min-h-screen p-0;
   }
 
   img {
