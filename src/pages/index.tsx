@@ -10,7 +10,7 @@ const Page: NextPageWithLayout = () => {
         <title>{getPageTitle("Home")}</title>
         <meta name="description" content="Sergiu Barbershop" />
       </Head>
-      <div className="grid w-full place-items-center">HOME</div>
+      <div className="grid w-full place-items-center"></div>
     </>
   );
 };
