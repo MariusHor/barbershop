@@ -1,27 +1,27 @@
 const galleryImage = {
   name: "gallery-image",
   type: "document",
-  title: "gallery-image",
+  title: "Imagini Galerie",
   fields: [
     {
       name: "name",
       type: "string",
-      title: "Name",
+      title: "Nume fisier",
     },
     {
       name: "imgUrl",
       type: "image",
-      title: "ImgUrl",
+      title: "Imagine",
     },
     {
       name: "width",
       type: "number",
-      title: "Width",
+      title: "Latime imagine",
     },
     {
       name: "height",
       type: "number",
-      title: "Height",
+      title: "Inaltime imagine",
     },
   ],
 };
