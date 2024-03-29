@@ -1,5 +1,5 @@
-import Link from "next/link";
 import { cva, type VariantProps } from "class-variance-authority";
+import Link from "next/link";
 
 import { cn } from "@/utils/helpers";
 

@@ -1,4 +1,4 @@
-import type { ReactElement, ReactNode } from "react";
+import * as React from "react";
 import { type AppProps } from "next/app";
 import { type NextPage } from "next";
 import { Inter } from "next/font/google";
@@ -15,7 +15,7 @@ const inter = Inter({
 });
 
 export type NextPageWithLayout<P = object, IP = P> = NextPage<P, IP> & {
-  getLayout?: (page: ReactElement) => ReactNode;
+  getLayout?: (page: React.ReactElement) => React.ReactNode;
 };
 
 type AppPropsWithLayout = AppProps & {
