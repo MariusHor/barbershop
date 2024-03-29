@@ -1,27 +1,27 @@
 const heroImage = {
   name: "hero-image",
   type: "document",
-  title: "hero-image",
+  title: "Imagine Principala",
   fields: [
     {
       name: "name",
       type: "string",
-      title: "Name",
+      title: "Nume fisier",
     },
     {
       name: "imgUrl",
       type: "image",
-      title: "ImgUrl",
+      title: "Imagine",
     },
     {
       name: "width",
       type: "number",
-      title: "Width",
+      title: "Latime imagine",
     },
     {
       name: "height",
       type: "number",
-      title: "Height",
+      title: "Inaltime imagine",
     },
   ],
 };

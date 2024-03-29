@@ -1,27 +1,27 @@
 const barber = {
   name: "barber",
   type: "document",
-  title: "barber",
+  title: "Frizeri",
   fields: [
     {
-      name: "barberName",
+      name: "name",
       type: "string",
-      title: "Barber name",
+      title: "Nume",
     },
     {
       name: "imgUrl",
       type: "image",
-      title: "ImgUrl",
+      title: "Imagine",
     },
     {
       name: "width",
       type: "number",
-      title: "Width",
+      title: "Latime imagine",
     },
     {
       name: "height",
       type: "number",
-      title: "Height",
+      title: "Inaltime imagine",
     },
   ],
 };
