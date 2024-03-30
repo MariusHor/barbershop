@@ -56,14 +56,14 @@ const Header = (): React.JSX.Element => {
 };
 
 const Footer = (): React.JSX.Element => {
-  const { data: locationsData } = api.locations.getAll.useQuery();
+  const { data: locationsData } = api.content.getAllLocations.useQuery();
 
   if (!locationsData) return <></>;
 
   return (
     <footer className="bg-slate-200">
       <div className="container-lg sticky bottom-0 flex flex-col items-center justify-center gap-20 py-16">
-        <BaseLogo size={"large"} />
+        <BaseLogo />
         <div className="grid h-full w-full grow grid-cols-3 items-center">
           <Column title="Contact">
             <div className="flex flex-col gap-4">
