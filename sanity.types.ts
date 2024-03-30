@@ -74,6 +74,28 @@ export type Slug = {
   source?: string;
 };
 
+export type Logo = {
+  _id: string;
+  _type: "logo";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  name?: string;
+  imgUrl?: {
+    asset?: {
+      _ref: string;
+      _type: "reference";
+      _weak?: boolean;
+      [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+    };
+    hotspot?: SanityImageHotspot;
+    crop?: SanityImageCrop;
+    _type: "image";
+  };
+  width?: number;
+  height?: number;
+};
+
 export type Location = {
   _id: string;
   _type: "location";

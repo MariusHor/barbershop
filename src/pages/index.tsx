@@ -7,7 +7,7 @@ import { getSSGHelper } from "@/utils/getSSGHelper";
 export const getServerSideProps = async () => {
   const ssg = getSSGHelper();
 
-  await ssg.locations.getAll.prefetch();
+  await ssg.content.getAllLocations.prefetch();
 
   return {
     props: {
