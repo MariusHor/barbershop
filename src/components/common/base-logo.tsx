@@ -8,12 +8,10 @@ export const BaseLogo = ({
 }): React.JSX.Element => {
   const { data } = api.content.getLogo.useQuery();
 
-  if (!data?.imgUrl) return <></>;
-
   return (
     <Link href={"/"}>
       <Image
-        src={urlFor(data.imgUrl).url()}
+        src={urlFor(data?.imgUrl ?? "").url()}
         alt="website logo"
         width={data?.width}
         height={data?.height}

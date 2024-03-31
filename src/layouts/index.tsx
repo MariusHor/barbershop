@@ -56,9 +56,7 @@ const Header = (): React.JSX.Element => {
 };
 
 const Footer = (): React.JSX.Element => {
-  const { data: locationsData } = api.content.getAllLocations.useQuery();
-
-  if (!locationsData) return <></>;
+  const { data: locationData } = api.content.getLocation.useQuery();
 
   return (
     <footer className="bg-slate-200">
@@ -68,22 +66,20 @@ const Footer = (): React.JSX.Element => {
           <Column title="Contact">
             <div className="flex flex-col gap-4">
               <p className="w-fit text-2xl font-thin">
-                {locationsData[0]?.street}
+                {locationData?.street}
                 <br />
-                {locationsData[0]?.city} {locationsData[0]?.zip}
+                {locationData?.city} {locationData?.zip}
               </p>
               <ul className="w-fit items-start">
-                {[locationsData[0]?.phone, locationsData[0]?.email].map(
-                  (item) => (
-                    <li key={item} className="md:p-lg w-fit">
-                      <a
-                        href={`${item?.includes("@") ? "mailto:" : "tel:"}${item}`}
-                      >
-                        {item}
-                      </a>
-                    </li>
-                  ),
-                )}
+                {[locationData?.phone, locationData?.email].map((item) => (
+                  <li key={item} className="md:p-lg w-fit">
+                    <a
+                      href={`${item?.includes("@") ? "mailto:" : "tel:"}${item}`}
+                    >
+                      {item}
+                    </a>
+                  </li>
+                ))}
               </ul>
               <SocialLinks />
               <ScheduleButton className="mt-4" />
@@ -91,7 +87,7 @@ const Footer = (): React.JSX.Element => {
           </Column>
           <Column title="Orar">
             <div>
-              {locationsData[0]?.timetables?.map((entry) => (
+              {locationData?.timetables?.map((entry) => (
                 <p key={entry}>{entry}</p>
               ))}
             </div>
