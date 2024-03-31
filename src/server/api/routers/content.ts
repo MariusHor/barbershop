@@ -3,13 +3,13 @@ import { createTRPCRouter, publicProcedure } from "../trpc";
 import { TRPCError } from "@trpc/server";
 
 export const sanityContentRouter = createTRPCRouter({
-  getAllLocations: publicProcedure.query(async ({ ctx }) => {
+  getLocation: publicProcedure.query(async ({ ctx }) => {
     const query = '*[_type == "location"]';
     const data = await ctx.sanityClient.fetch<Location[]>(query);
 
     if (!data) throw new TRPCError({ code: "NOT_FOUND" });
 
-    return data;
+    return data[0];
   }),
   getLogo: publicProcedure.query(async ({ ctx }) => {
     const query = '*[_type == "logo"]';
