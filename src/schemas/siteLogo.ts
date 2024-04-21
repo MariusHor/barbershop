@@ -1,15 +1,15 @@
 import { type Rule } from "@sanity/types";
 import { SANITY_DOC_TYPES } from "@/utils/constants";
 
-const barber = {
-  name: SANITY_DOC_TYPES.barber,
+const siteLogo = {
+  name: SANITY_DOC_TYPES.siteLogo,
   type: "document",
-  title: "Frizeri",
+  title: "Logo",
   fields: [
     {
       name: "name",
       type: "string",
-      title: "Nume",
+      title: "Nume Fisier",
       validation: (rule: Rule) => rule.required().min(4).max(50),
     },
     {
@@ -33,4 +33,4 @@ const barber = {
   ],
 };
 
-export default barber;
+export default siteLogo;

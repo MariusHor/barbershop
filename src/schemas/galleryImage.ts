@@ -1,27 +1,34 @@
+import { type Rule } from "@sanity/types";
+import { SANITY_DOC_TYPES } from "@/utils/constants";
+
 const galleryImage = {
-  name: "gallery-image",
+  name: SANITY_DOC_TYPES.galleryImage,
   type: "document",
-  title: "gallery-image",
+  title: "Imagini Galerie",
   fields: [
     {
       name: "name",
       type: "string",
-      title: "Name",
+      title: "Nume fisier",
+      validation: (rule: Rule) => rule.required().min(4).max(50),
     },
     {
       name: "imgUrl",
       type: "image",
-      title: "ImgUrl",
+      title: "Imagine",
+      validation: (rule: Rule) => rule.required(),
     },
     {
       name: "width",
       type: "number",
-      title: "Width",
+      title: "Latime imagine",
+      validation: (rule: Rule) => rule.required().integer(),
     },
     {
       name: "height",
       type: "number",
-      title: "Height",
+      title: "Inaltime imagine",
+      validation: (rule: Rule) => rule.required().integer(),
     },
   ],
 };
