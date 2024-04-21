@@ -4,6 +4,13 @@ import type { Logo, Location, SiteSettings } from "sanity.types";
 import { createTRPCRouter, publicProcedure } from "../trpc";
 import { TRPCError } from "@trpc/server";
 
+function throwSanityErrorMessage({ dataType }: { dataType: string }) {
+  throw new TRPCError({
+    code: "NOT_FOUND",
+    message: `Could not find ${dataType} data. Make sure that Sanity has a valid record.`,
+  });
+}
+
 export const sanityContentRouter = createTRPCRouter({
   getSiteSettings: publicProcedure.query(async ({ ctx }) => {
     const query = '*[_type == "siteSettings"]';
@@ -12,7 +19,7 @@ export const sanityContentRouter = createTRPCRouter({
         query,
       );
 
-    if (!data) throw new TRPCError({ code: "NOT_FOUND" });
+    if (!data[0]) throwSanityErrorMessage({ dataType: "Site Settings" });
 
     return data[0];
   }),
@@ -20,7 +27,7 @@ export const sanityContentRouter = createTRPCRouter({
     const query = '*[_type == "location"]';
     const data = await ctx.sanityClient.fetch<Location[]>(query);
 
-    if (!data) throw new TRPCError({ code: "NOT_FOUND" });
+    if (!data[0]) throwSanityErrorMessage({ dataType: "Location" });
 
     return data[0];
   }),
@@ -28,7 +35,7 @@ export const sanityContentRouter = createTRPCRouter({
     const query = '*[_type == "logo"]';
     const data = await ctx.sanityClient.fetch<Logo[]>(query);
 
-    if (!data) throw new TRPCError({ code: "NOT_FOUND" });
+    if (!data[0]) throwSanityErrorMessage({ dataType: "Logo" });
 
     return data[0];
   }),

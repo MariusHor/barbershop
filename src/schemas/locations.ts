@@ -34,9 +34,9 @@ const locatii = {
       title: "Email",
     },
     {
-      name: "accounts",
+      name: "socialPlatforms",
       type: "array",
-      title: "Conturi Social",
+      title: "Platforme Social",
       of: [
         {
           name: "account",
@@ -44,9 +44,16 @@ const locatii = {
           title: "Cont Social",
           fields: [
             {
-              name: "platform",
+              title: "Nume",
+              name: "name",
               type: "string",
-              title: "Platforma",
+              options: {
+                list: [
+                  { title: "Facebook", value: "facebook" },
+                  { title: "Instagram", value: "instagram" },
+                  { title: "Twitter", value: "twitter" },
+                ],
+              },
             },
             {
               name: "link",
