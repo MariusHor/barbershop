@@ -2,9 +2,10 @@ import { usePathname } from "next/navigation";
 import * as React from "react";
 import Link from "next/link";
 
-import { BaseLogo, SocialLinks, ScheduleButton } from "@/components";
+import { Logo, SocialLinks, ScheduleButton } from "@/components";
 import { capitalize, cn } from "@/utils/helpers";
 import { api } from "@/utils/api";
+import { PAGE_ROUTES } from "@/utils/constants";
 
 type Props = {
   children: React.ReactNode;
@@ -21,28 +22,22 @@ export function MainLayout({ children }: Props) {
 }
 
 const Header = (): React.JSX.Element => {
-  const LINKS = {
-    acasa: "/",
-    galerie: "/galerie",
-    servicii: "/servicii",
-    contact: "/contact",
-  };
   const currentRoute = usePathname();
 
   return (
     <header className="py-6">
       <div className="container-lg mx-auto flex items-center justify-between text-lg">
-        <BaseLogo />
+        <Logo />
         <div className="flex items-center gap-10">
           <nav>
             <ul className="flex gap-4">
-              {Object.entries(LINKS).map(([routeName, routeHref]) => (
-                <li key={routeName}>
+              {Object.values(PAGE_ROUTES).map((route) => (
+                <li key={route.name}>
                   <Link
-                    href={routeHref}
-                    className={cn({ underline: currentRoute === routeHref })}
+                    href={route.path}
+                    className={cn({ underline: currentRoute === route.path })}
                   >
-                    {capitalize(routeName)}
+                    {capitalize(route.name)}
                   </Link>
                 </li>
               ))}
@@ -61,7 +56,7 @@ const Footer = (): React.JSX.Element => {
   return (
     <footer className="bg-slate-200">
       <div className="container-lg sticky bottom-0 flex flex-col items-center justify-center gap-20 py-16">
-        <BaseLogo />
+        <Logo />
         <div className="grid h-full w-full grow grid-cols-3 items-center">
           <Column title="Contact">
             <div className="flex flex-col gap-4">
