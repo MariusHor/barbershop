@@ -51,7 +51,7 @@ const Header = (): React.JSX.Element => {
 };
 
 const Footer = (): React.JSX.Element => {
-  const { data: locationData } = api.content.getLocation.useQuery();
+  const { data: locationData } = api.content.getShopLocation.useQuery();
 
   return (
     <footer className="bg-slate-200">

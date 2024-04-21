@@ -74,49 +74,6 @@ export type Slug = {
   source?: string;
 };
 
-export type Logo = {
-  _id: string;
-  _type: "logo";
-  _createdAt: string;
-  _updatedAt: string;
-  _rev: string;
-  name?: string;
-  imgUrl?: {
-    asset?: {
-      _ref: string;
-      _type: "reference";
-      _weak?: boolean;
-      [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
-    };
-    hotspot?: SanityImageHotspot;
-    crop?: SanityImageCrop;
-    _type: "image";
-  };
-  width?: number;
-  height?: number;
-};
-
-export type Location = {
-  _id: string;
-  _type: "location";
-  _createdAt: string;
-  _updatedAt: string;
-  _rev: string;
-  name?: string;
-  street?: string;
-  city?: string;
-  zip?: number;
-  phone?: string;
-  email?: string;
-  socialPlatforms?: Array<{
-    name?: "facebook" | "instagram" | "twitter";
-    link?: string;
-    _type: "account";
-    _key: string;
-  }>;
-  timetables?: Array<string>;
-};
-
 export type Barber = {
   _id: string;
   _type: "barber";
@@ -141,7 +98,7 @@ export type Barber = {
 
 export type HeroImage = {
   _id: string;
-  _type: "hero-image";
+  _type: "heroImage";
   _createdAt: string;
   _updatedAt: string;
   _rev: string;
@@ -163,7 +120,50 @@ export type HeroImage = {
 
 export type GalleryImage = {
   _id: string;
-  _type: "gallery-image";
+  _type: "galleryImage";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  name?: string;
+  imgUrl?: {
+    asset?: {
+      _ref: string;
+      _type: "reference";
+      _weak?: boolean;
+      [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+    };
+    hotspot?: SanityImageHotspot;
+    crop?: SanityImageCrop;
+    _type: "image";
+  };
+  width?: number;
+  height?: number;
+};
+
+export type ShopLocation = {
+  _id: string;
+  _type: "shopLocation";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  name?: string;
+  street?: string;
+  city?: string;
+  zip?: number;
+  phone?: string;
+  email?: string;
+  socialPlatforms?: Array<{
+    name?: "facebook" | "instagram" | "twitter";
+    link?: string;
+    _type: "account";
+    _key: string;
+  }>;
+  timetables?: Array<string>;
+};
+
+export type SiteLogo = {
+  _id: string;
+  _type: "siteLogo";
   _createdAt: string;
   _updatedAt: string;
   _rev: string;

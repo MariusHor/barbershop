@@ -8,7 +8,7 @@ type Props = {
 };
 
 export const Logo = ({ width, height }: Props): React.JSX.Element => {
-  const { data } = api.content.getLogo.useQuery();
+  const { data } = api.content.getSiteLogo.useQuery();
 
   return (
     <ImageLink

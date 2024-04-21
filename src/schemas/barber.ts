@@ -1,7 +1,8 @@
 import { type Rule } from "@sanity/types";
+import { SANITY_DOC_TYPES } from "@/utils/constants";
 
 const barber = {
-  name: "barber",
+  name: SANITY_DOC_TYPES.barber,
   type: "document",
   title: "Frizeri",
   fields: [

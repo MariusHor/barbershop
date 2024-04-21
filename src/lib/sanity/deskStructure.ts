@@ -9,7 +9,10 @@ export const customDeskStructure = (S: StructureBuilder) =>
         .child(
           S.document().schemaType("siteSettings").documentId("siteSettings"),
         ),
+      S.listItem()
+        .title("Logo")
+        .child(S.document().schemaType("siteLogo").documentId("siteLogo")),
       ...S.documentTypeListItems().filter(
-        (listItem) => !["siteSettings"].includes(listItem.getId()!),
+        (listItem) => !["siteLogo", "siteSettings"].includes(listItem.getId()!),
       ),
     ]);

@@ -1,7 +1,8 @@
 import { type Rule } from "@sanity/types";
+import { SANITY_DOC_TYPES } from "@/utils/constants";
 
-const locatii = {
-  name: "location",
+const shopLocation = {
+  name: SANITY_DOC_TYPES.shopLocation,
   type: "document",
   title: "Locatii",
   fields: [
@@ -89,4 +90,4 @@ const locatii = {
   ],
 };
 
-export default locatii;
+export default shopLocation;

@@ -1,7 +1,8 @@
 import { type Rule } from "@sanity/types";
+import { SANITY_DOC_TYPES } from "@/utils/constants";
 
-const websiteConfig = {
-  name: "siteSettings",
+const siteSettings = {
+  name: SANITY_DOC_TYPES.siteSettings,
   type: "document",
   title: "Setari website",
   fields: [
@@ -26,4 +27,4 @@ const websiteConfig = {
   ],
 };
 
-export default websiteConfig;
+export default siteSettings;

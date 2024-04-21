@@ -1,7 +1,8 @@
 import { type Rule } from "@sanity/types";
+import { SANITY_DOC_TYPES } from "@/utils/constants";
 
 const galleryImage = {
-  name: "gallery-image",
+  name: SANITY_DOC_TYPES.galleryImage,
   type: "document",
   title: "Imagini Galerie",
   fields: [
