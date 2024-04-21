@@ -108,8 +108,8 @@ export type Location = {
   zip?: string;
   phone?: string;
   email?: string;
-  accounts?: Array<{
-    platform?: string;
+  socialPlatforms?: Array<{
+    name?: "facebook" | "instagram" | "twitter";
     link?: string;
     _type: "account";
     _key: string;

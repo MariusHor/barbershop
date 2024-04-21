@@ -1,20 +1,28 @@
 import Link from "next/link";
-import { Button } from "../ui/button";
-import { InstagramLogoIcon, TwitterLogoIcon } from "@radix-ui/react-icons";
+import { Icon } from "@iconify-icon/react";
 
-export const SocialLinks = (): React.JSX.Element => {
+import { api } from "@/utils/api";
+
+export const SocialLinks = () => {
+  const { data } = api.content.getLocation.useQuery();
+
+  if (!data?.socialPlatforms) return false;
+
   return (
     <div className="flex w-fit gap-2">
-      <Button asChild variant={"outline"}>
-        <Link href={""}>
-          <InstagramLogoIcon />
+      {data.socialPlatforms.map((platform) => (
+        <Link
+          href={platform.link ?? ""}
+          target="_blank"
+          key={platform.name}
+          className="flex justify-center"
+        >
+          <Icon
+            icon={`mdi:${platform.name}`}
+            className="text-5xl hover:text-gray-600"
+          />
         </Link>
-      </Button>
-      <Button asChild variant={"outline"}>
-        <Link href={""}>
-          <TwitterLogoIcon />
-        </Link>
-      </Button>
+      ))}
     </div>
   );
 };

@@ -552,17 +552,31 @@
         },
         "optional": true
       },
-      "accounts": {
+      "socialPlatforms": {
         "type": "objectAttribute",
         "value": {
           "type": "array",
           "of": {
             "type": "object",
             "attributes": {
-              "platform": {
+              "name": {
                 "type": "objectAttribute",
                 "value": {
-                  "type": "string"
+                  "type": "union",
+                  "of": [
+                    {
+                      "type": "string",
+                      "value": "facebook"
+                    },
+                    {
+                      "type": "string",
+                      "value": "instagram"
+                    },
+                    {
+                      "type": "string",
+                      "value": "twitter"
+                    }
+                  ]
                 },
                 "optional": true
               },
