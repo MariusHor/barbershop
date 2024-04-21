@@ -21,3 +21,12 @@ export const PAGE_ROUTES = Object.freeze({
     path: "/contact",
   },
 });
+
+export const SANITY_DOC_TYPES = Object.freeze({
+  siteSettings: "siteSettings",
+  siteLogo: "siteLogo",
+  shopLocation: "shopLocation",
+  heroImage: "heroImage",
+  galleryImage: "galleryImage",
+  barber: "barber",
+});

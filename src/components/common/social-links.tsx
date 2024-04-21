@@ -4,7 +4,7 @@ import { Icon } from "@iconify-icon/react";
 import { api } from "@/utils/api";
 
 export const SocialLinks = () => {
-  const { data } = api.content.getLocation.useQuery();
+  const { data } = api.content.getShopLocation.useQuery();
 
   if (!data?.socialPlatforms) return false;
 

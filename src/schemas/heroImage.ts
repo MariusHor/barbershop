@@ -1,7 +1,8 @@
 import { type Rule } from "@sanity/types";
+import { SANITY_DOC_TYPES } from "@/utils/constants";
 
 const heroImage = {
-  name: "hero-image",
+  name: SANITY_DOC_TYPES.heroImage,
   type: "document",
   title: "Imagine Principala",
   fields: [
