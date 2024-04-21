@@ -1,3 +1,5 @@
+import { type Rule } from "@sanity/types";
+
 const websiteConfig = {
   name: "siteSettings",
   type: "document",
@@ -7,16 +9,19 @@ const websiteConfig = {
       name: "title",
       type: "string",
       title: "Titlu website",
+      validation: (rule: Rule) => rule.required().min(10).max(50),
     },
     {
       name: "description",
       type: "text",
       title: "Descriere website",
+      validation: (rule: Rule) => rule.required().min(20),
     },
     {
       name: "scheduleLink",
       type: "url",
       title: "Link programari",
+      validation: (rule: Rule) => rule.required().min(20),
     },
   ],
 };

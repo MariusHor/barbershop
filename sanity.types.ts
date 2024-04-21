@@ -105,7 +105,7 @@ export type Location = {
   name?: string;
   street?: string;
   city?: string;
-  zip?: string;
+  zip?: number;
   phone?: string;
   email?: string;
   socialPlatforms?: Array<{
