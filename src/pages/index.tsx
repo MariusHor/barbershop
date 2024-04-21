@@ -8,6 +8,7 @@ export const getServerSideProps = async () => {
   const ssg = getSSGHelper();
 
   await ssg.content.getLocation.prefetch();
+  await ssg.content.getLogo.prefetch();
 
   return {
     props: {
