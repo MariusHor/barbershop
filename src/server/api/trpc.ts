@@ -12,7 +12,7 @@ import { type CreateNextContextOptions } from "@trpc/server/adapters/next";
 import superjson from "superjson";
 import { ZodError } from "zod";
 
-import { client } from "@/utils/sanity/client";
+import { client } from "@/lib/sanity/client";
 
 /**
  * 1. CONTEXT
