@@ -14,8 +14,9 @@ type Props = {
 export function MainLayout({ children }: Props) {
   return (
     <>
+      <div></div>
       <Header />
-      <main className="flex-grow">{children}</main>
+      <main className="h-full flex-grow">{children}</main>
       <Footer />
     </>
   );
@@ -25,7 +26,7 @@ const Header = (): React.JSX.Element => {
   const currentRoute = usePathname();
 
   return (
-    <header className="py-6">
+    <header className="header flex items-center">
       <div className="container-lg mx-auto flex items-center justify-between text-lg">
         <Logo />
         <div className="flex items-center gap-10">
