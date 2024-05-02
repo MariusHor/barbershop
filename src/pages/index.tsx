@@ -35,7 +35,9 @@ const Page: NextPageWithLayout<
         <title>{getPageTitle(pageName, siteSettings?.title)}</title>
         <meta name="description" content={siteSettings?.description} />
       </Head>
-      <div className="grid w-full place-items-center"></div>
+      <div className="hero grid w-full place-items-center">
+        <h1>Sergiu Barbershop</h1>
+      </div>
     </>
   );
 };
