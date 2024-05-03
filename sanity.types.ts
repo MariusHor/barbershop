@@ -74,6 +74,33 @@ export type Slug = {
   source?: string;
 };
 
+export type Page = {
+  _id: string;
+  _type: "page";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  title?: string;
+  pageBuilder?: Array<{
+    heading?: string;
+    tagline?: string;
+    image?: {
+      asset?: {
+        _ref: string;
+        _type: "reference";
+        _weak?: boolean;
+        [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+      };
+      hotspot?: SanityImageHotspot;
+      crop?: SanityImageCrop;
+      alt?: string;
+      _type: "image";
+    };
+    _type: "hero";
+    _key: string;
+  }>;
+};
+
 export type Barber = {
   _id: string;
   _type: "barber";

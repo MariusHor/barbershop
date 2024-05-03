@@ -4,6 +4,7 @@ import shopLocation from "./shopLocation";
 import galleryImage from "./galleryImage";
 import heroImage from "./heroImage";
 import barber from "./barber";
+import homePage from "./homePage";
 
 export const schemaTypes = [
   siteSettings,
@@ -12,4 +13,5 @@ export const schemaTypes = [
   galleryImage,
   heroImage,
   barber,
+  homePage,
 ];

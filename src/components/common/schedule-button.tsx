@@ -7,13 +7,17 @@ import { cn } from "@/utils/helpers";
 import { api } from "@/utils/api";
 
 export type ScheduleButtonProps = {
+  text?: string;
   className?: string;
   size?: VariantProps<typeof buttonVariants>["size"];
+  variant?: VariantProps<typeof buttonVariants>["variant"];
   href?: Url;
 };
 
 export const ScheduleButton = ({
+  text,
   className,
+  variant,
   size = "lg",
   href = "",
 }: ScheduleButtonProps): React.JSX.Element => {
@@ -22,9 +26,14 @@ export const ScheduleButton = ({
   });
 
   return (
-    <Button size={size} className={cn("w-fit text-lg", className)} asChild>
+    <Button
+      size={size}
+      className={cn("w-fit text-lg", className)}
+      variant={variant}
+      asChild
+    >
       <Link href={data?.scheduleLink ?? href} target="_blank">
-        Programeaza
+        {text ?? "Programeaza"}
       </Link>
     </Button>
   );
