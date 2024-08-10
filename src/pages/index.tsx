@@ -5,25 +5,28 @@ import type { NextPageWithLayout } from "./_app";
 import { getPageTitle } from "@/utils/helpers";
 import { getSSGHelper } from "@/utils/getSSGHelper";
 import { PAGE_ROUTES } from "@/utils/constants";
+import { api } from "@/utils/api";
 
 export const getServerSideProps = async () => {
   const ssg = getSSGHelper();
 
-  const siteSettings = await ssg.content.getSiteSettings.fetch();
-  await ssg.content.getSiteLogo.prefetch();
-  await ssg.content.getShopLocation.prefetch();
+  await Promise.all([
+    ssg.content.getSiteSettings.prefetch(),
+    ssg.content.getSiteLogo.prefetch(),
+    ssg.content.getShopLocation.prefetch(),
+  ]);
 
   return {
     props: {
       trpcState: ssg.dehydrate(),
-      siteSettings,
     },
   };
 };
 
 const Page: NextPageWithLayout<
   InferGetServerSidePropsType<typeof getServerSideProps>
-> = ({ siteSettings }) => {
+> = () => {
+  const { data: siteSettings } = api.content.getSiteSettings.useQuery();
   const pageName = PAGE_ROUTES.home.name;
 
   return (
