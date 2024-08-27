@@ -2,6 +2,7 @@ import { type InferGetServerSidePropsType } from "next";
 import Head from "next/head";
 import { type Page } from "sanity.types";
 import Image from "next/image";
+import Link from "next/link";
 import { ArrowRightIcon } from "@radix-ui/react-icons";
 
 import type { NextPageWithLayout } from "./_app";
@@ -12,7 +13,6 @@ import { type PageSection } from "@/utils/types";
 import { urlFor } from "@/lib/sanity/client";
 import { ScheduleButton } from "@/components";
 import { Button } from "@/components/ui/button";
-import Link from "next/link";
 
 export const getServerSideProps = async () => {
   const ssg = getSSGHelper();
@@ -22,6 +22,7 @@ export const getServerSideProps = async () => {
     ssg.content.getSiteSettings.prefetch(),
     ssg.content.getSiteLogo.prefetch(),
     ssg.content.getShopLocation.prefetch(),
+    ssg.content.getRoutes.prefetch(),
   ]);
 
   return {
