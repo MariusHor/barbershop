@@ -5,7 +5,6 @@ import Link from "next/link";
 import { Logo, SocialLinks, ScheduleButton } from "@/components";
 import { capitalize, cn } from "@/utils/helpers";
 import { api } from "@/utils/api";
-import { PAGE_ROUTES } from "@/utils/constants";
 
 type Props = {
   children: React.ReactNode;
@@ -23,6 +22,7 @@ export function MainLayout({ children }: Props) {
 }
 
 const Header = (): React.JSX.Element => {
+  const { data: routes } = api.content.getRoutes.useQuery();
   const currentRoute = usePathname();
 
   return (
@@ -32,13 +32,13 @@ const Header = (): React.JSX.Element => {
         <div className="flex items-center gap-10">
           <nav>
             <ul className="flex gap-4">
-              {Object.values(PAGE_ROUTES).map((route) => (
-                <li key={route.name}>
+              {routes?.map((route, index) => (
+                <li key={index}>
                   <Link
-                    href={route.path}
+                    href={route.path!}
                     className={cn({ underline: currentRoute === route.path })}
                   >
-                    {capitalize(route.name)}
+                    {capitalize(route.name!)}
                   </Link>
                 </li>
               ))}
@@ -67,15 +67,17 @@ const Footer = (): React.JSX.Element => {
                 {locationData?.city} {locationData?.zip}
               </p>
               <ul className="w-fit items-start">
-                {[locationData?.phone, locationData?.email].map((item) => (
-                  <li key={item} className="md:p-lg w-fit">
-                    <a
-                      href={`${item?.includes("@") ? "mailto:" : "tel:"}${item}`}
-                    >
-                      {item}
-                    </a>
-                  </li>
-                ))}
+                {[locationData?.phone, locationData?.email].map(
+                  (item, index) => (
+                    <li key={index} className="md:p-lg w-fit">
+                      <a
+                        href={`${item?.includes("@") ? "mailto:" : "tel:"}${item}`}
+                      >
+                        {item}
+                      </a>
+                    </li>
+                  ),
+                )}
               </ul>
               <SocialLinks />
               <ScheduleButton className="mt-4" />
@@ -83,8 +85,8 @@ const Footer = (): React.JSX.Element => {
           </Column>
           <Column title="Orar">
             <div>
-              {locationData?.timetables?.map((entry) => (
-                <p key={entry}>{entry}</p>
+              {locationData?.timetables?.map((entry, index) => (
+                <p key={index}>{entry}</p>
               ))}
             </div>
           </Column>

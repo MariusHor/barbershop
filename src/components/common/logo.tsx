@@ -7,16 +7,18 @@ type Props = {
   height?: number;
 };
 
-export const Logo = ({ width, height }: Props): React.JSX.Element => {
+export const Logo = ({ width, height }: Props): React.JSX.Element | null => {
   const { data } = api.content.getSiteLogo.useQuery();
+
+  if (!data?.image) return null;
 
   return (
     <ImageLink
       href={"/"}
-      src={urlFor(data?.imgUrl ?? "").url()}
+      src={urlFor(data.image).url()}
       alt="website logo"
-      width={width ?? data?.width}
-      height={height ?? data?.height}
+      width={width ?? data.image.width}
+      height={height ?? data.image.height}
     />
   );
 };

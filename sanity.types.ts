@@ -68,12 +68,6 @@ export type Geopoint = {
   alt?: number;
 };
 
-export type Slug = {
-  _type: "slug";
-  current?: string;
-  source?: string;
-};
-
 export type Page = {
   _id: string;
   _type: "page";
@@ -81,9 +75,13 @@ export type Page = {
   _updatedAt: string;
   _rev: string;
   title?: string;
-  pageBuilder?: Array<{
-    heading?: string;
-    tagline?: string;
+  path?: string;
+  slug?: Slug;
+  sections?: Array<{
+    title?: string;
+    subtitle?: string;
+    content?: string;
+    ctaButtonText?: string;
     image?: {
       asset?: {
         _ref: string;
@@ -94,11 +92,19 @@ export type Page = {
       hotspot?: SanityImageHotspot;
       crop?: SanityImageCrop;
       alt?: string;
+      width?: number;
+      height?: number;
       _type: "image";
     };
-    _type: "hero";
+    _type: "section";
     _key: string;
   }>;
+};
+
+export type Slug = {
+  _type: "slug";
+  current?: string;
+  source?: string;
 };
 
 export type Barber = {
@@ -108,7 +114,7 @@ export type Barber = {
   _updatedAt: string;
   _rev: string;
   name?: string;
-  imgUrl?: {
+  image?: {
     asset?: {
       _ref: string;
       _type: "reference";
@@ -117,32 +123,11 @@ export type Barber = {
     };
     hotspot?: SanityImageHotspot;
     crop?: SanityImageCrop;
+    alt?: string;
+    width?: number;
+    height?: number;
     _type: "image";
   };
-  width?: number;
-  height?: number;
-};
-
-export type HeroImage = {
-  _id: string;
-  _type: "heroImage";
-  _createdAt: string;
-  _updatedAt: string;
-  _rev: string;
-  name?: string;
-  imgUrl?: {
-    asset?: {
-      _ref: string;
-      _type: "reference";
-      _weak?: boolean;
-      [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
-    };
-    hotspot?: SanityImageHotspot;
-    crop?: SanityImageCrop;
-    _type: "image";
-  };
-  width?: number;
-  height?: number;
 };
 
 export type GalleryImage = {
@@ -152,7 +137,7 @@ export type GalleryImage = {
   _updatedAt: string;
   _rev: string;
   name?: string;
-  imgUrl?: {
+  image?: {
     asset?: {
       _ref: string;
       _type: "reference";
@@ -161,10 +146,11 @@ export type GalleryImage = {
     };
     hotspot?: SanityImageHotspot;
     crop?: SanityImageCrop;
+    alt?: string;
+    width?: number;
+    height?: number;
     _type: "image";
   };
-  width?: number;
-  height?: number;
 };
 
 export type ShopLocation = {
@@ -195,7 +181,7 @@ export type SiteLogo = {
   _updatedAt: string;
   _rev: string;
   name?: string;
-  imgUrl?: {
+  image?: {
     asset?: {
       _ref: string;
       _type: "reference";
@@ -204,10 +190,11 @@ export type SiteLogo = {
     };
     hotspot?: SanityImageHotspot;
     crop?: SanityImageCrop;
+    alt?: string;
+    width?: number;
+    height?: number;
     _type: "image";
   };
-  width?: number;
-  height?: number;
 };
 
 export type SanityImageCrop = {
