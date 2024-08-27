@@ -54,9 +54,36 @@ const page = {
               type: "string",
             },
             {
-              name: "ctaButtonText",
-              title: "Text buton CTA",
-              type: "string",
+              name: "ctaButton",
+              title: "Buton CTA",
+              type: "object",
+              fields: [
+                {
+                  name: "text",
+                  type: "string",
+                  title: "Text",
+                  validation: (rule: Rule) => rule.required(),
+                },
+              ],
+            },
+            {
+              name: "linkButton",
+              title: "Buton link",
+              type: "object",
+              fields: [
+                {
+                  name: "text",
+                  type: "string",
+                  title: "Text",
+                  validation: (rule: Rule) => rule.required(),
+                },
+                {
+                  name: "href",
+                  type: "string",
+                  title: "Catre",
+                  validation: (rule: Rule) => rule.required(),
+                },
+              ],
             },
             {
               name: "image",
@@ -92,3 +119,33 @@ const page = {
 };
 
 export default page;
+
+// {
+//   name: "ctaButton",
+//   title: "Buton CTA",
+//   type: "array",
+//   of: [
+//     {
+//       name: "text",
+//       type: "string",
+//       title: "Text",
+//     },
+//   ],
+// },
+// {
+//   name: "linkButton",
+//   title: "Buton link",
+//   type: "array",
+//   of: [
+//     {
+//       name: "text",
+//       type: "string",
+//       title: "Text",
+//     },
+//     {
+//       name: "href",
+//       type: "string",
+//       title: "Catre",
+//     },
+//   ],
+// },

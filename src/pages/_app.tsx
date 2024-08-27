@@ -1,7 +1,7 @@
 import * as React from "react";
 import { type AppProps } from "next/app";
 import { type NextPage } from "next";
-import { Inter } from "next/font/google";
+import { Source_Sans_3 } from "next/font/google";
 import Head from "next/head";
 
 import { api } from "@/utils/api";
@@ -9,7 +9,7 @@ import { api } from "@/utils/api";
 import "@/styles/globals.css";
 import { MainLayout } from "@/layouts";
 
-const inter = Inter({
+const sourceSans3 = Source_Sans_3({
   subsets: ["latin"],
 });
 
@@ -30,7 +30,7 @@ const MyApp = ({ Component, pageProps }: AppPropsWithLayout) => {
         <link rel="icon" href="/favicon.ico" />
         <meta name="viewport" content="initial-scale=1.0, width=device-width" />
       </Head>
-      <div className={`flex min-h-screen flex-col ${inter.className}`}>
+      <div className={`flex min-h-screen flex-col ${sourceSans3.className}`}>
         <MainLayout>{getLayout(<Component {...pageProps} />)}</MainLayout>
       </div>
     </>

@@ -28,7 +28,10 @@ export const ScheduleButton = ({
   return (
     <Button
       size={size}
-      className={cn("w-fit text-lg", className)}
+      className={cn(
+        "font-600 w-fit rounded-none text-lg text-muted hover:bg-primary-foreground",
+        className,
+      )}
       variant={variant}
       asChild
     >

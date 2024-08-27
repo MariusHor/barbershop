@@ -2,6 +2,7 @@ import { type InferGetServerSidePropsType } from "next";
 import Head from "next/head";
 import { type Page } from "sanity.types";
 import Image from "next/image";
+import { ArrowRightIcon } from "@radix-ui/react-icons";
 
 import type { NextPageWithLayout } from "./_app";
 import { getPageTitle } from "@/utils/helpers";
@@ -10,6 +11,8 @@ import { api } from "@/utils/api";
 import { type PageSection } from "@/utils/types";
 import { urlFor } from "@/lib/sanity/client";
 import { ScheduleButton } from "@/components";
+import { Button } from "@/components/ui/button";
+import Link from "next/link";
 
 export const getServerSideProps = async () => {
   const ssg = getSSGHelper();
@@ -69,15 +72,34 @@ const HeroSection = ({ data }: { data: PageSection | undefined }) => {
         />
       ) : null}
 
-      <div className="flex max-w-3xl flex-col items-center gap-4">
-        <h1 className="z-10 text-center text-8xl font-bold text-white opacity-100">
+      <div className="container-lg flex max-w-3xl flex-col items-center gap-4">
+        <h1 className="z-10 text-center text-4xl font-bold text-white opacity-100 sm:text-5xl md:text-6xl lg:text-7xl 2xl:text-8xl">
           {data?.title}
         </h1>
-        <ScheduleButton
-          className="z-10"
-          text={data?.ctaButtonText}
-          variant={"secondary"}
-        />
+
+        {data?.subtitle ? (
+          <p className="text-md z-10 text-center text-white opacity-100 sm:text-lg md:text-xl lg:text-2xl 2xl:text-3xl">
+            {data?.subtitle}
+          </p>
+        ) : null}
+
+        <div className="z-10 mt-8 flex items-center justify-center gap-6">
+          {data.ctaButton ? (
+            <ScheduleButton className="z-10" text={data?.ctaButton?.text} />
+          ) : null}
+
+          {data.linkButton ? (
+            <Button
+              className="font-600 flex gap-2 rounded-none bg-transparent p-0 text-lg text-white hover:text-primary-foreground"
+              asChild
+            >
+              <Link href={data?.linkButton?.href!} target="_blank">
+                {data?.linkButton?.text}
+                <ArrowRightIcon />
+              </Link>
+            </Button>
+          ) : null}
+        </div>
       </div>
     </section>
   );
