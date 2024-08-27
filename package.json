@@ -46,12 +46,13 @@
     "@typescript-eslint/eslint-plugin": "^8.3.0",
     "@typescript-eslint/parser": "^8.3.0",
     "eslint": "^8.57.0",
-    "eslint-config-next": "^14.2.6",
+    "eslint-config-next": "^12.1.0",
     "postcss": "^8.4.41",
     "prettier": "^3.3.3",
     "prettier-plugin-tailwindcss": "^0.6.6",
     "tailwindcss": "^3.4.10",
-    "typescript": "^5.5.4"
+    "typescript": "^5.5.4",
+    "typescript-eslint": "^8.3.0"
   },
   "ct3aMetadata": {
     "initVersion": "7.30.0"

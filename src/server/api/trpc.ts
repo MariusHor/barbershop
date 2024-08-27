@@ -8,7 +8,6 @@
  */
 
 import { initTRPC } from "@trpc/server";
-import { type CreateNextContextOptions } from "@trpc/server/adapters/next";
 import superjson from "superjson";
 import { ZodError } from "zod";
 
@@ -22,8 +21,6 @@ import { client } from "@/lib/sanity/client";
  * These allow you to access things when processing a request, like the database, the session, etc.
  */
 
-type CreateContextOptions = Record<string, never>;
-
 /**
  * This helper generates the "internals" for a tRPC context. If you need to use it, you can export
  * it from here.
@@ -34,7 +31,7 @@ type CreateContextOptions = Record<string, never>;
  *
  * @see https://create.t3.gg/en/usage/trpc#-serverapitrpcts
  */
-export const createInnerTRPCContext = (_opts?: CreateContextOptions) => {
+export const createInnerTRPCContext = () => {
   return { sanityClient: client };
 };
 
@@ -44,8 +41,8 @@ export const createInnerTRPCContext = (_opts?: CreateContextOptions) => {
  *
  * @see https://trpc.io/docs/context
  */
-export const createTRPCContext = (_opts: CreateNextContextOptions) => {
-  return createInnerTRPCContext({});
+export const createTRPCContext = () => {
+  return createInnerTRPCContext();
 };
 
 /**

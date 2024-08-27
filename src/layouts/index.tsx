@@ -1,5 +1,4 @@
 import { usePathname } from "next/navigation";
-import * as React from "react";
 import Link from "next/link";
 import { useWindowSize } from "@uidotdev/usehooks";
 
@@ -46,7 +45,6 @@ const Header = (): React.JSX.Element => {
 
 const HamburgerMenu = ({
   routes,
-  currentRoute,
 }: {
   routes: { path: string; name: string }[] | undefined;
   currentRoute: string | null;

@@ -1,4 +1,3 @@
-import * as React from "react";
 import { type AppProps } from "next/app";
 import { type NextPage } from "next";
 import { Source_Sans_3 } from "next/font/google";
