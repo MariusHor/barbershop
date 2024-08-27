@@ -2,8 +2,8 @@ import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
 import { DEFAULT_WEBSITE_SETTINGS } from "./constants";
 
-export function getPageTitle(pageName: string, websiteTitle?: string) {
-  return `${pageName} | ${websiteTitle ?? DEFAULT_WEBSITE_SETTINGS.title}`;
+export function getPageTitle(pageName?: string, websiteTitle?: string) {
+  return `${pageName ? `${pageName} | ` : ""}${websiteTitle ?? DEFAULT_WEBSITE_SETTINGS.title}`;
 }
 
 export function capitalize(input: string) {

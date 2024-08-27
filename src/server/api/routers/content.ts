@@ -1,14 +1,10 @@
 import { type Url } from "next/dist/shared/lib/router/router";
 
-import type {
-  SiteLogo,
-  ShopLocation,
-  SiteSettings,
-  HeroImage,
-} from "sanity.types";
+import type { SiteLogo, ShopLocation, SiteSettings, Page } from "sanity.types";
 import { createTRPCRouter, publicProcedure } from "../trpc";
 import { TRPCError } from "@trpc/server";
 import { SANITY_DOC_TYPES } from "@/utils/constants";
+import { z } from "zod";
 
 function throwSanityErrorMessage({ dataType }: { dataType: string }) {
   throw new TRPCError({
@@ -48,13 +44,28 @@ export const sanityContentRouter = createTRPCRouter({
 
     return data[0];
   }),
-  getHeroImage: publicProcedure.query(async ({ ctx }) => {
-    const dataType = SANITY_DOC_TYPES.heroImage;
+  getPageData: publicProcedure
+    .input(z.object({ slug: z.string() }))
+    .query(async ({ ctx, input }) => {
+      const dataType = SANITY_DOC_TYPES.page;
+      const query = `*[_type == "${dataType}" && slug.current == $slug]`;
+
+      const data = await ctx.sanityClient.fetch<Page[]>(query, {
+        slug: input.slug,
+      });
+
+      if (!data[0]) throwSanityErrorMessage({ dataType });
+
+      return data[0];
+    }),
+  getRoutes: publicProcedure.query(async ({ ctx }) => {
+    const dataType = SANITY_DOC_TYPES.page;
     const query = `*[_type == "${dataType}"]`;
-    const data = await ctx.sanityClient.fetch<HeroImage[]>(query);
+
+    const data = await ctx.sanityClient.fetch<Page[]>(query);
 
     if (!data[0]) throwSanityErrorMessage({ dataType });
 
-    return data[0];
+    return data.map((page) => ({ name: page.title, path: page.path }));
   }),
 });

@@ -13,22 +13,29 @@ const barber = {
       validation: (rule: Rule) => rule.required().min(4).max(50),
     },
     {
-      name: "imgUrl",
+      name: "image",
       type: "image",
       title: "Imagine",
       validation: (rule: Rule) => rule.required(),
-    },
-    {
-      name: "width",
-      type: "number",
-      title: "Latime imagine",
-      validation: (rule: Rule) => rule.required().integer(),
-    },
-    {
-      name: "height",
-      type: "number",
-      title: "Inaltime imagine",
-      validation: (rule: Rule) => rule.required().integer(),
+      fields: [
+        {
+          name: "alt",
+          type: "string",
+          title: "Text alternativ",
+        },
+        {
+          name: "width",
+          type: "number",
+          title: "Latime imagine",
+          validation: (rule: Rule) => rule.required().integer(),
+        },
+        {
+          name: "height",
+          type: "number",
+          title: "Inaltime imagine",
+          validation: (rule: Rule) => rule.required().integer(),
+        },
+      ],
     },
   ],
 };
