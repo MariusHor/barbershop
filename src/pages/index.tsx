@@ -6,13 +6,14 @@ import Link from "next/link";
 import { ArrowRightIcon } from "@radix-ui/react-icons";
 
 import type { NextPageWithLayout } from "./_app";
-import { getPageTitle } from "@/utils/helpers";
+import { cn, getPageTitle } from "@/utils/helpers";
 import { getSSGHelper } from "@/utils/getSSGHelper";
 import { api } from "@/utils/api";
 import { type PageSection } from "@/utils/types";
 import { urlFor } from "@/lib/sanity/client";
 import { ScheduleButton } from "@/components";
 import { Button } from "@/components/ui/button";
+import { useState } from "react";
 
 export const getServerSideProps = async () => {
   const ssg = getSSGHelper();
@@ -57,19 +58,21 @@ const Page: NextPageWithLayout<
 
 const HeroSection = ({ data }: { data: PageSection }) => {
   const heroImage = data?.image;
+  const [isImageLoading, setImageLoading] = useState(true);
 
   return (
     <section className="hero relative flex w-full flex-col items-center justify-center bg-black">
-      {heroImage && (
-        <Image
-          src={urlFor(heroImage).url()}
-          alt={heroImage.alt ?? "hero image"}
-          width={heroImage.width}
-          height={heroImage.height}
-          className="absolute left-0 top-0 h-full w-full object-cover opacity-40"
-          priority
-        />
-      )}
+      <Image
+        src={urlFor(heroImage).url()}
+        alt={heroImage.alt ?? "hero image"}
+        width={heroImage.width}
+        height={heroImage.height}
+        className={cn(
+          "absolute left-0 top-0 h-full w-full object-cover opacity-40",
+          `${isImageLoading ? "blur" : "remove-blur"}`,
+        )}
+        onLoad={() => setImageLoading(false)}
+      />
 
       <div className="container-lg z-10 flex max-w-3xl flex-col items-center gap-4">
         <h1 className="text-center text-4xl font-bold text-white opacity-100 sm:text-5xl md:text-6xl lg:text-7xl 2xl:text-8xl">
