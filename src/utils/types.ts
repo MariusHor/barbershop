@@ -5,17 +5,17 @@ import {
 } from "sanity.types";
 
 export type PageSection = {
-  title?: string;
+  title: string;
   subtitle?: string;
   content?: string;
   ctaButton?: {
-    text?: string;
+    text: string;
   };
   linkButton?: {
-    text?: string;
-    href?: string;
+    text: string;
+    href: string;
   };
-  image?: {
+  image: {
     asset?: {
       _ref: string;
       _type: "reference";
@@ -25,8 +25,8 @@ export type PageSection = {
     hotspot?: SanityImageHotspot;
     crop?: SanityImageCrop;
     alt?: string;
-    width?: number;
-    height?: number;
+    width: number;
+    height: number;
     _type: "image";
   };
   _type: "section";

@@ -365,14 +365,14 @@
         "value": {
           "type": "string"
         },
-        "optional": true
+        "optional": false
       },
       "path": {
         "type": "objectAttribute",
         "value": {
           "type": "string"
         },
-        "optional": true
+        "optional": false
       },
       "slug": {
         "type": "objectAttribute",
@@ -380,7 +380,7 @@
           "type": "inline",
           "name": "slug"
         },
-        "optional": true
+        "optional": false
       },
       "sections": {
         "type": "objectAttribute",
@@ -394,7 +394,7 @@
                 "value": {
                   "type": "string"
                 },
-                "optional": true
+                "optional": false
               },
               "subtitle": {
                 "type": "objectAttribute",
@@ -420,7 +420,7 @@
                       "value": {
                         "type": "string"
                       },
-                      "optional": true
+                      "optional": false
                     }
                   }
                 },
@@ -436,14 +436,14 @@
                       "value": {
                         "type": "string"
                       },
-                      "optional": true
+                      "optional": false
                     },
                     "href": {
                       "type": "objectAttribute",
                       "value": {
                         "type": "string"
                       },
-                      "optional": true
+                      "optional": false
                     }
                   }
                 },
@@ -512,14 +512,14 @@
                       "value": {
                         "type": "number"
                       },
-                      "optional": true
+                      "optional": false
                     },
                     "height": {
                       "type": "objectAttribute",
                       "value": {
                         "type": "number"
                       },
-                      "optional": true
+                      "optional": false
                     },
                     "_type": {
                       "type": "objectAttribute",
@@ -530,7 +530,7 @@
                     }
                   }
                 },
-                "optional": true
+                "optional": false
               },
               "_type": {
                 "type": "objectAttribute",
@@ -575,7 +575,7 @@
           "value": {
             "type": "string"
           },
-          "optional": true
+          "optional": false
         },
         "source": {
           "type": "objectAttribute",
@@ -627,7 +627,7 @@
         "value": {
           "type": "string"
         },
-        "optional": true
+        "optional": false
       },
       "image": {
         "type": "objectAttribute",
@@ -692,14 +692,14 @@
               "value": {
                 "type": "number"
               },
-              "optional": true
+              "optional": false
             },
             "height": {
               "type": "objectAttribute",
               "value": {
                 "type": "number"
               },
-              "optional": true
+              "optional": false
             },
             "_type": {
               "type": "objectAttribute",
@@ -710,7 +710,7 @@
             }
           }
         },
-        "optional": true
+        "optional": false
       }
     }
   },
@@ -754,7 +754,7 @@
         "value": {
           "type": "string"
         },
-        "optional": true
+        "optional": false
       },
       "image": {
         "type": "objectAttribute",
@@ -819,14 +819,14 @@
               "value": {
                 "type": "number"
               },
-              "optional": true
+              "optional": false
             },
             "height": {
               "type": "objectAttribute",
               "value": {
                 "type": "number"
               },
-              "optional": true
+              "optional": false
             },
             "_type": {
               "type": "objectAttribute",
@@ -837,7 +837,7 @@
             }
           }
         },
-        "optional": true
+        "optional": false
       }
     }
   },
@@ -881,42 +881,42 @@
         "value": {
           "type": "string"
         },
-        "optional": true
+        "optional": false
       },
       "street": {
         "type": "objectAttribute",
         "value": {
           "type": "string"
         },
-        "optional": true
+        "optional": false
       },
       "city": {
         "type": "objectAttribute",
         "value": {
           "type": "string"
         },
-        "optional": true
+        "optional": false
       },
       "zip": {
         "type": "objectAttribute",
         "value": {
           "type": "number"
         },
-        "optional": true
+        "optional": false
       },
       "phone": {
         "type": "objectAttribute",
         "value": {
           "type": "string"
         },
-        "optional": true
+        "optional": false
       },
       "email": {
         "type": "objectAttribute",
         "value": {
           "type": "string"
         },
-        "optional": true
+        "optional": false
       },
       "socialPlatforms": {
         "type": "objectAttribute",
@@ -944,14 +944,14 @@
                     }
                   ]
                 },
-                "optional": true
+                "optional": false
               },
               "link": {
                 "type": "objectAttribute",
                 "value": {
                   "type": "string"
                 },
-                "optional": true
+                "optional": false
               },
               "_type": {
                 "type": "objectAttribute",
@@ -1028,7 +1028,7 @@
         "value": {
           "type": "string"
         },
-        "optional": true
+        "optional": false
       },
       "image": {
         "type": "objectAttribute",
@@ -1093,14 +1093,14 @@
               "value": {
                 "type": "number"
               },
-              "optional": true
+              "optional": false
             },
             "height": {
               "type": "objectAttribute",
               "value": {
                 "type": "number"
               },
-              "optional": true
+              "optional": false
             },
             "_type": {
               "type": "objectAttribute",
@@ -1111,7 +1111,7 @@
             }
           }
         },
-        "optional": true
+        "optional": false
       }
     }
   },
@@ -1492,21 +1492,21 @@
         "value": {
           "type": "string"
         },
-        "optional": true
+        "optional": false
       },
       "description": {
         "type": "objectAttribute",
         "value": {
           "type": "string"
         },
-        "optional": true
+        "optional": false
       },
       "scheduleLink": {
         "type": "objectAttribute",
         "value": {
           "type": "string"
         },
-        "optional": true
+        "optional": false
       }
     }
   }

@@ -69,6 +69,7 @@ const shopLocation = {
               name: "link",
               type: "string",
               title: "Link",
+              validation: (rule: Rule) => rule.required(),
             },
           ],
         },

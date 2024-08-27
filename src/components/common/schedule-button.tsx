@@ -18,12 +18,15 @@ export const ScheduleButton = ({
   text,
   className,
   variant,
+  href,
   size = "lg",
-  href = "",
-}: ScheduleButtonProps): React.JSX.Element => {
+}: ScheduleButtonProps): React.JSX.Element | null => {
   const { data } = api.content.getSiteSettings.useQuery(undefined, {
     enabled: !href,
   });
+
+  const linkHref = href ?? data?.scheduleLink;
+  if (!linkHref) return null;
 
   return (
     <Button
@@ -35,7 +38,7 @@ export const ScheduleButton = ({
       variant={variant}
       asChild
     >
-      <Link href={data?.scheduleLink ?? href} target="_blank">
+      <Link href={linkHref} target="_blank">
         {text ?? "Programeaza"}
       </Link>
     </Button>

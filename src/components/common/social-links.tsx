@@ -6,13 +6,13 @@ import { api } from "@/utils/api";
 export const SocialLinks = () => {
   const { data } = api.content.getShopLocation.useQuery();
 
-  if (!data?.socialPlatforms) return false;
+  if (!data?.socialPlatforms) return null;
 
   return (
     <div className="flex w-fit gap-2">
       {data.socialPlatforms.map((platform) => (
         <Link
-          href={platform.link ?? ""}
+          href={platform.link}
           target="_blank"
           key={platform.name}
           className="flex justify-center"

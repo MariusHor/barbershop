@@ -49,19 +49,17 @@ const Page: NextPageWithLayout<
         <title>{getPageTitle(pageData?.title, siteSettings?.title)}</title>
         <meta name="description" content={siteSettings?.description} />
       </Head>
-      <HeroSection data={pageData.sections[0]} />
+      <HeroSection data={pageData.sections[0] as PageSection} />
     </>
   );
 };
 
-const HeroSection = ({ data }: { data: PageSection | undefined }) => {
-  if (!data) return null;
-
+const HeroSection = ({ data }: { data: PageSection }) => {
   const heroImage = data?.image;
 
   return (
     <section className="hero relative flex w-full flex-col items-center justify-center bg-black">
-      {heroImage ? (
+      {heroImage && (
         <Image
           src={urlFor(heroImage).url()}
           alt={heroImage.alt ?? "hero image"}
@@ -70,35 +68,33 @@ const HeroSection = ({ data }: { data: PageSection | undefined }) => {
           className="absolute left-0 top-0 h-full w-full object-cover opacity-40"
           priority
         />
-      ) : null}
+      )}
 
-      <div className="container-lg flex max-w-3xl flex-col items-center gap-4">
-        <h1 className="z-10 text-center text-4xl font-bold text-white opacity-100 sm:text-5xl md:text-6xl lg:text-7xl 2xl:text-8xl">
-          {data?.title}
+      <div className="container-lg z-10 flex max-w-3xl flex-col items-center gap-4">
+        <h1 className="text-center text-4xl font-bold text-white opacity-100 sm:text-5xl md:text-6xl lg:text-7xl 2xl:text-8xl">
+          {data.title}
         </h1>
 
-        {data?.subtitle ? (
-          <p className="text-md z-10 text-center text-white opacity-100 sm:text-lg md:text-xl lg:text-2xl 2xl:text-3xl">
+        {data?.subtitle && (
+          <p className="max-w-[736px] text-center text-lg text-white opacity-100 sm:text-xl md:text-2xl xl:text-3xl">
             {data?.subtitle}
           </p>
-        ) : null}
+        )}
 
-        <div className="z-10 mt-8 flex items-center justify-center gap-6">
-          {data.ctaButton ? (
-            <ScheduleButton className="z-10" text={data?.ctaButton?.text} />
-          ) : null}
+        <div className="mt-8 flex flex-col items-center justify-center gap-6 md:flex-row">
+          {data.ctaButton && <ScheduleButton text={data.ctaButton.text} />}
 
-          {data.linkButton ? (
+          {data.linkButton && (
             <Button
               className="font-600 flex gap-2 rounded-none bg-transparent p-0 text-lg text-white hover:text-primary-foreground"
               asChild
             >
-              <Link href={data?.linkButton?.href!} target="_blank">
-                {data?.linkButton?.text}
+              <Link href={data.linkButton.href}>
+                {data.linkButton.text}
                 <ArrowRightIcon />
               </Link>
             </Button>
-          ) : null}
+          )}
         </div>
       </div>
     </section>

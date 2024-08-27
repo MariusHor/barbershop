@@ -60,7 +60,7 @@ export const sanityContentRouter = createTRPCRouter({
     }),
   getRoutes: publicProcedure.query(async ({ ctx }) => {
     const dataType = SANITY_DOC_TYPES.page;
-    const query = `*[_type == "${dataType}"]`;
+    const query = `*[_type == "${dataType}"] | order(order asc)`;
 
     const data = await ctx.sanityClient.fetch<Page[]>(query);
 

@@ -1,15 +1,45 @@
 import { type Rule } from "@sanity/types";
+import { type Page } from "sanity.types";
 
 const page = {
   name: "page",
   type: "document",
-  title: "Page",
+  title: "Pagini",
   fields: [
     {
       name: "title",
       title: "Titlu pagina",
       type: "string",
       validation: (rule: Rule) => rule.required(),
+    },
+    {
+      name: "order",
+      title: "Ordine",
+      type: "number",
+      validation: (rule: Rule) =>
+        rule
+          .required()
+          .integer()
+          .positive()
+          .min(1)
+          .custom(async (order: string | number, context) => {
+            const { document } = context;
+            const client = context.getClient({ apiVersion: "2023-08-27" });
+
+            const existingPages: Page[] = await client.fetch(
+              `*[_type == "page" && _id != $id && order == $order]`,
+              { id: document?._id, order },
+            );
+
+            if (
+              existingPages.length > 0 &&
+              existingPages[0]?._id !== document?._id.replace("drafts.", "")
+            ) {
+              return `Ordine ${order} este deja folosită. Vă rugăm să alegeți un alt număr.`;
+            }
+
+            return true;
+          }),
     },
     {
       name: "path",
@@ -119,33 +149,3 @@ const page = {
 };
 
 export default page;
-
-// {
-//   name: "ctaButton",
-//   title: "Buton CTA",
-//   type: "array",
-//   of: [
-//     {
-//       name: "text",
-//       type: "string",
-//       title: "Text",
-//     },
-//   ],
-// },
-// {
-//   name: "linkButton",
-//   title: "Buton link",
-//   type: "array",
-//   of: [
-//     {
-//       name: "text",
-//       type: "string",
-//       title: "Text",
-//     },
-//     {
-//       name: "href",
-//       type: "string",
-//       title: "Catre",
-//     },
-//   ],
-// },

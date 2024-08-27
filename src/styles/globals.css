@@ -22,6 +22,9 @@
     --muted: 210 40% 96.1%;
     --muted-foreground: 215.4 16.3% 46.9%;
 
+    --dark: 210, 10%, 23%;
+    --dark-foreground: 212, 10%, 25%;
+
     --accent: 210 40% 96.1%;
     --accent-foreground: 222.2 47.4% 11.2%;
 
@@ -70,6 +73,7 @@
   .nav-link {
     padding: 4px;
     display: block;
+    @apply text-dark;
   }
 
   .nav-link:hover,
@@ -87,7 +91,7 @@
     @apply mx-auto w-full px-4;
   }
   .container-lg {
-    @apply base-container 3xl:px-0 2xl:max-w-[1648px];
+    @apply base-container 2xl:max-w-[1648px] 3xl:px-0;
   }
 
   .container-md {
