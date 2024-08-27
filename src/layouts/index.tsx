@@ -1,6 +1,6 @@
 import { usePathname } from "next/navigation";
 import Link from "next/link";
-import { useWindowSize } from "@uidotdev/usehooks";
+import { useWindowSize } from "usehooks-ts";
 
 import { Logo, SocialLinks, ScheduleButton } from "@/components";
 import { capitalize, cn } from "@/utils/helpers";
@@ -13,7 +13,6 @@ type Props = {
 export function MainLayout({ children }: Props) {
   return (
     <>
-      <div></div>
       <Header />
       <main className="h-full flex-grow">{children}</main>
       <Footer />
@@ -21,18 +20,24 @@ export function MainLayout({ children }: Props) {
   );
 }
 
-const Header = (): React.JSX.Element => {
+import { useEffect, useState } from "react";
+
+const Header = (): React.JSX.Element | null => {
   const { data: routes } = api.content.getRoutes.useQuery();
   const currentRoute = usePathname();
-  const screenSize = useWindowSize();
-  const screenWidth = screenSize.width ?? 0;
+  const { width = 0 } = useWindowSize();
+  const [isSmallScreen, setIsSmallScreen] = useState(false);
+
+  useEffect(() => {
+    setIsSmallScreen(width < 968);
+  }, [width]);
 
   return (
     <header className="header flex items-center">
       <div className="container-lg mx-auto flex items-center justify-between text-lg">
         <Logo />
         <div className="flex items-center gap-10">
-          {screenWidth < 968 ? (
+          {isSmallScreen ? (
             <HamburgerMenu routes={routes} currentRoute={currentRoute} />
           ) : (
             <DesktopNavLinks routes={routes} currentRoute={currentRoute} />
