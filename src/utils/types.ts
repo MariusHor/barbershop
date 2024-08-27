@@ -8,7 +8,13 @@ export type PageSection = {
   title?: string;
   subtitle?: string;
   content?: string;
-  ctaButtonText?: string;
+  ctaButton?: {
+    text?: string;
+  };
+  linkButton?: {
+    text?: string;
+    href?: string;
+  };
   image?: {
     asset?: {
       _ref: string;

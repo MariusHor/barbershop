@@ -13,8 +13,8 @@
     --popover: 0 0% 100%;
     --popover-foreground: 222.2 84% 4.9%;
 
-    --primary: 222.2 47.4% 11.2%;
-    --primary-foreground: 210 40% 98%;
+    --primary: 53, 38%, 39%;
+    --primary-foreground: 53, 24%, 52%;
 
     --secondary: 210 40% 96.1%;
     --secondary-foreground: 222.2 47.4% 11.2%;
@@ -66,14 +66,28 @@
   .hero {
     height: calc(100vh - var(--header-height));
   }
+
+  .nav-link {
+    padding: 4px;
+    display: block;
+  }
+
+  .nav-link:hover,
+  .nav-link.active {
+    @apply bg-primary text-muted;
+  }
+
+  .nav-link.active {
+    transform: rotate(5deg);
+  }
 }
 
 @layer utilities {
   .base-container {
-    @apply container mx-auto w-full;
+    @apply mx-auto w-full px-4;
   }
   .container-lg {
-    @apply base-container 3xl:px-0 px-2 2xl:max-w-[1648px];
+    @apply base-container 3xl:px-0 2xl:max-w-[1648px];
   }
 
   .container-md {

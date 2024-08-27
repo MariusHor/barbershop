@@ -1,6 +1,7 @@
 import { usePathname } from "next/navigation";
 import * as React from "react";
 import Link from "next/link";
+import { useWindowSize } from "@uidotdev/usehooks";
 
 import { Logo, SocialLinks, ScheduleButton } from "@/components";
 import { capitalize, cn } from "@/utils/helpers";
@@ -24,27 +25,40 @@ export function MainLayout({ children }: Props) {
 const Header = (): React.JSX.Element => {
   const { data: routes } = api.content.getRoutes.useQuery();
   const currentRoute = usePathname();
+  const screenSize = useWindowSize();
+  const screenWidth = screenSize.width ?? 0;
 
   return (
     <header className="header flex items-center">
       <div className="container-lg mx-auto flex items-center justify-between text-lg">
         <Logo />
         <div className="flex items-center gap-10">
-          <nav>
-            <ul className="flex gap-4">
-              {routes?.map((route, index) => (
-                <li key={index}>
-                  <Link
-                    href={route.path!}
-                    className={cn({ underline: currentRoute === route.path })}
-                  >
-                    {capitalize(route.name!)}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </nav>
-          <ScheduleButton />
+          {screenWidth < 762 ? (
+            <>{/* HAMBURGER MENU */}</>
+          ) : (
+            <>
+              <nav>
+                <ul className="flex gap-4">
+                  {routes?.map((route, index) => (
+                    <li key={index}>
+                      <Link
+                        href={route.path!}
+                        className={cn(
+                          "nav-link text-2xl font-black uppercase",
+                          {
+                            active: currentRoute === route.path,
+                          },
+                        )}
+                      >
+                        {capitalize(route.name!)}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </nav>
+              <ScheduleButton />
+            </>
+          )}
         </div>
       </div>
     </header>
