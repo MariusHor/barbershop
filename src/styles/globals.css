@@ -67,18 +67,12 @@
   }
 
   .nav-link {
-    padding: 4px;
-    display: block;
     @apply text-dark;
   }
 
   .nav-link:hover,
   .nav-link.active {
-    @apply bg-primary text-muted;
-  }
-
-  .nav-link.active {
-    transform: rotate(5deg);
+    @apply text-primary;
   }
 }
 
@@ -87,11 +81,11 @@
     @apply mx-auto w-full px-4;
   }
   .container-lg {
-    @apply base-container 2xl:max-w-[1648px] 3xl:px-0;
+    @apply base-container 2xl:max-w-[1848px] 3xl:px-0;
   }
 
   .container-md {
-    @apply base-container px-2 2xl:px-4;
+    @apply base-container px-2 2xl:max-w-[1648px] 2xl:px-4;
   }
 
   .blur {

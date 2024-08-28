@@ -66,12 +66,12 @@ const DesktopNavLinks = ({
 
   return (
     <nav>
-      <ul className="flex gap-4">
+      <ul className="flex gap-4 xl:gap-8 2xl:gap-12">
         {routes?.map((route, index) => (
           <li key={index}>
             <Link
               href={route.path}
-              className={cn("nav-link text-1.5xl font-black uppercase", {
+              className={cn("nav-link font-300 text-1xl uppercase", {
                 active: currentRoute === route.path,
               })}
             >

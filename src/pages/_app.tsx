@@ -1,6 +1,6 @@
 import { type AppProps } from "next/app";
 import { type NextPage } from "next";
-import { Source_Sans_3 } from "next/font/google";
+import { Work_Sans } from "next/font/google";
 import Head from "next/head";
 
 import { api } from "@/utils/api";
@@ -8,7 +8,7 @@ import { api } from "@/utils/api";
 import "@/styles/globals.css";
 import { MainLayout } from "@/layouts";
 
-const sourceSans3 = Source_Sans_3({
+const workSans = Work_Sans({
   subsets: ["latin"],
 });
 
@@ -29,7 +29,7 @@ const MyApp = ({ Component, pageProps }: AppPropsWithLayout) => {
         <link rel="icon" href="/favicon.ico" />
         <meta name="viewport" content="initial-scale=1.0, width=device-width" />
       </Head>
-      <div className={`flex min-h-screen flex-col ${sourceSans3.className}`}>
+      <div className={`flex min-h-screen flex-col ${workSans.className}`}>
         <MainLayout>{getLayout(<Component {...pageProps} />)}</MainLayout>
       </div>
     </>
