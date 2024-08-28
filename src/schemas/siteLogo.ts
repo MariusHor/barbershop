@@ -22,18 +22,26 @@ const siteLogo = {
           name: "alt",
           type: "string",
           title: "Text alternativ",
+          validation: (rule: Rule) =>
+            rule
+              .required()
+              .warning(
+                "Textul alternativ poate fi de ajutor atunci cand imaginea nu poate fi incarcata.",
+              ),
         },
         {
           name: "width",
           type: "number",
-          title: "Latime imagine",
-          validation: (rule: Rule) => rule.required().integer(),
+          title: "Lățime",
+          readOnly: true,
+          hidden: true,
         },
         {
           name: "height",
           type: "number",
-          title: "Inaltime imagine",
-          validation: (rule: Rule) => rule.required().integer(),
+          title: "Înălțime",
+          readOnly: true,
+          hidden: true,
         },
       ],
     },

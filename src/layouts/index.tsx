@@ -14,7 +14,7 @@ export function MainLayout({ children }: Props) {
   return (
     <>
       <Header />
-      <main className="h-screen flex-grow">{children}</main>
+      <main className="flex-grow">{children}</main>
       <Footer />
     </>
   );
@@ -49,7 +49,7 @@ const Header = (): React.JSX.Element | null => {
   return (
     <header
       className={cn(
-        "container-lg fixed z-50 mx-auto flex h-20 w-full items-center justify-end text-lg transition",
+        "fixed z-50 mx-auto flex h-20 w-full items-center text-lg transition",
         { "bg-white": isScrolled },
       )}
     >
@@ -84,7 +84,7 @@ const DesktopNavLinks = ({
   if (!routes?.length) return null;
 
   return (
-    <nav>
+    <nav className="container-lg mx-auto flex items-center justify-end">
       <ul className="flex gap-4 xl:gap-8 2xl:gap-12">
         {routes?.map((route, index) => (
           <li key={index}>

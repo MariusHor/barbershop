@@ -456,6 +456,13 @@
                 },
                 "optional": true
               },
+              "marqueeText": {
+                "type": "objectAttribute",
+                "value": {
+                  "type": "string"
+                },
+                "optional": true
+              },
               "image": {
                 "type": "objectAttribute",
                 "value": {
@@ -512,21 +519,21 @@
                       "value": {
                         "type": "string"
                       },
-                      "optional": true
+                      "optional": false
                     },
                     "width": {
                       "type": "objectAttribute",
                       "value": {
                         "type": "number"
                       },
-                      "optional": false
+                      "optional": true
                     },
                     "height": {
                       "type": "objectAttribute",
                       "value": {
                         "type": "number"
                       },
-                      "optional": false
+                      "optional": true
                     },
                     "_type": {
                       "type": "objectAttribute",
@@ -692,21 +699,21 @@
               "value": {
                 "type": "string"
               },
-              "optional": true
+              "optional": false
             },
             "width": {
               "type": "objectAttribute",
               "value": {
                 "type": "number"
               },
-              "optional": false
+              "optional": true
             },
             "height": {
               "type": "objectAttribute",
               "value": {
                 "type": "number"
               },
-              "optional": false
+              "optional": true
             },
             "_type": {
               "type": "objectAttribute",
@@ -811,6 +818,20 @@
               "type": "objectAttribute",
               "value": {
                 "type": "string"
+              },
+              "optional": false
+            },
+            "width": {
+              "type": "objectAttribute",
+              "value": {
+                "type": "number"
+              },
+              "optional": true
+            },
+            "height": {
+              "type": "objectAttribute",
+              "value": {
+                "type": "number"
               },
               "optional": true
             },
@@ -1072,21 +1093,21 @@
               "value": {
                 "type": "string"
               },
-              "optional": true
+              "optional": false
             },
             "width": {
               "type": "objectAttribute",
               "value": {
                 "type": "number"
               },
-              "optional": false
+              "optional": true
             },
             "height": {
               "type": "objectAttribute",
               "value": {
                 "type": "number"
               },
-              "optional": false
+              "optional": true
             },
             "_type": {
               "type": "objectAttribute",

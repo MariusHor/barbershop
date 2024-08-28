@@ -57,8 +57,41 @@ const Page: NextPageWithLayout<
         <title>{getPageTitle(pageData?.title, siteSettings?.title)}</title>
         <meta name="description" content={siteSettings?.description} />
       </Head>
-      <HeroSection data={pageData.sections[0] as PageSection} />
+
+      {pageData.sections[0] && <HeroSection data={pageData.sections[0]} />}
+
+      {pageData.sections[1] && (
+        <ColumnsSection data={pageData.sections[1]} reverse />
+      )}
+
+      {pageData.sections[2] && (
+        <ColumnsSection data={pageData.sections[2]} reverse />
+      )}
     </>
+  );
+};
+
+const ColumnsSection = ({
+  data,
+  reverse = false,
+}: {
+  data: PageSection;
+  reverse?: boolean;
+}) => {
+  return (
+    <div className="grid grid-cols-2">
+      <Image
+        src={urlFor(data.image).url()}
+        alt={data.image.alt ?? "hero image"}
+        width={data.image.width}
+        height={data.image.height}
+        className={cn("h-full w-full object-cover", {
+          "order-2": reverse,
+        })}
+        loading="lazy"
+      />
+      <div></div>
+    </div>
   );
 };
 
@@ -94,7 +127,7 @@ const HeroSection = ({ data }: { data: PageSection }) => {
   }
 
   return (
-    <section className="relative grid h-full w-full bg-black lg:grid-cols-2">
+    <section className="relative grid h-screen w-full bg-black lg:grid-cols-2">
       <div className="relative">
         <div className="absolute left-0 top-0 h-full w-full grayscale">
           <Image
@@ -160,13 +193,13 @@ const HeroSection = ({ data }: { data: PageSection }) => {
             autoPlaySpeed={4000}
             beforeChange={handleBeforeSlideChange}
           >
-            {imagesData.map((image, index) => (
+            {imagesData.map((item, index) => (
               <Image
                 key={index}
-                src={image.imageUrl}
-                alt={image.alt ?? "hero image"}
-                width={image.width}
-                height={image.height}
+                src={urlFor(item.image).url()}
+                alt={item.image.alt ?? "hero image"}
+                width={item.image.width}
+                height={item.image.height}
                 className="relative z-0 h-full w-full select-none object-cover"
                 priority
               />

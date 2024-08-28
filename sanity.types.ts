@@ -89,6 +89,7 @@ export type Page = {
       text: string;
       href: string;
     };
+    marqueeText?: string;
     image: {
       asset?: {
         _ref: string;
@@ -98,9 +99,9 @@ export type Page = {
       };
       hotspot?: SanityImageHotspot;
       crop?: SanityImageCrop;
-      alt?: string;
-      width: number;
-      height: number;
+      alt: string;
+      width?: number;
+      height?: number;
       _type: "image";
     };
     _type: "section";
@@ -130,9 +131,9 @@ export type Barber = {
     };
     hotspot?: SanityImageHotspot;
     crop?: SanityImageCrop;
-    alt?: string;
-    width: number;
-    height: number;
+    alt: string;
+    width?: number;
+    height?: number;
     _type: "image";
   };
 };
@@ -152,7 +153,9 @@ export type GalleryImage = {
     };
     hotspot?: SanityImageHotspot;
     crop?: SanityImageCrop;
-    alt?: string;
+    alt: string;
+    width?: number;
+    height?: number;
     _type: "image";
   };
 };
@@ -194,9 +197,9 @@ export type SiteLogo = {
     };
     hotspot?: SanityImageHotspot;
     crop?: SanityImageCrop;
-    alt?: string;
-    width: number;
-    height: number;
+    alt: string;
+    width?: number;
+    height?: number;
     _type: "image";
   };
 };
