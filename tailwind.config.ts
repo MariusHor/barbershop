@@ -63,6 +63,11 @@ const config = {
       },
       fontSize: {
         "1.5xl": "19px",
+        "10xl": "80px",
+        "12xl": "96px",
+        "14xl": "112px",
+        "18xl": "164px",
+        "20xl": "180px",
       },
       borderRadius: {
         lg: "var(--radius)",

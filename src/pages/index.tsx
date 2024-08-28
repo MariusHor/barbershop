@@ -2,8 +2,6 @@ import { type InferGetServerSidePropsType } from "next";
 import Head from "next/head";
 import { type Page } from "sanity.types";
 import Image from "next/image";
-import Link from "next/link";
-import { ArrowRightIcon } from "@radix-ui/react-icons";
 
 import type { NextPageWithLayout } from "./_app";
 import { cn, getPageTitle } from "@/utils/helpers";
@@ -12,7 +10,6 @@ import { api } from "@/utils/api";
 import { type PageSection } from "@/utils/types";
 import { urlFor } from "@/lib/sanity/client";
 import { ScheduleButton } from "@/components";
-import { Button } from "@/components/ui/button";
 import { useState } from "react";
 
 export const getServerSideProps = async () => {
@@ -61,31 +58,40 @@ const HeroSection = ({ data }: { data: PageSection }) => {
   const [isImageLoading, setImageLoading] = useState(true);
 
   return (
-    <section className="hero relative flex w-full flex-col items-center justify-center bg-black">
-      <Image
-        src={urlFor(heroImage).url()}
-        alt={heroImage.alt ?? "hero image"}
-        width={heroImage.width}
-        height={heroImage.height}
-        className={cn(
-          "absolute left-0 top-0 h-full w-full object-cover opacity-40",
-          `${isImageLoading ? "blur" : "remove-blur"}`,
-        )}
-        onLoad={() => setImageLoading(false)}
-      />
+    <section className="relative grid h-full w-full bg-black lg:grid-cols-2">
+      <div className="relative">
+        <div className="absolute left-0 top-0 h-full w-full grayscale">
+          <Image
+            src={urlFor(heroImage).url()}
+            alt={heroImage.alt ?? "hero image"}
+            width={heroImage.width}
+            height={heroImage.height}
+            className={cn(
+              "h-full w-full object-cover opacity-40",
+              `${isImageLoading ? "blur" : "remove-blur"}`,
+            )}
+            onLoad={() => setImageLoading(false)}
+          />
+        </div>
 
-      <div className="container-lg z-10 flex max-w-3xl flex-col items-center gap-4">
-        <h1 className="text-center text-4xl font-bold text-white opacity-100 sm:text-5xl md:text-6xl lg:text-7xl 2xl:text-8xl">
-          {data.title}
-        </h1>
+        <div className="relative z-50 flex h-full flex-col items-center justify-center gap-16">
+          <h1 className="xl:text-20xl md:text-14xl text-12xl text-center font-black text-primary opacity-100">
+            {data.title}
+          </h1>
 
-        {data?.subtitle && (
-          <p className="max-w-[736px] text-center text-lg text-white opacity-100 sm:text-xl md:text-2xl xl:text-3xl">
-            {data?.subtitle}
-          </p>
-        )}
+          {data?.subtitle && (
+            <p className="max-w-[736px] text-center text-lg text-white opacity-100 sm:text-xl md:text-2xl xl:text-3xl">
+              {data?.subtitle}
+            </p>
+          )}
 
-        <div className="mt-8 flex flex-col items-center justify-center gap-6 md:flex-row">
+          <ScheduleButton className="bg-white text-dark hover:text-muted lg:hidden" />
+        </div>
+      </div>
+
+      <div className="hidden flex-col items-center justify-center gap-16 bg-white px-20 lg:flex">
+        <div className="aspect-square max-h-[564px] w-full max-w-[564px] border-[1px] border-solid border-dark"></div>
+        {/* <div className="mt-8 flex flex-col items-center justify-center gap-6 md:flex-row">
           {data.ctaButton && <ScheduleButton text={data.ctaButton.text} />}
 
           {data.linkButton && (
@@ -99,7 +105,8 @@ const HeroSection = ({ data }: { data: PageSection }) => {
               </Link>
             </Button>
           )}
-        </div>
+        </div> */}
+        <ScheduleButton className="absolute bottom-16" />
       </div>
     </section>
   );

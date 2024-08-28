@@ -14,7 +14,7 @@ export function MainLayout({ children }: Props) {
   return (
     <>
       <Header />
-      <main className="h-full flex-grow">{children}</main>
+      <main className="h-screen flex-grow">{children}</main>
       <Footer />
     </>
   );
@@ -29,21 +29,16 @@ const Header = (): React.JSX.Element | null => {
   const [isSmallScreen, setIsSmallScreen] = useState(false);
 
   useEffect(() => {
-    setIsSmallScreen(width < 968);
+    setIsSmallScreen(width < 1024);
   }, [width]);
 
   return (
-    <header className="header flex items-center">
-      <div className="container-lg mx-auto flex items-center justify-between text-lg">
-        <Logo />
-        <div className="flex items-center gap-10">
-          {isSmallScreen ? (
-            <HamburgerMenu routes={routes} currentRoute={currentRoute} />
-          ) : (
-            <DesktopNavLinks routes={routes} currentRoute={currentRoute} />
-          )}
-        </div>
-      </div>
+    <header className="header container-lg fixed z-50 mx-auto flex w-full items-center justify-end text-lg">
+      {isSmallScreen ? (
+        <HamburgerMenu routes={routes} currentRoute={currentRoute} />
+      ) : (
+        <DesktopNavLinks routes={routes} currentRoute={currentRoute} />
+      )}
     </header>
   );
 };
@@ -70,25 +65,22 @@ const DesktopNavLinks = ({
   if (!routes?.length) return null;
 
   return (
-    <>
-      <nav>
-        <ul className="flex gap-4">
-          {routes?.map((route, index) => (
-            <li key={index}>
-              <Link
-                href={route.path}
-                className={cn("nav-link text-1.5xl font-black uppercase", {
-                  active: currentRoute === route.path,
-                })}
-              >
-                {capitalize(route.name)}
-              </Link>
-            </li>
-          ))}
-        </ul>
-      </nav>
-      <ScheduleButton />
-    </>
+    <nav>
+      <ul className="flex gap-4">
+        {routes?.map((route, index) => (
+          <li key={index}>
+            <Link
+              href={route.path}
+              className={cn("nav-link text-1.5xl font-black uppercase", {
+                active: currentRoute === route.path,
+              })}
+            >
+              {capitalize(route.name)}
+            </Link>
+          </li>
+        ))}
+      </ul>
+    </nav>
   );
 };
 

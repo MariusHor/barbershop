@@ -32,7 +32,7 @@ export const ScheduleButton = ({
     <Button
       size={size}
       className={cn(
-        "font-600 w-fit rounded-none text-lg text-muted hover:bg-primary-foreground",
+        "font-600 h-14 w-fit rounded-none text-lg text-muted hover:bg-primary-foreground",
         className,
       )}
       variant={variant}
