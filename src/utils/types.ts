@@ -22,6 +22,7 @@ export type PageSection = {
     text: string;
     href: string;
   };
+  marqueeText?: string;
   image: {
     asset?: {
       _ref: string;

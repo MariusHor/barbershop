@@ -116,6 +116,11 @@ const page = {
               ],
             },
             {
+              name: "marqueeText",
+              title: "Text animat",
+              type: "string",
+            },
+            {
               name: "image",
               type: "image",
               title: "Imagine",

@@ -2,6 +2,9 @@ import { type InferGetServerSidePropsType } from "next";
 import Head from "next/head";
 import { type Page } from "sanity.types";
 import Image from "next/image";
+import Marquee from "react-fast-marquee";
+import Carousel from "react-multi-carousel";
+import "react-multi-carousel/lib/styles.css";
 
 import type { NextPageWithLayout } from "./_app";
 import { cn, getPageTitle } from "@/utils/helpers";
@@ -10,15 +13,19 @@ import { api } from "@/utils/api";
 import { type PageSection } from "@/utils/types";
 import { urlFor } from "@/lib/sanity/client";
 import { ScheduleButton } from "@/components";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 
 export const getServerSideProps = async () => {
   const ssg = getSSGHelper();
 
+  const pageData = await ssg.content.getPageData.fetch({ slug: "acasa" });
+
   await Promise.all([
-    ssg.content.getPageData.prefetch({ slug: "acasa" }),
-    ssg.content.getGalleryImages.prefetch({ end: 6 }),
+    pageData,
+    ssg.content.getGalleryImages.prefetch({
+      end: pageData?.sections?.[0]?.title.length,
+    }),
     ssg.content.getSiteSettings.prefetch(),
     ssg.content.getSiteLogo.prefetch(),
     ssg.content.getShopLocation.prefetch(),
@@ -57,20 +64,33 @@ const Page: NextPageWithLayout<
 
 const HeroSection = ({ data }: { data: PageSection }) => {
   const { data: imagesData } = api.content.getGalleryImages.useQuery({
-    end: 6,
+    end: data.title.length,
   });
 
+  const carouselElement = useRef<Carousel | null>(null);
   const [isImageLoading, setImageLoading] = useState(true);
-  const [selectedImageIndex, setSelectedImageIndex] = useState(0);
-  const selectedImage = imagesData?.[selectedImageIndex];
+  const [activeSlideIndex, setActiveSlideIndex] = useState(0);
   const heroImage = data?.image;
+  const responsiveCarousel = {
+    general: {
+      breakpoint: { min: 0, max: 4000 },
+      items: 1,
+    },
+  };
 
-  function handleImageSelect(index: number) {
-    setSelectedImageIndex(index);
+  if (!imagesData?.length) {
+    throw new Error("Missing gallery images");
   }
 
-  if (!selectedImage) {
-    throw new Error("Missing gallery images");
+  function handleSlideSelect(index: number) {
+    if (!carouselElement.current) return;
+
+    setActiveSlideIndex(index);
+    carouselElement.current.goToSlide(index);
+  }
+
+  function handleBeforeSlideChange(nextSlide: number) {
+    setActiveSlideIndex(nextSlide);
   }
 
   return (
@@ -99,9 +119,11 @@ const HeroSection = ({ data }: { data: PageSection }) => {
                 variant={"ghost"}
                 className={cn(
                   "p-0 text-6xl font-black text-muted hover:bg-transparent hover:text-primary md:text-8xl 2xl:text-9xl",
-                  { "text-primary": index === selectedImageIndex },
+                  {
+                    "text-primary": activeSlideIndex === index,
+                  },
                 )}
-                onClick={() => handleImageSelect(index)}
+                onClick={() => handleSlideSelect(index)}
               >
                 {letter}
               </Button>
@@ -114,37 +136,50 @@ const HeroSection = ({ data }: { data: PageSection }) => {
             </p>
           )}
 
-          <ScheduleButton className="bg-white text-dark hover:text-muted lg:hidden" />
+          <ScheduleButton
+            className="bg-white text-dark hover:text-muted xl:mt-4"
+            text={data.ctaButton?.text}
+          />
         </div>
       </div>
 
-      <div className="hidden flex-col items-center justify-center gap-16 bg-white px-20 lg:flex">
-        <div className="aspect-square max-h-[564px] w-full max-w-[564px] border-[1px] border-solid border-dark">
-          <Image
-            src={selectedImage.imageUrl}
-            alt={selectedImage.alt ?? ""}
-            width={selectedImage.width}
-            height={selectedImage.height}
-            className="h-full w-full object-cover"
-            priority
-          />
+      <div className="relative hidden flex-col items-center justify-center gap-16 overflow-hidden bg-white px-20 lg:flex">
+        <div className="relative z-10 aspect-square max-h-[564px] w-full max-w-[564px] select-none overflow-hidden border-[1px] border-solid border-dark">
+          <Carousel
+            ref={carouselElement}
+            responsive={responsiveCarousel}
+            itemClass="h-full"
+            containerClass="h-full"
+            sliderClass="h-full"
+            ssr={true}
+            draggable={false}
+            swipeable={false}
+            arrows={false}
+            autoPlay={true}
+            rewind={true}
+            autoPlaySpeed={4000}
+            beforeChange={handleBeforeSlideChange}
+          >
+            {imagesData.map((image, index) => (
+              <Image
+                key={index}
+                src={image.imageUrl}
+                alt={image.alt ?? "hero image"}
+                width={image.width}
+                height={image.height}
+                className="relative z-0 h-full w-full select-none object-cover"
+                priority
+              />
+            ))}
+          </Carousel>
         </div>
-        {/* <div className="mt-8 flex flex-col items-center justify-center gap-6 md:flex-row">
-          {data.ctaButton && <ScheduleButton text={data.ctaButton.text} />}
-
-          {data.linkButton && (
-            <Button
-              className="font-600 flex gap-2 rounded-none bg-transparent p-0 text-lg text-white hover:text-primary-foreground"
-              asChild
-            >
-              <Link href={data.linkButton.href}>
-                {data.linkButton.text}
-                <ArrowRightIcon />
-              </Link>
-            </Button>
+        <div className="absolute bottom-10">
+          {data.marqueeText && (
+            <Marquee className="font-500 text-3xl" autoFill pauseOnHover>
+              <span className="mr-8"> {data.marqueeText}</span>
+            </Marquee>
           )}
-        </div> */}
-        <ScheduleButton className="absolute bottom-16" />
+        </div>
       </div>
     </section>
   );
