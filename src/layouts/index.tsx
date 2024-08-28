@@ -27,13 +27,32 @@ const Header = (): React.JSX.Element | null => {
   const currentRoute = usePathname();
   const { width = 0 } = useWindowSize();
   const [isSmallScreen, setIsSmallScreen] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
 
   useEffect(() => {
     setIsSmallScreen(width < 1024);
   }, [width]);
 
+  useEffect(() => {
+    const handleScroll = () => {
+      const isTop = window.scrollY === 0;
+      setIsScrolled(!isTop);
+    };
+
+    window.addEventListener("scroll", handleScroll);
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
+
   return (
-    <header className="header container-lg fixed z-50 mx-auto flex w-full items-center justify-end text-lg">
+    <header
+      className={cn(
+        "container-lg fixed z-50 mx-auto flex h-20 w-full items-center justify-end text-lg transition",
+        { "bg-white": isScrolled },
+      )}
+    >
       {isSmallScreen ? (
         <HamburgerMenu routes={routes} currentRoute={currentRoute} />
       ) : (

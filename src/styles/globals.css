@@ -36,8 +36,6 @@
     --ring: 222.2 84% 4.9%;
 
     --radius: 0.5rem;
-
-    --header-height: 6rem;
   }
 }
 
@@ -62,10 +60,6 @@
 }
 
 @layer components {
-  .header {
-    height: var(--header-height);
-  }
-
   .nav-link {
     @apply text-dark;
   }

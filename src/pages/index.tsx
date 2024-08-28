@@ -111,7 +111,7 @@ const HeroSection = ({ data }: { data: PageSection }) => {
           />
         </div>
 
-        <div className="relative z-50 flex h-full flex-col items-center justify-center gap-16">
+        <div className="relative z-40 flex h-full flex-col items-center justify-center gap-16">
           <h1 className="flex gap-4 text-center opacity-100 md:gap-6 xl:gap-8">
             {data.title.split("").map((letter, index) => (
               <Button
