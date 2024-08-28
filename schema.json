@@ -367,6 +367,13 @@
         },
         "optional": false
       },
+      "order": {
+        "type": "objectAttribute",
+        "value": {
+          "type": "number"
+        },
+        "optional": false
+      },
       "path": {
         "type": "objectAttribute",
         "value": {
@@ -749,13 +756,6 @@
           "type": "string"
         }
       },
-      "name": {
-        "type": "objectAttribute",
-        "value": {
-          "type": "string"
-        },
-        "optional": false
-      },
       "image": {
         "type": "objectAttribute",
         "value": {
@@ -813,20 +813,6 @@
                 "type": "string"
               },
               "optional": true
-            },
-            "width": {
-              "type": "objectAttribute",
-              "value": {
-                "type": "number"
-              },
-              "optional": false
-            },
-            "height": {
-              "type": "objectAttribute",
-              "value": {
-                "type": "number"
-              },
-              "optional": false
             },
             "_type": {
               "type": "objectAttribute",

@@ -75,6 +75,7 @@ export type Page = {
   _updatedAt: string;
   _rev: string;
   title: string;
+  order: number;
   path: string;
   slug: Slug;
   sections?: Array<{
@@ -142,7 +143,6 @@ export type GalleryImage = {
   _createdAt: string;
   _updatedAt: string;
   _rev: string;
-  name: string;
   image: {
     asset?: {
       _ref: string;
@@ -153,8 +153,6 @@ export type GalleryImage = {
     hotspot?: SanityImageHotspot;
     crop?: SanityImageCrop;
     alt?: string;
-    width: number;
-    height: number;
     _type: "image";
   };
 };

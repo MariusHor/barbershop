@@ -5,6 +5,7 @@ import { createTRPCRouter, publicProcedure } from "../trpc";
 import { TRPCError } from "@trpc/server";
 import { SANITY_DOC_TYPES } from "@/utils/constants";
 import { z } from "zod";
+import { type GalleryImage } from "@/utils/types";
 
 function throwSanityErrorMessage({ dataType }: { dataType: string }) {
   throw new TRPCError({
@@ -68,4 +69,25 @@ export const sanityContentRouter = createTRPCRouter({
 
     return data.map((page) => ({ name: page.title, path: page.path }));
   }),
+  getGalleryImages: publicProcedure
+    .input(
+      z.object({ start: z.number().default(0), end: z.number().default(10) }),
+    )
+    .query(async ({ ctx, input }) => {
+      const dataType = SANITY_DOC_TYPES.galleryImage;
+      const query = `*[_type == "${dataType}"][$start...$end]{
+        "imageUrl": image.asset->url,
+        "width": image.asset->metadata.dimensions.width,
+        "height": image.asset->metadata.dimensions.height,
+        "alt": image.alt,
+      } | order(_createdAt asc)`;
+
+      const data = await ctx.sanityClient.fetch<GalleryImage[]>(query, {
+        ...input,
+      });
+
+      if (!data[0]) throwSanityErrorMessage({ dataType });
+
+      return data;
+    }),
 });

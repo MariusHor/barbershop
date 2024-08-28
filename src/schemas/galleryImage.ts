@@ -7,12 +7,6 @@ const galleryImage = {
   title: "Imagini Galerie",
   fields: [
     {
-      name: "name",
-      type: "string",
-      title: "Nume fisier",
-      validation: (rule: Rule) => rule.required().min(4).max(50),
-    },
-    {
       name: "image",
       type: "image",
       title: "Imagine",
@@ -23,21 +17,19 @@ const galleryImage = {
           type: "string",
           title: "Text alternativ",
         },
-        {
-          name: "width",
-          type: "number",
-          title: "Latime imagine",
-          validation: (rule: Rule) => rule.required().integer(),
-        },
-        {
-          name: "height",
-          type: "number",
-          title: "Inaltime imagine",
-          validation: (rule: Rule) => rule.required().integer(),
-        },
       ],
+      options: {
+        hotspot: true,
+      },
     },
   ],
+  preview: {
+    select: {
+      title: "image.asset.originalFilename",
+      width: "image.asset.metadata.dimensions.width",
+      height: "image.asset.metadata.dimensions.height",
+    },
+  },
 };
 
 export default galleryImage;

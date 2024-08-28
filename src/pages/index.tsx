@@ -11,12 +11,14 @@ import { type PageSection } from "@/utils/types";
 import { urlFor } from "@/lib/sanity/client";
 import { ScheduleButton } from "@/components";
 import { useState } from "react";
+import { Button } from "@/components/ui/button";
 
 export const getServerSideProps = async () => {
   const ssg = getSSGHelper();
 
   await Promise.all([
     ssg.content.getPageData.prefetch({ slug: "acasa" }),
+    ssg.content.getGalleryImages.prefetch({ end: 6 }),
     ssg.content.getSiteSettings.prefetch(),
     ssg.content.getSiteLogo.prefetch(),
     ssg.content.getShopLocation.prefetch(),
@@ -54,8 +56,22 @@ const Page: NextPageWithLayout<
 };
 
 const HeroSection = ({ data }: { data: PageSection }) => {
-  const heroImage = data?.image;
+  const { data: imagesData } = api.content.getGalleryImages.useQuery({
+    end: 6,
+  });
+
   const [isImageLoading, setImageLoading] = useState(true);
+  const [selectedImageIndex, setSelectedImageIndex] = useState(0);
+  const selectedImage = imagesData?.[selectedImageIndex];
+  const heroImage = data?.image;
+
+  function handleImageSelect(index: number) {
+    setSelectedImageIndex(index);
+  }
+
+  if (!selectedImage) {
+    throw new Error("Missing gallery images");
+  }
 
   return (
     <section className="relative grid h-full w-full bg-black lg:grid-cols-2">
@@ -71,12 +87,25 @@ const HeroSection = ({ data }: { data: PageSection }) => {
               `${isImageLoading ? "blur" : "remove-blur"}`,
             )}
             onLoad={() => setImageLoading(false)}
+            priority
           />
         </div>
 
         <div className="relative z-50 flex h-full flex-col items-center justify-center gap-16">
-          <h1 className="xl:text-20xl md:text-14xl text-12xl text-center font-black text-primary opacity-100">
-            {data.title}
+          <h1 className="flex gap-4 text-center opacity-100 md:gap-6 xl:gap-8">
+            {data.title.split("").map((letter, index) => (
+              <Button
+                key={index}
+                variant={"ghost"}
+                className={cn(
+                  "p-0 text-6xl font-black text-muted hover:bg-transparent hover:text-primary md:text-8xl 2xl:text-9xl",
+                  { "text-primary": index === selectedImageIndex },
+                )}
+                onClick={() => handleImageSelect(index)}
+              >
+                {letter}
+              </Button>
+            ))}
           </h1>
 
           {data?.subtitle && (
@@ -90,7 +119,16 @@ const HeroSection = ({ data }: { data: PageSection }) => {
       </div>
 
       <div className="hidden flex-col items-center justify-center gap-16 bg-white px-20 lg:flex">
-        <div className="aspect-square max-h-[564px] w-full max-w-[564px] border-[1px] border-solid border-dark"></div>
+        <div className="aspect-square max-h-[564px] w-full max-w-[564px] border-[1px] border-solid border-dark">
+          <Image
+            src={selectedImage.imageUrl}
+            alt={selectedImage.alt ?? ""}
+            width={selectedImage.width}
+            height={selectedImage.height}
+            className="h-full w-full object-cover"
+            priority
+          />
+        </div>
         {/* <div className="mt-8 flex flex-col items-center justify-center gap-6 md:flex-row">
           {data.ctaButton && <ScheduleButton text={data.ctaButton.text} />}
 

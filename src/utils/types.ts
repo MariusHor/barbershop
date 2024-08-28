@@ -4,6 +4,13 @@ import {
   type internalGroqTypeReferenceTo,
 } from "sanity.types";
 
+export type GalleryImage = {
+  imageUrl: string;
+  width: number;
+  height: number;
+  alt: string;
+};
+
 export type PageSection = {
   title: string;
   subtitle?: string;
