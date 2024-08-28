@@ -5,6 +5,7 @@ import Image from "next/image";
 import Marquee from "react-fast-marquee";
 import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
+import { ArrowRightIcon } from "@radix-ui/react-icons";
 
 import type { NextPageWithLayout } from "./_app";
 import { cn, getPageTitle } from "@/utils/helpers";
@@ -15,6 +16,7 @@ import { urlFor } from "@/lib/sanity/client";
 import { ScheduleButton } from "@/components";
 import { useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
+import Link from "next/link";
 
 export const getServerSideProps = async () => {
   const ssg = getSSGHelper();
@@ -61,17 +63,15 @@ const Page: NextPageWithLayout<
       {pageData.sections[0] && <HeroSection data={pageData.sections[0]} />}
 
       {pageData.sections[1] && (
-        <ColumnsSection data={pageData.sections[1]} reverse />
+        <ColumnSection data={pageData.sections[1]} reverse />
       )}
 
-      {pageData.sections[2] && (
-        <ColumnsSection data={pageData.sections[2]} reverse />
-      )}
+      {pageData.sections[2] && <ColumnSection data={pageData.sections[2]} />}
     </>
   );
 };
 
-const ColumnsSection = ({
+const ColumnSection = ({
   data,
   reverse = false,
 }: {
@@ -79,7 +79,7 @@ const ColumnsSection = ({
   reverse?: boolean;
 }) => {
   return (
-    <div className="grid grid-cols-2">
+    <section className="grid grid-cols-2">
       <Image
         src={urlFor(data.image).url()}
         alt={data.image.alt ?? "hero image"}
@@ -90,8 +90,31 @@ const ColumnsSection = ({
         })}
         loading="lazy"
       />
-      <div></div>
-    </div>
+      <div className="flex flex-col items-start justify-center gap-4 p-16 text-dark">
+        {data.title && <h2 className="text-4xl text-dark">{data.title}</h2>}
+        {data.subtitle && (
+          <h3 className="text-3xl text-dark-foreground">{data.subtitle}</h3>
+        )}
+        {data.content && (
+          <p className="mt-4 max-w-[548px] text-lg text-dark-foreground">
+            {data.content}
+          </p>
+        )}
+        {data.linkButton && (
+          <Button
+            size={"default"}
+            variant={"ghost"}
+            asChild
+            className="flex gap-2 p-0 text-lg hover:bg-transparent hover:text-primary"
+          >
+            <Link href={data.linkButton?.href}>
+              {data.linkButton?.text}
+              <ArrowRightIcon style={{ width: "20px", height: "20px" }} />
+            </Link>
+          </Button>
+        )}
+      </div>
+    </section>
   );
 };
 
