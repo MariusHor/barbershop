@@ -50,7 +50,7 @@ const Header = (): React.JSX.Element | null => {
     <header
       className={cn(
         "fixed z-50 mx-auto flex h-20 w-full items-center text-lg transition",
-        { "bg-white": isScrolled },
+        { "bg-white shadow-md": isScrolled },
       )}
     >
       {isSmallScreen ? (
