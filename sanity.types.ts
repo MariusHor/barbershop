@@ -80,20 +80,17 @@ export type Page = {
   slug: Slug;
   sections?: Array<{
     style: "column" | "row" | "row-reversed";
-    value: "intro" | "location" | "services";
-    order: number;
-    title: string;
+    value: "intro" | "location" | "services" | "follow" | "about";
+    title?: string;
     subtitle?: string;
     content?: string;
-    ctaButton?: {
-      text: string;
-    };
+    withGallery?: boolean;
     linkButton?: {
       text: string;
-      href: string;
+      href?: string;
     };
     marqueeText?: string;
-    image: {
+    image?: {
       asset?: {
         _ref: string;
         _type: "reference";

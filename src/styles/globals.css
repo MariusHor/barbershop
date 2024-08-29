@@ -5,6 +5,7 @@
 @layer base {
   :root {
     --background: 0 0% 100%;
+    --background-secondary: 26, 23%, 94%;
     --foreground: 222.2 84% 4.9%;
 
     --card: 0 0% 100%;
@@ -20,7 +21,7 @@
     --secondary-foreground: 222.2 47.4% 11.2%;
 
     --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
+    --muted-foreground: 195, 4%, 70%;
 
     --dark: 210, 10%, 23%;
     --dark-foreground: 212, 10%, 25%;
@@ -60,14 +61,6 @@
 }
 
 @layer components {
-  .nav-link {
-    @apply text-dark;
-  }
-
-  .nav-link:hover,
-  .nav-link.active {
-    @apply text-primary;
-  }
 }
 
 @layer utilities {

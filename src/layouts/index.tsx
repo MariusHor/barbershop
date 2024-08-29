@@ -2,7 +2,7 @@ import { usePathname } from "next/navigation";
 import Link from "next/link";
 import { useWindowSize } from "usehooks-ts";
 
-import { Logo, SocialLinks, ScheduleButton } from "@/components";
+import { Separator } from "@/components/ui/separator";
 import { capitalize, cn } from "@/utils/helpers";
 import { api } from "@/utils/api";
 
@@ -53,11 +53,17 @@ const Header = (): React.JSX.Element | null => {
         { "bg-white shadow-md": isScrolled },
       )}
     >
-      {isSmallScreen ? (
-        <HamburgerMenu routes={routes} currentRoute={currentRoute} />
-      ) : (
-        <DesktopNavLinks routes={routes} currentRoute={currentRoute} />
-      )}
+      <div className="container-lg flex justify-end">
+        {isSmallScreen ? (
+          <HamburgerMenu routes={routes} currentRoute={currentRoute} />
+        ) : (
+          <DesktopNavLinks
+            routes={routes}
+            currentRoute={currentRoute}
+            itemClassName="text-dark"
+          />
+        )}
+      </div>
     </header>
   );
 };
@@ -77,22 +83,35 @@ const HamburgerMenu = ({
 const DesktopNavLinks = ({
   routes,
   currentRoute,
+  direction = "row",
+  itemClassName,
 }: {
   routes: { path: string; name: string }[] | undefined;
   currentRoute: string | null;
+  direction?: "row" | "col";
+  itemClassName?: string;
 }): React.JSX.Element | null => {
   if (!routes?.length) return null;
 
   return (
-    <nav className="container-lg mx-auto flex items-center justify-end">
-      <ul className="flex gap-4 xl:gap-8 2xl:gap-12">
+    <nav className="flex items-center">
+      <ul
+        className={cn("flex gap-4", {
+          "flex-col gap-2": direction === "col",
+          "gap-4 xl:gap-8 2xl:gap-12": direction === "row",
+        })}
+      >
         {routes?.map((route, index) => (
           <li key={index}>
             <Link
               href={route.path}
-              className={cn("nav-link font-300 text-1xl uppercase", {
-                active: currentRoute === route.path,
-              })}
+              className={cn(
+                "font-300 text-1xl uppercase hover:text-primary",
+                itemClassName,
+                {
+                  "text-primary": currentRoute === route.path,
+                },
+              )}
             >
               {capitalize(route.name)}
             </Link>
@@ -105,56 +124,58 @@ const DesktopNavLinks = ({
 
 const Footer = (): React.JSX.Element => {
   const { data: locationData } = api.content.getShopLocation.useQuery();
+  const { data: siteSettings } = api.content.getSiteSettings.useQuery();
+  const { data: routes } = api.content.getRoutes.useQuery();
+  const currentRoute = usePathname();
 
   return (
-    <footer className="bg-slate-200">
-      <div className="container-lg sticky bottom-0 flex flex-col items-center justify-center gap-20 py-16">
-        <Logo />
-        <div className="grid h-full w-full grow grid-cols-3 items-center">
-          {locationData && (
-            <>
-              <Column title="Contact">
-                <div className="flex flex-col gap-4">
-                  <p className="w-fit text-2xl font-thin">
-                    {locationData.street}
-                    <br />
-                    {locationData.city} {locationData.zip}
-                  </p>
-                  <ul className="w-fit items-start">
-                    {[locationData.phone, locationData.email].map(
-                      (item, index) => (
-                        <li key={index} className="md:p-lg w-fit">
-                          <a
-                            href={`${item?.includes("@") ? "mailto:" : "tel:"}${item}`}
-                          >
-                            {item}
-                          </a>
-                        </li>
-                      ),
-                    )}
-                  </ul>
-                  <SocialLinks />
-                  <ScheduleButton className="mt-4" />
-                </div>
-              </Column>
-              {locationData.timetables?.length && (
-                <Column title="Orar">
-                  <div>
-                    {locationData.timetables.map((entry, index) => (
-                      <p key={index}>{entry}</p>
-                    ))}
-                  </div>
-                </Column>
-              )}
-            </>
-          )}
+    <footer className="bg-black">
+      <div className="sticky bottom-0 m-auto flex max-w-[1024px] justify-center gap-20 py-16">
+        <Column title="Meniu">
+          <DesktopNavLinks
+            routes={routes}
+            currentRoute={currentRoute}
+            direction="col"
+            itemClassName="text-muted"
+          />
+        </Column>
 
-          {/* TODO: Integrate Google Maps */}
-          <Column title="Locatie">
-            <div className="h-full w-full bg-white"></div>
-          </Column>
-        </div>
+        <Separator
+          orientation="vertical"
+          className="h-auto bg-dark-foreground"
+        />
+
+        <Column title="Locatii">
+          <div className="flex flex-col gap-2">
+            <p className="font-black">{locationData?.name}</p>
+            <p>{locationData?.street}</p>
+            <p>
+              {locationData?.zip} {locationData?.city}
+            </p>
+            <p>{locationData?.phone}</p>
+          </div>
+        </Column>
+
+        <Separator
+          orientation="vertical"
+          className="h-auto bg-dark-foreground"
+        />
+
+        <Column title="Orar">
+          <div className="flex flex-col gap-2">
+            {locationData?.timetables?.map((item, index) => (
+              <p key={index}>{item}</p>
+            ))}
+          </div>
+        </Column>
       </div>
+
+      <Separator className="bg-dark-foreground" />
+
+      <p className="m-auto w-fit p-4 font-[300] text-muted-foreground">
+        ©2023 {siteSettings?.title}. All content is the property of{" "}
+        {siteSettings?.title} unless otherwise noted.
+      </p>
     </footer>
   );
 };
@@ -166,8 +187,10 @@ type ColumnProps = {
 
 const Column = ({ title, children }: ColumnProps): React.JSX.Element => {
   return (
-    <div className="flex h-full max-h-96 flex-col gap-4">
-      <h3 className="mb-4 text-3xl font-thin">{title}</h3>
+    <div className="flex h-full max-h-96 flex-col gap-4 text-white">
+      <h3 className="mb-4 text-3xl font-[300] text-muted-foreground">
+        {title}
+      </h3>
       {children}
     </div>
   );

@@ -433,15 +433,16 @@
                     {
                       "type": "string",
                       "value": "services"
+                    },
+                    {
+                      "type": "string",
+                      "value": "follow"
+                    },
+                    {
+                      "type": "string",
+                      "value": "about"
                     }
                   ]
-                },
-                "optional": false
-              },
-              "order": {
-                "type": "objectAttribute",
-                "value": {
-                  "type": "number"
                 },
                 "optional": false
               },
@@ -450,7 +451,7 @@
                 "value": {
                   "type": "string"
                 },
-                "optional": false
+                "optional": true
               },
               "subtitle": {
                 "type": "objectAttribute",
@@ -466,19 +467,10 @@
                 },
                 "optional": true
               },
-              "ctaButton": {
+              "withGallery": {
                 "type": "objectAttribute",
                 "value": {
-                  "type": "object",
-                  "attributes": {
-                    "text": {
-                      "type": "objectAttribute",
-                      "value": {
-                        "type": "string"
-                      },
-                      "optional": false
-                    }
-                  }
+                  "type": "boolean"
                 },
                 "optional": true
               },
@@ -499,7 +491,7 @@
                       "value": {
                         "type": "string"
                       },
-                      "optional": false
+                      "optional": true
                     }
                   }
                 },
@@ -593,7 +585,7 @@
                     }
                   }
                 },
-                "optional": false
+                "optional": true
               },
               "_type": {
                 "type": "objectAttribute",

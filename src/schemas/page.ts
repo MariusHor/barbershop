@@ -91,37 +91,16 @@ const page = {
                   { title: "Intro", value: "intro" },
                   { title: "Locatie", value: "location" },
                   { title: "Servicii", value: "services" },
+                  { title: "Urmareste", value: "follow" },
+                  { title: "Despre", value: "about" },
                 ],
               },
-              initialValue: "one-column",
-            },
-            {
-              name: "order",
-              title: "Ordine",
-              type: "number",
-              validation: (rule: Rule) =>
-                rule
-                  .required()
-                  .integer()
-                  .positive()
-                  .min(1)
-                  .custom((order, context) => {
-                    const parent = context.parent as
-                      | { value?: string }
-                      | undefined;
-
-                    if (parent?.value === "intro" && order !== 1) {
-                      return 'Pentru "Intro" ordinea trebuie să fie tot timpul "1"';
-                    }
-
-                    return true;
-                  }),
+              initialValue: "intro",
             },
             {
               name: "title",
               title: "Titlu",
               type: "string",
-              validation: (rule: Rule) => rule.required().min(4).max(50),
             },
             {
               name: "subtitle",
@@ -134,17 +113,9 @@ const page = {
               type: "string",
             },
             {
-              name: "ctaButton",
-              title: "Buton CTA",
-              type: "object",
-              fields: [
-                {
-                  name: "text",
-                  type: "string",
-                  title: "Text",
-                  validation: (rule: Rule) => rule.required(),
-                },
-              ],
+              name: "withGallery",
+              title: "Galerie",
+              type: "boolean",
             },
             {
               name: "linkButton",
@@ -161,7 +132,6 @@ const page = {
                   name: "href",
                   type: "string",
                   title: "Catre",
-                  validation: (rule: Rule) => rule.required(),
                 },
               ],
             },
@@ -174,7 +144,6 @@ const page = {
               name: "image",
               type: "image",
               title: "Imagine",
-              validation: (rule: Rule) => rule.required(),
               fields: [
                 {
                   name: "alt",
