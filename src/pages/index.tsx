@@ -53,6 +53,10 @@ const Page: NextPageWithLayout<
     throw new Error("Missing 'Acasa' page Sanity sections data");
   }
 
+  const heroSectionData = pageData.sections.find(
+    (section) => section.value === "intro",
+  );
+
   return (
     <>
       <Head>
@@ -60,24 +64,68 @@ const Page: NextPageWithLayout<
         <meta name="description" content={siteSettings?.description} />
       </Head>
 
-      {pageData.sections[0] && <HeroSection data={pageData.sections[0]} />}
+      {heroSectionData && <HeroSection data={heroSectionData} />}
 
-      {pageData.sections[1] && (
-        <ColumnSection
-          data={pageData.sections[1]}
-          className="border-b-[1px] border-t-[1px]"
-          reverse
-        />
-      )}
-
-      {pageData.sections[2] && (
-        <ColumnSection data={pageData.sections[2]} className="border-b-[1px]" />
-      )}
+      {pageData.sections
+        .slice(1)
+        .map((section, index) =>
+          section.style.includes("column") ? (
+            <ColumnSection key={index} data={section} />
+          ) : (
+            <RowSection
+              key={index}
+              data={section}
+              className={
+                section.style.includes("reversed")
+                  ? "border-b-[1px] border-t-[1px]"
+                  : "border-b-[1px]"
+              }
+              reverse={section.style.includes("reversed")}
+            />
+          ),
+        )}
     </>
   );
 };
 
 const ColumnSection = ({
+  data,
+  className = "",
+}: {
+  data: PageSection;
+  className?: string;
+}) => {
+  return (
+    <section
+      className={cn("grid grid-cols-2 border-solid border-dark", className)}
+    >
+      {data.title && <h2 className="text-4xl text-dark">{data.title}</h2>}
+      {data.subtitle && (
+        <h3 className="text-3xl text-dark-foreground">{data.subtitle}</h3>
+      )}
+      {data.content && (
+        <p className="mt-4 max-w-[548px] text-lg text-dark-foreground">
+          {data.content}
+        </p>
+      )}
+      {data.linkButton && (
+        <Button
+          size={"default"}
+          variant={"ghost"}
+          asChild
+          className="flex gap-2 p-0 text-lg hover:bg-transparent hover:text-primary"
+        >
+          <Link href={data.linkButton?.href}>
+            {data.linkButton?.text}
+            <ArrowRightIcon style={{ width: "20px", height: "20px" }} />
+          </Link>
+        </Button>
+      )}
+    </section>
+  );
+};
+
+const RowSection = ({
   data,
   className = "",
   reverse = false,

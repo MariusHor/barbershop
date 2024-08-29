@@ -396,6 +396,55 @@
           "of": {
             "type": "object",
             "attributes": {
+              "style": {
+                "type": "objectAttribute",
+                "value": {
+                  "type": "union",
+                  "of": [
+                    {
+                      "type": "string",
+                      "value": "column"
+                    },
+                    {
+                      "type": "string",
+                      "value": "row"
+                    },
+                    {
+                      "type": "string",
+                      "value": "row-reversed"
+                    }
+                  ]
+                },
+                "optional": false
+              },
+              "value": {
+                "type": "objectAttribute",
+                "value": {
+                  "type": "union",
+                  "of": [
+                    {
+                      "type": "string",
+                      "value": "intro"
+                    },
+                    {
+                      "type": "string",
+                      "value": "location"
+                    },
+                    {
+                      "type": "string",
+                      "value": "services"
+                    }
+                  ]
+                },
+                "optional": false
+              },
+              "order": {
+                "type": "objectAttribute",
+                "value": {
+                  "type": "number"
+                },
+                "optional": false
+              },
               "title": {
                 "type": "objectAttribute",
                 "value": {

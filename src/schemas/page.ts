@@ -68,6 +68,56 @@ const page = {
           title: "Sectiune",
           fields: [
             {
+              name: "style",
+              title: "Stil",
+              type: "string",
+              validation: (rule: Rule) => rule.required().min(1),
+              options: {
+                list: [
+                  { title: "Column", value: "column" },
+                  { title: "Row", value: "row" },
+                  { title: "Row reversed", value: "row-reversed" },
+                ],
+              },
+              initialValue: "classic",
+            },
+            {
+              name: "value",
+              title: "Valoare",
+              type: "string",
+              validation: (rule: Rule) => rule.required().min(1),
+              options: {
+                list: [
+                  { title: "Intro", value: "intro" },
+                  { title: "Locatie", value: "location" },
+                  { title: "Servicii", value: "services" },
+                ],
+              },
+              initialValue: "one-column",
+            },
+            {
+              name: "order",
+              title: "Ordine",
+              type: "number",
+              validation: (rule: Rule) =>
+                rule
+                  .required()
+                  .integer()
+                  .positive()
+                  .min(1)
+                  .custom((order, context) => {
+                    const parent = context.parent as
+                      | { value?: string }
+                      | undefined;
+
+                    if (parent?.value === "intro" && order !== 1) {
+                      return 'Pentru "Intro" ordinea trebuie să fie tot timpul "1"';
+                    }
+
+                    return true;
+                  }),
+            },
+            {
               name: "title",
               title: "Titlu",
               type: "string",

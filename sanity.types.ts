@@ -79,6 +79,9 @@ export type Page = {
   path: string;
   slug: Slug;
   sections?: Array<{
+    style: "column" | "row" | "row-reversed";
+    value: "intro" | "location" | "services";
+    order: number;
     title: string;
     subtitle?: string;
     content?: string;
