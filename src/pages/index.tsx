@@ -63,34 +63,49 @@ const Page: NextPageWithLayout<
       {pageData.sections[0] && <HeroSection data={pageData.sections[0]} />}
 
       {pageData.sections[1] && (
-        <ColumnSection data={pageData.sections[1]} reverse />
+        <ColumnSection
+          data={pageData.sections[1]}
+          className="border-b-[1px] border-t-[1px]"
+          reverse
+        />
       )}
 
-      {pageData.sections[2] && <ColumnSection data={pageData.sections[2]} />}
+      {pageData.sections[2] && (
+        <ColumnSection data={pageData.sections[2]} className="border-b-[1px]" />
+      )}
     </>
   );
 };
 
 const ColumnSection = ({
   data,
+  className = "",
   reverse = false,
 }: {
   data: PageSection;
+  className?: string;
   reverse?: boolean;
 }) => {
   return (
-    <section className="grid grid-cols-2">
+    <section
+      className={cn("grid grid-cols-2 border-solid border-dark", className)}
+    >
       <Image
         src={urlFor(data.image).url()}
         alt={data.image.alt ?? "hero image"}
         width={data.image.width}
         height={data.image.height}
-        className={cn("h-full w-full object-cover", {
-          "order-2": reverse,
+        className={cn("max-h-[484px] w-full object-cover", {
+          "order-2 border-l-[1px] border-solid border-dark": reverse,
         })}
         loading="lazy"
       />
-      <div className="flex flex-col items-start justify-center gap-4 p-16 text-dark">
+      <div
+        className={cn(
+          "flex flex-col items-start justify-center gap-4 p-16 text-dark",
+          { "border-l-[1px] border-solid border-dark": !reverse },
+        )}
+      >
         {data.title && <h2 className="text-4xl text-dark">{data.title}</h2>}
         {data.subtitle && (
           <h3 className="text-3xl text-dark-foreground">{data.subtitle}</h3>
