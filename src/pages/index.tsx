@@ -84,24 +84,143 @@ const Page: NextPageWithLayout<
             />
           ),
         )}
-      <SocialMediaSection />
+
+      <section className="bg-background-secondary flex flex-col items-center justify-center gap-6 p-16">
+        <Logo />
+
+        <p className="max-w-[620px] text-center text-lg leading-8 text-dark-foreground">
+          Stay in the loop on special events, new arrivals, and exclusive
+          collaborations brought to you by the crew at {siteSettings?.title}.
+        </p>
+
+        <SocialLinks />
+      </section>
     </>
   );
 };
 
-const SocialMediaSection = () => {
-  const { data: siteSettings } = api.content.getSiteSettings.useQuery();
+const HeroSection = ({ data }: { data: PageSection }) => {
+  const { data: imagesData } = api.content.getGalleryImages.useQuery({
+    end: data.title?.length,
+  });
+
+  const carouselElement = useRef<Carousel | null>(null);
+  const [isImageLoading, setImageLoading] = useState(true);
+  const [activeSlideIndex, setActiveSlideIndex] = useState(0);
+  const heroImage = data?.image;
+  const responsiveCarousel = {
+    general: {
+      breakpoint: { min: 0, max: 4000 },
+      items: 1,
+    },
+  };
+
+  if (!imagesData?.length) {
+    throw new Error("Missing gallery images");
+  }
+
+  function handleSlideSelect(index: number) {
+    if (!carouselElement.current) return;
+
+    setActiveSlideIndex(index);
+    carouselElement.current.goToSlide(index);
+  }
+
+  function handleBeforeSlideChange(nextSlide: number) {
+    setActiveSlideIndex(nextSlide);
+  }
 
   return (
-    <section className="bg-background-secondary flex flex-col items-center justify-center gap-6 p-16">
-      <Logo />
+    <section className="relative grid h-screen w-full bg-black lg:grid-cols-2">
+      <div className="relative">
+        {heroImage && (
+          <div className="absolute left-0 top-0 h-full w-full grayscale">
+            <Image
+              src={urlFor(heroImage).url()}
+              alt={heroImage.alt ?? "hero image"}
+              width={heroImage.width}
+              height={heroImage.height}
+              className={cn(
+                "h-full w-full object-cover opacity-40",
+                `${isImageLoading ? "blur" : "remove-blur"}`,
+              )}
+              onLoad={() => setImageLoading(false)}
+              priority
+            />
+          </div>
+        )}
 
-      <p className="max-w-[620px] text-center text-lg leading-8 text-dark-foreground">
-        Stay in the loop on special events, new arrivals, and exclusive
-        collaborations brought to you by the crew at {siteSettings?.title}.
-      </p>
+        <div className="relative z-40 flex h-full flex-col items-center justify-center gap-16">
+          <h1 className="flex gap-4 text-center opacity-100 md:gap-6 xl:gap-8">
+            {data.title?.split("").map((letter, index) => (
+              <Button
+                key={index}
+                variant={"ghost"}
+                className={cn(
+                  "p-0 text-6xl font-black text-muted hover:bg-transparent hover:text-primary md:text-8xl 2xl:text-9xl",
+                  {
+                    "text-primary": activeSlideIndex === index,
+                  },
+                )}
+                onClick={() => handleSlideSelect(index)}
+              >
+                {letter}
+              </Button>
+            ))}
+          </h1>
 
-      <SocialLinks />
+          {data?.subtitle && (
+            <p className="max-w-[736px] text-center text-lg text-white opacity-100 sm:text-xl md:text-2xl xl:text-3xl">
+              {data?.subtitle}
+            </p>
+          )}
+
+          <ScheduleButton
+            className="bg-white text-dark hover:text-muted xl:mt-4"
+            text={data.linkButton?.text}
+            href={data.linkButton?.href}
+          />
+        </div>
+      </div>
+      <div className="relative hidden flex-col items-center justify-center gap-16 overflow-hidden bg-white px-20 lg:flex">
+        <div className="relative z-10 aspect-square max-h-[564px] w-full max-w-[564px] select-none overflow-hidden border-[1px] border-solid border-dark">
+          <Carousel
+            ref={carouselElement}
+            responsive={responsiveCarousel}
+            itemClass="h-full"
+            containerClass="h-full"
+            sliderClass="h-full"
+            ssr={true}
+            draggable={false}
+            swipeable={false}
+            arrows={false}
+            autoPlay={true}
+            rewind={true}
+            autoPlaySpeed={4000}
+            beforeChange={handleBeforeSlideChange}
+            rtl
+          >
+            {imagesData.map((item, index) => (
+              <Image
+                key={index}
+                src={urlFor(item.image).url()}
+                alt={item.image.alt ?? "hero image"}
+                width={item.image.width}
+                height={item.image.height}
+                className="relative z-0 h-full w-full select-none object-cover"
+                priority
+              />
+            ))}
+          </Carousel>
+        </div>
+        <div className="bg-background-secondary absolute bottom-0 py-6">
+          {data.marqueeText && (
+            <Marquee autoFill pauseOnHover>
+              <span className="font-500 mr-8 text-3xl">{data.marqueeText}</span>
+            </Marquee>
+          )}
+        </div>
+      </div>
     </section>
   );
 };
@@ -245,132 +364,6 @@ const RowSection = ({
             </Link>
           </Button>
         )}
-      </div>
-    </section>
-  );
-};
-
-const HeroSection = ({ data }: { data: PageSection }) => {
-  const { data: imagesData } = api.content.getGalleryImages.useQuery({
-    end: data.title?.length,
-  });
-
-  const carouselElement = useRef<Carousel | null>(null);
-  const [isImageLoading, setImageLoading] = useState(true);
-  const [activeSlideIndex, setActiveSlideIndex] = useState(0);
-  const heroImage = data?.image;
-  const responsiveCarousel = {
-    general: {
-      breakpoint: { min: 0, max: 4000 },
-      items: 1,
-    },
-  };
-
-  if (!imagesData?.length) {
-    throw new Error("Missing gallery images");
-  }
-
-  function handleSlideSelect(index: number) {
-    if (!carouselElement.current) return;
-
-    setActiveSlideIndex(index);
-    carouselElement.current.goToSlide(index);
-  }
-
-  function handleBeforeSlideChange(nextSlide: number) {
-    setActiveSlideIndex(nextSlide);
-  }
-
-  return (
-    <section className="relative grid h-screen w-full bg-black lg:grid-cols-2">
-      <div className="relative">
-        {heroImage && (
-          <div className="absolute left-0 top-0 h-full w-full grayscale">
-            <Image
-              src={urlFor(heroImage).url()}
-              alt={heroImage.alt ?? "hero image"}
-              width={heroImage.width}
-              height={heroImage.height}
-              className={cn(
-                "h-full w-full object-cover opacity-40",
-                `${isImageLoading ? "blur" : "remove-blur"}`,
-              )}
-              onLoad={() => setImageLoading(false)}
-              priority
-            />
-          </div>
-        )}
-
-        <div className="relative z-40 flex h-full flex-col items-center justify-center gap-16">
-          <h1 className="flex gap-4 text-center opacity-100 md:gap-6 xl:gap-8">
-            {data.title?.split("").map((letter, index) => (
-              <Button
-                key={index}
-                variant={"ghost"}
-                className={cn(
-                  "p-0 text-6xl font-black text-muted hover:bg-transparent hover:text-primary md:text-8xl 2xl:text-9xl",
-                  {
-                    "text-primary": activeSlideIndex === index,
-                  },
-                )}
-                onClick={() => handleSlideSelect(index)}
-              >
-                {letter}
-              </Button>
-            ))}
-          </h1>
-
-          {data?.subtitle && (
-            <p className="max-w-[736px] text-center text-lg text-white opacity-100 sm:text-xl md:text-2xl xl:text-3xl">
-              {data?.subtitle}
-            </p>
-          )}
-
-          <ScheduleButton
-            className="bg-white text-dark hover:text-muted xl:mt-4"
-            text={data.linkButton?.text}
-            href={data.linkButton?.href}
-          />
-        </div>
-      </div>
-      <div className="relative hidden flex-col items-center justify-center gap-16 overflow-hidden bg-white px-20 lg:flex">
-        <div className="relative z-10 aspect-square max-h-[564px] w-full max-w-[564px] select-none overflow-hidden border-[1px] border-solid border-dark">
-          <Carousel
-            ref={carouselElement}
-            responsive={responsiveCarousel}
-            itemClass="h-full"
-            containerClass="h-full"
-            sliderClass="h-full"
-            ssr={true}
-            draggable={false}
-            swipeable={false}
-            arrows={false}
-            autoPlay={true}
-            rewind={true}
-            autoPlaySpeed={4000}
-            beforeChange={handleBeforeSlideChange}
-            rtl
-          >
-            {imagesData.map((item, index) => (
-              <Image
-                key={index}
-                src={urlFor(item.image).url()}
-                alt={item.image.alt ?? "hero image"}
-                width={item.image.width}
-                height={item.image.height}
-                className="relative z-0 h-full w-full select-none object-cover"
-                priority
-              />
-            ))}
-          </Carousel>
-        </div>
-        <div className="bg-background-secondary absolute bottom-0 py-6">
-          {data.marqueeText && (
-            <Marquee autoFill pauseOnHover>
-              <span className="font-500 mr-8 text-3xl">{data.marqueeText}</span>
-            </Marquee>
-          )}
-        </div>
       </div>
     </section>
   );
