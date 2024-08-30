@@ -7,6 +7,9 @@ import { api } from "@/utils/api";
 
 import "@/styles/globals.css";
 import { MainLayout } from "@/layouts";
+import { useStore } from "@/store";
+import { cn } from "@/utils/helpers";
+import { useEffect } from "react";
 
 const workSans = Work_Sans({
   subsets: ["latin"],
@@ -22,6 +25,20 @@ type AppPropsWithLayout = AppProps & {
 
 const MyApp = ({ Component, pageProps }: AppPropsWithLayout) => {
   const getLayout = Component.getLayout ?? ((page) => page);
+  const menuOpen = useStore((state) => state.menuOpen);
+  const BODY_CLASS = "overflow-hidden";
+
+  useEffect(() => {
+    if (menuOpen) {
+      document.body.classList.add(BODY_CLASS);
+    } else {
+      document.body.classList.remove(BODY_CLASS);
+    }
+
+    return () => {
+      document.body.classList.remove(BODY_CLASS);
+    };
+  }, [menuOpen]);
 
   return (
     <>
@@ -29,7 +46,8 @@ const MyApp = ({ Component, pageProps }: AppPropsWithLayout) => {
         <link rel="icon" href="/favicon.ico" />
         <meta name="viewport" content="initial-scale=1.0, width=device-width" />
       </Head>
-      <div className={`flex min-h-screen flex-col ${workSans.className}`}>
+
+      <div className={cn("flex min-h-screen flex-col", workSans.className)}>
         <MainLayout>{getLayout(<Component {...pageProps} />)}</MainLayout>
       </div>
     </>

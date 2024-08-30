@@ -22,6 +22,9 @@ const config = {
       screens: {
         "3xl": "1724px",
       },
+      height: {
+        header: "var(--header-height)",
+      },
       colors: {
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
