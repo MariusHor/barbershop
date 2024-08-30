@@ -56,6 +56,7 @@ const Header = (): React.JSX.Element | null => {
           routes={routes}
           currentRoute={currentRoute}
           itemClassName="text-dark"
+          shouldHideOnMobile
         />
       </div>
     </header>
@@ -162,8 +163,9 @@ const HamburgerMenu = ({
                   className={cn("hover:text-primary", {
                     "text-primary": currentRoute === route.path,
                   })}
+                  onClick={() => setMenuOpen(!menuOpen)}
                 >
-                  <span className="font-300 text-2xl">{"0" + (index + 1)}</span>
+                  <span className="font-300 text-xl">{"0" + (index + 1)}</span>
                   <span className="font-400 text-5xl">{route.name}</span>
                 </Link>
               </motion.li>
@@ -207,7 +209,7 @@ const HamburgerMenu = ({
               icon={`mdi:${instagramData.name}`}
               className={cn(
                 "text-4xl text-inherit hover:text-primary-foreground",
-                { "text-dark": isScrolled },
+                { "text-dark": isScrolled || currentRoute !== "/" },
               )}
             />
           </motion.span>
@@ -263,16 +265,18 @@ const DesktopNavLinks = ({
   currentRoute,
   direction = "row",
   itemClassName,
+  shouldHideOnMobile = false,
 }: {
   routes: { path: string; name: string }[] | undefined;
   currentRoute: string | null;
   direction?: "row" | "col";
   itemClassName?: string;
+  shouldHideOnMobile?: boolean;
 }): React.JSX.Element | null => {
   if (!routes?.length) return null;
 
   return (
-    <nav className="hidden items-center lg:flex">
+    <nav className={cn("items-center lg:flex", { hidden: shouldHideOnMobile })}>
       <ul
         className={cn("flex gap-4", {
           "flex-col gap-2": direction === "col",
