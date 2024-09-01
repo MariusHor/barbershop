@@ -19,7 +19,7 @@ export const SocialLinks = () => {
         >
           <Icon
             icon={`mdi:${platform.name}`}
-            className="text-5xl hover:text-gray-600"
+            className="text-4xl hover:text-primary lg:text-5xl"
           />
         </Link>
       ))}

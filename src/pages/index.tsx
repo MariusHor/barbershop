@@ -7,6 +7,7 @@ import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
 import { ArrowRightIcon } from "@radix-ui/react-icons";
 import PhotoAlbum from "react-photo-album";
+import { useWindowSize } from "@uidotdev/usehooks";
 
 import type { NextPageWithLayout } from "./_app";
 import { cn, getPageTitle } from "@/utils/helpers";
@@ -15,7 +16,7 @@ import { api } from "@/utils/api";
 import { type PageSection } from "@/utils/types";
 import { urlFor } from "@/lib/sanity/client";
 import { Logo, ScheduleButton, SocialLinks } from "@/components";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 
@@ -85,15 +86,17 @@ const Page: NextPageWithLayout<
           ),
         )}
 
-      <section className="bg-background-secondary flex flex-col items-center justify-center gap-6 p-16">
-        <Logo />
+      <section className="bg-background-secondary pb-16">
+        <div className="container-md flex flex-col items-center justify-center gap-6">
+          <Logo />
 
-        <p className="max-w-[620px] text-center text-lg leading-8 text-dark-foreground">
-          Stay in the loop on special events, new arrivals, and exclusive
-          collaborations brought to you by the crew at {siteSettings?.title}.
-        </p>
+          <p className="max-w-[512px] text-center text-lg leading-7 text-dark-foreground">
+            Stay in the loop on special events, new arrivals, and exclusive
+            collaborations brought to you by the crew at {siteSettings?.title}.
+          </p>
 
-        <SocialLinks />
+          <SocialLinks />
+        </div>
       </section>
     </>
   );
@@ -213,7 +216,7 @@ const HeroSection = ({ data }: { data: PageSection }) => {
             ))}
           </Carousel>
         </div>
-        <div className="bg-background-secondary absolute bottom-0 py-6">
+        <div className="absolute bottom-0 bg-background-secondary py-6">
           {data.marqueeText && (
             <Marquee autoFill pauseOnHover>
               <span className="font-500 mr-8 text-3xl">{data.marqueeText}</span>
@@ -242,55 +245,80 @@ const ColumnSection = ({
       width: item.image.width ?? 0,
       height: item.image.height ?? 0,
     })) ?? [];
+  const { width, height } = useWindowSize();
+  const rootEl = useRef<HTMLElement>(null);
+  const [rootElHeight, setRootElHeight] = useState(0);
+
+  useEffect(() => {
+    if (!rootEl.current) return;
+
+    setRootElHeight(parseFloat(getComputedStyle(rootEl.current).height));
+  }, [rootEl, width]);
 
   return (
     <section
       className={cn(
-        "bg-background-secondary flex min-h-screen flex-col items-center justify-center gap-16 py-24",
+        "flex min-h-screen flex-col items-center justify-center gap-16 bg-background-secondary",
         className,
+        {
+          "py-16":
+            (width && width > 1328) || (height && rootElHeight >= height),
+        },
       )}
+      ref={rootEl}
     >
-      {data.title && (
-        <h2 className="max-w-[1024px] text-7xl font-semibold text-primary-foreground">
-          {data.title}
-        </h2>
-      )}
+      <div className="container-md flex flex-col items-center justify-center gap-12 text-center lg:gap-16">
+        {data.title && (
+          <h2 className="max-w-[1024px] text-5xl font-semibold text-primary-foreground md:text-6xl lg:text-7xl">
+            {data.title}
+          </h2>
+        )}
 
-      {data.subtitle && (
-        <h3 className="max-w-[1024px] text-4xl text-dark-foreground">
-          {data.subtitle}
-        </h3>
-      )}
+        {data.subtitle && (
+          <h3 className="max-w-[1024px] text-2xl text-dark-foreground md:text-3xl lg:text-4xl">
+            {data.subtitle}
+          </h3>
+        )}
 
-      {data.content && (
-        <p className="max-w-[786px] text-center text-lg leading-9 text-dark-foreground">
-          {data.content}
-        </p>
-      )}
+        {data.content && (
+          <p className="max-w-[786px] text-center text-lg leading-8 text-dark-foreground lg:leading-9">
+            {data.content}
+          </p>
+        )}
 
-      {data.linkButton?.href && (
-        <Button
-          size={"default"}
-          variant={"ghost"}
-          asChild
-          className="flex gap-2 p-0 text-lg hover:bg-transparent hover:text-primary"
-        >
-          <Link href={data.linkButton?.href}>
-            {data.linkButton?.text}
-            <ArrowRightIcon style={{ width: "20px", height: "20px" }} />
-          </Link>
-        </Button>
-      )}
+        {data.linkButton?.href && (
+          <Button
+            size={"default"}
+            variant={"ghost"}
+            asChild
+            className="flex gap-2 p-0 text-lg hover:bg-transparent hover:text-primary"
+          >
+            <Link href={data.linkButton?.href}>
+              {data.linkButton?.text}
+              <ArrowRightIcon style={{ width: "20px", height: "20px" }} />
+            </Link>
+          </Button>
+        )}
+      </div>
 
-      {data.withGallery && (
+      {data.withGallery && width && (
         <div className="w-full">
           <PhotoAlbum
             componentsProps={{
-              columnContainerProps: { style: { width: "33%" } },
-              imageProps: { style: { width: "100%", marginBottom: "8px" } },
-              rowContainerProps: { style: { gap: 0 } },
+              containerProps: {
+                style: {
+                  gap: width < 768 ? "1px" : width < 1024 ? "2px" : "8px",
+                },
+              },
+              columnContainerProps: {
+                style: {
+                  width: width < 768 ? "100%" : width < 1024 ? "50%" : "33%",
+                  gap: width < 768 ? "1px" : width < 1024 ? "2px" : "8px",
+                },
+              },
+              imageProps: { style: { width: "100%", marginBottom: 0 } },
             }}
-            columns={3}
+            columns={width < 768 ? 1 : width < 1024 ? 2 : 3}
             layout={"masonry"}
             photos={albumImages}
           />
@@ -312,15 +340,19 @@ const RowSection = ({
   return (
     <section
       className={cn(
-        "grid max-h-[484px] grid-cols-2 overflow-hidden border-solid border-dark",
+        "grid max-h-[968px] grid-rows-2 overflow-hidden border-solid border-dark lg:max-h-[484px] lg:grid-cols-2 lg:grid-rows-1",
         className,
       )}
     >
       {data?.image && (
         <div
-          className={cn("h-full max-h-[484px] w-full object-cover", {
-            "order-2 border-l-[1px] border-solid border-dark": reverse,
-          })}
+          className={cn(
+            "h-full w-full border-t-[1px] border-solid border-dark object-cover lg:max-h-[484px] lg:border-t-0",
+            {
+              "order-2 lg:border-l-[1px]": reverse,
+              "order-2 lg:order-[0]": !reverse,
+            },
+          )}
         >
           <Image
             src={urlFor(data.image).url()}
@@ -338,16 +370,20 @@ const RowSection = ({
 
       <div
         className={cn(
-          "flex flex-col items-start justify-center gap-4 p-16 text-dark",
-          { "border-l-[1px] border-solid border-dark": !reverse },
+          "container-md flex flex-col items-center justify-center gap-6 py-24 text-center text-dark lg:items-start lg:px-12 lg:text-left",
+          { "border-solid border-dark lg:border-l-[1px]": !reverse },
         )}
       >
-        {data.title && <h2 className="text-4xl text-dark">{data.title}</h2>}
+        {data.title && (
+          <h2 className="text-3xl text-dark lg:text-4xl">{data.title}</h2>
+        )}
         {data.subtitle && (
-          <h3 className="text-3xl text-dark-foreground">{data.subtitle}</h3>
+          <h3 className="text-2xl text-dark-foreground lg:text-3xl">
+            {data.subtitle}
+          </h3>
         )}
         {data.content && (
-          <p className="mt-4 max-w-[548px] text-lg leading-9 text-dark-foreground">
+          <p className="mt-4 max-w-[548px] text-lg leading-7 text-dark-foreground lg:leading-8">
             {data.content}
           </p>
         )}

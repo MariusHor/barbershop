@@ -82,20 +82,16 @@ const HamburgerMenu = ({
   );
 
   const sidebarVariants = {
-    open: (height = 1000) => ({
-      clipPath: `circle(${height * 2 + 200}px at calc(100% - 40px) 40px)`,
+    open: {
+      x: 0,
       transition: {
-        type: "spring",
-        stiffness: 20,
-        restDelta: 2,
+        velocity: 40,
       },
-    }),
+    },
     closed: {
-      clipPath: `circle(30px at calc(100% - 58px) 40px)`,
+      x: "100%",
       transition: {
-        type: "spring",
-        stiffness: 400,
-        damping: 40,
+        velocity: 40,
         delay: 0.6,
       },
     },
@@ -138,19 +134,21 @@ const HamburgerMenu = ({
       animate={menuOpen ? "open" : "closed"}
       custom={height}
       ref={containerRef}
-      className="flex items-center justify-center gap-4 lg:hidden"
+      className="flex items-center justify-center gap-2 lg:hidden"
     >
       <motion.div
-        className="absolute left-0 top-0 h-20 w-screen bg-white"
+        className="absolute left-0 top-0 flex h-20 w-screen flex-col justify-end bg-white"
         variants={sidebarVariants}
-      />
+      >
+        <Separator />
+      </motion.div>
 
       <motion.div
         variants={listVariants}
         className="absolute top-20 flex h-screen w-screen flex-col items-center justify-center bg-white"
       >
         <div className="relative -mt-[calc(var(--header-height)_*2)] flex h-full w-full flex-col items-center justify-center">
-          <ul className="grid items-center justify-center gap-8">
+          <ul className="grid items-center justify-center gap-4 lg:gap-8">
             {routes?.map((route, index) => (
               <motion.li
                 key={index}
@@ -165,15 +163,19 @@ const HamburgerMenu = ({
                   })}
                   onClick={() => setMenuOpen(!menuOpen)}
                 >
-                  <span className="font-300 text-xl">{"0" + (index + 1)}</span>
-                  <span className="font-400 text-5xl">{route.name}</span>
+                  <span className="font-300 text-base sm:text-xl">
+                    {"0" + (index + 1)}
+                  </span>
+                  <span className="font-400 text-3xl sm:text-5xl">
+                    {route.name}
+                  </span>
                 </Link>
               </motion.li>
             ))}
           </ul>
 
           <motion.p
-            className="absolute bottom-20 left-1/2 max-w-80 -translate-x-1/2 text-center"
+            className="absolute bottom-[5%] left-1/2 max-w-80 -translate-x-1/2 text-center text-base sm:text-lg"
             variants={{
               closed: { opacity: 0 },
               open: { opacity: 1 },
@@ -219,39 +221,51 @@ const HamburgerMenu = ({
       <Button
         variant="ghost"
         onClick={() => setMenuOpen(!menuOpen)}
-        className="relative z-20 hover:bg-transparent"
+        className="relative z-20 ml-3 p-0 hover:bg-transparent"
       >
         <svg width="23" height="23" viewBox="0 0 23 23">
           <motion.path
+            key={isScrolled.toString() + 1}
             fill="transparent"
             strokeWidth="3"
-            stroke="hsl(0, 0%, 18%)"
             strokeLinecap="round"
             variants={{
-              closed: { d: "M 2 2.5 L 20 2.5" },
-              open: { d: "M 3 16.5 L 17 2.5" },
+              closed: {
+                d: "M 2 2.5 L 20 2.5",
+                stroke: isScrolled ? "hsl(var(--dark))" : "hsl(var(--muted))",
+                transition: { delay: 0.8 },
+              },
+              open: { d: "M 3 16.5 L 17 2.5", stroke: "hsl(var(--dark))" },
             }}
           />
           <motion.path
+            key={isScrolled.toString() + 2}
             fill="transparent"
             strokeWidth="3"
-            stroke="hsl(0, 0%, 18%)"
             strokeLinecap="round"
             d="M 2 9.423 L 20 9.423"
             variants={{
-              closed: { opacity: 1 },
-              open: { opacity: 0 },
+              closed: {
+                opacity: 1,
+                stroke: isScrolled ? "hsl(var(--dark))" : "hsl(var(--muted))",
+                transition: { delay: 0.8 },
+              },
+              open: { opacity: 0, stroke: "hsl(var(--dark))" },
             }}
             transition={{ duration: 0.1 }}
           />
           <motion.path
+            key={isScrolled.toString() + 3}
             fill="transparent"
             strokeWidth="3"
-            stroke="hsl(0, 0%, 18%)"
             strokeLinecap="round"
             variants={{
-              closed: { d: "M 2 16.346 L 20 16.346" },
-              open: { d: "M 3 2.5 L 17 16.346" },
+              closed: {
+                d: "M 2 16.346 L 20 16.346",
+                stroke: isScrolled ? "hsl(var(--dark))" : "hsl(var(--muted))",
+                transition: { delay: 0.8 },
+              },
+              open: { d: "M 3 2.5 L 17 16.346", stroke: "hsl(var(--dark))" },
             }}
           />
         </svg>
@@ -278,7 +292,7 @@ const DesktopNavLinks = ({
   return (
     <nav className={cn("items-center lg:flex", { hidden: shouldHideOnMobile })}>
       <ul
-        className={cn("flex gap-4", {
+        className={cn("flex", {
           "flex-col gap-2": direction === "col",
           "gap-4 xl:gap-8 2xl:gap-12": direction === "row",
         })}
@@ -312,7 +326,7 @@ const Footer = (): React.JSX.Element => {
 
   return (
     <footer className="bg-black">
-      <div className="sticky bottom-0 m-auto flex max-w-[1024px] justify-center gap-20 py-16">
+      <div className="sticky bottom-0 m-auto flex max-w-[1024px] flex-col items-center justify-center gap-8 py-16 lg:flex-row lg:items-start lg:gap-20">
         <Column title="Meniu">
           <DesktopNavLinks
             routes={routes}
@@ -354,7 +368,7 @@ const Footer = (): React.JSX.Element => {
 
       <Separator className="bg-dark-foreground" />
 
-      <p className="m-auto w-fit p-4 font-[300] text-muted-foreground">
+      <p className="m-auto w-fit p-4 text-center text-sm font-[300] text-muted-foreground lg:text-base">
         ©2023 {siteSettings?.title}. All content is the property of{" "}
         {siteSettings?.title} unless otherwise noted.
       </p>
@@ -370,7 +384,7 @@ const Column = ({
   children: React.ReactNode;
 }): React.JSX.Element => {
   return (
-    <div className="flex h-full max-h-96 flex-col gap-4 text-white">
+    <div className="flex h-full max-h-96 flex-col gap-4 text-center text-white lg:text-start">
       <h3 className="mb-4 text-3xl font-[300] text-muted-foreground">
         {title}
       </h3>
