@@ -7,7 +7,7 @@ import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
 import { ArrowRightIcon } from "@radix-ui/react-icons";
 import PhotoAlbum from "react-photo-album";
-import { useWindowSize } from "@uidotdev/usehooks";
+import { useMeasure, useWindowSize } from "@uidotdev/usehooks";
 
 import type { NextPageWithLayout } from "./_app";
 import { cn, getPageTitle } from "@/utils/helpers";
@@ -107,7 +107,10 @@ const HeroSection = ({ data }: { data: PageSection }) => {
     end: data.title?.length,
   });
 
-  const carouselElement = useRef<Carousel | null>(null);
+  const DEFAULT_CAROUSEL_SIZE = 564;
+  const [rootElement, { height: rootElHeight }] = useMeasure();
+  const carouselElement = useRef<Carousel>(null);
+  const [carouselElMaxHeight, setCarouselElementMaxHeight] = useState(0);
   const [isImageLoading, setImageLoading] = useState(true);
   const [activeSlideIndex, setActiveSlideIndex] = useState(0);
   const heroImage = data?.image;
@@ -117,6 +120,14 @@ const HeroSection = ({ data }: { data: PageSection }) => {
       items: 1,
     },
   };
+
+  useEffect(() => {
+    if (!rootElHeight) return;
+
+    setCarouselElementMaxHeight(
+      Math.min(Math.round(rootElHeight * 0.6), DEFAULT_CAROUSEL_SIZE),
+    );
+  }, [rootElHeight]);
 
   if (!imagesData?.length) {
     throw new Error("Missing gallery images");
@@ -134,7 +145,10 @@ const HeroSection = ({ data }: { data: PageSection }) => {
   }
 
   return (
-    <section className="relative grid h-screen w-full bg-black lg:grid-cols-2">
+    <section
+      className="relative grid h-screen w-full bg-black lg:grid-cols-2"
+      ref={rootElement}
+    >
       <div className="relative">
         {heroImage && (
           <div className="absolute left-0 top-0 h-full w-full grayscale">
@@ -186,7 +200,13 @@ const HeroSection = ({ data }: { data: PageSection }) => {
         </div>
       </div>
       <div className="relative hidden flex-col items-center justify-center gap-16 overflow-hidden bg-white px-20 lg:flex">
-        <div className="relative z-10 aspect-square max-h-[564px] w-full max-w-[564px] select-none overflow-hidden border-[1px] border-solid border-dark">
+        <div
+          className="relative z-10 aspect-square w-full select-none overflow-hidden border-[1px] border-solid border-dark"
+          style={{
+            maxHeight: carouselElMaxHeight,
+            maxWidth: DEFAULT_CAROUSEL_SIZE,
+          }}
+        >
           <Carousel
             ref={carouselElement}
             responsive={responsiveCarousel}
