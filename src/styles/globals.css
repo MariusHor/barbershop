@@ -70,7 +70,7 @@
     @apply mx-auto w-full px-4;
   }
   .container-lg {
-    @apply base-container 2xl:max-w-[1848px] 3xl:px-0;
+    @apply base-container 2xl:max-w-[1848px];
   }
 
   .container-md {
