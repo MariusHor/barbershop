@@ -10,10 +10,14 @@ export const ColumnSection = ({
   children,
   data,
   className = "",
+  titleClassName = "",
+  subTitleClassName = "",
 }: {
   children?: ({ width }: { width: number }) => React.ReactNode;
   data: PageSection;
   className?: string;
+  titleClassName?: string;
+  subTitleClassName?: string;
 }) => {
   const { width, height } = useWindowSize();
   const rootEl = useRef<HTMLElement>(null);
@@ -28,7 +32,7 @@ export const ColumnSection = ({
   return (
     <section
       className={cn(
-        "flex min-h-screen flex-col items-center justify-center gap-16 bg-background-secondary",
+        "flex min-h-screen flex-col items-center justify-center gap-16",
         className,
         {
           "py-16":
@@ -39,13 +43,23 @@ export const ColumnSection = ({
     >
       <div className="container-md flex flex-col items-center justify-center gap-12 text-center lg:gap-16">
         {data.title && (
-          <h2 className="max-w-[1024px] text-5xl font-semibold text-primary-foreground md:text-6xl lg:text-7xl">
+          <h2
+            className={cn(
+              "max-w-[1024px] text-5xl font-semibold text-primary-foreground md:text-6xl lg:text-7xl",
+              titleClassName,
+            )}
+          >
             {data.title}
           </h2>
         )}
 
         {data.subtitle && (
-          <h3 className="max-w-[1024px] text-2xl text-dark-foreground md:text-3xl lg:text-4xl">
+          <h3
+            className={cn(
+              "max-w-[1024px] text-2xl text-dark-foreground md:text-3xl lg:text-4xl",
+              subTitleClassName,
+            )}
+          >
             {data.subtitle}
           </h3>
         )}

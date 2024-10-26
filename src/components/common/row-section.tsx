@@ -27,7 +27,7 @@ export const RowSection = ({
   return (
     <section
       className={cn(
-        `grid max-h-[968px] grid-rows-2 overflow-hidden border-solid border-muted-foreground lg:max-h-[${maxHeight}] lg:grid-cols-2 lg:grid-rows-1`,
+        `grid grid-rows-2 overflow-hidden border-solid border-muted-foreground lg:max-h-[${maxHeight}] lg:grid-cols-2 lg:grid-rows-1`,
         className,
       )}
     >

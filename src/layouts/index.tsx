@@ -10,7 +10,7 @@ import { Button } from "@/components/ui/button";
 import { capitalize, cn } from "@/utils/helpers";
 import { api } from "@/utils/api";
 import { useStore } from "@/store";
-import { Logo, SocialLinks } from "@/components";
+import { Logo } from "@/components";
 import {
   Accordion,
   AccordionContent,
@@ -19,27 +19,10 @@ import {
 } from "@/components/ui/accordion";
 
 export function MainLayout({ children }: { children: React.ReactNode }) {
-  const { data: siteSettings } = api.content.getSiteSettings.useQuery();
-
   return (
     <>
       <Header />
-      <main className="flex-grow">
-        {children} <Separator className="bg-muted-foreground" />
-        <section className="bg-background py-16">
-          <div className="container-md flex flex-col items-center justify-center gap-6">
-            <Logo />
-
-            <p className="max-w-[512px] text-center text-lg leading-7 text-dark-foreground">
-              Stay in the loop on special events, new arrivals, and exclusive
-              collaborations brought to you by the crew at {siteSettings?.title}
-              .
-            </p>
-
-            <SocialLinks />
-          </div>
-        </section>
-      </main>
+      <main className="flex-grow">{children}</main>
       <Footer />
     </>
   );

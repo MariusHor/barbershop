@@ -15,12 +15,13 @@ import { type PageSection } from "@/utils/types";
 import { urlFor } from "@/lib/sanity/client";
 import {
   ColumnSection,
-  Gallery,
   RowSection,
   ScheduleButton,
+  MainGallery,
 } from "@/components";
 import { useEffect, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
+import { StayInTouch } from "@/components/common/stay-in-touch";
 
 export const getServerSideProps = async () => {
   const ssg = getSSGHelper();
@@ -30,7 +31,7 @@ export const getServerSideProps = async () => {
   await Promise.all([
     pageData,
     ssg.content.getGalleryImages.prefetch({
-      end: pageData?.sections?.[0]?.title?.length,
+      limit: pageData?.sections?.[0]?.title?.length,
     }),
     ssg.content.getSiteSettings.prefetch(),
     ssg.content.getSiteLogo.prefetch(),
@@ -57,17 +58,6 @@ const Page: NextPageWithLayout<
     throw new Error("Missing 'Acasa' page Sanity sections data");
   }
 
-  const { data: galleryImages } = api.content.getGalleryImages.useQuery(
-    {},
-    { enabled: !!pageData.sections.some((section) => section.withGallery) },
-  );
-  const _galleryImages =
-    galleryImages?.map((item) => ({
-      src: urlFor(item.image).url(),
-      width: item.image.width ?? 0,
-      height: item.image.height ?? 0,
-    })) ?? [];
-
   const heroSectionData = pageData.sections.find(
     (section) => section.value === "intro",
   );
@@ -82,9 +72,13 @@ const Page: NextPageWithLayout<
       {heroSectionData && <HeroSection data={heroSectionData} />}
       {pageData.sections.slice(1).map((section, index) =>
         section.style.includes("column") ? (
-          <ColumnSection key={index} data={section}>
+          <ColumnSection
+            key={index}
+            data={section}
+            className="bg-background-secondary"
+          >
             {section.withGallery
-              ? ({ width }) => <Gallery width={width} data={_galleryImages} />
+              ? ({ width }) => <MainGallery pageData={pageData} width={width} />
               : undefined}
           </ColumnSection>
         ) : (
@@ -100,13 +94,14 @@ const Page: NextPageWithLayout<
           />
         ),
       )}
+      <StayInTouch className="bg-background-secondary" />
     </>
   );
 };
 
 const HeroSection = ({ data }: { data: PageSection }) => {
   const { data: imagesData } = api.content.getGalleryImages.useQuery({
-    end: data.title?.length,
+    limit: data.title?.length,
   });
 
   const DEFAULT_CAROUSEL_SIZE = 564;
@@ -130,10 +125,6 @@ const HeroSection = ({ data }: { data: PageSection }) => {
       Math.min(Math.round(rootElHeight * 0.6), DEFAULT_CAROUSEL_SIZE),
     );
   }, [rootElHeight]);
-
-  if (!imagesData?.length) {
-    throw new Error("Missing gallery images");
-  }
 
   function handleSlideSelect(index: number) {
     if (!carouselElement.current) return;
@@ -224,7 +215,7 @@ const HeroSection = ({ data }: { data: PageSection }) => {
             autoPlaySpeed={4000}
             beforeChange={handleBeforeSlideChange}
           >
-            {imagesData.map((item, index) => (
+            {imagesData?.items.map((item, index) => (
               <Image
                 key={index}
                 src={urlFor(item.image).url()}

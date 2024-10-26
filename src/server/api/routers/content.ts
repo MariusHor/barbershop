@@ -93,25 +93,67 @@ export const sanityContentRouter = createTRPCRouter({
   }),
   getGalleryImages: publicProcedure
     .input(
-      z.object({ start: z.number().default(0), end: z.number().default(10) }),
+      z.object({
+        limit: z.number().min(1).max(100).nullish(),
+        cursor: z
+          .object({
+            _createdAt: z.string().nullish(),
+            _id: z.string().nullish(),
+          })
+          .nullish(),
+      }),
     )
     .query(async ({ ctx, input }) => {
+      const limit = input.limit ?? 50;
+      const { cursor } = input;
       const dataType = SANITY_DOC_TYPES.galleryImage;
-      const query = `*[_type == "${dataType}"][$start...$end]{
+
+      const filterCondition =
+        cursor?._createdAt && cursor?._id
+          ? `&& (
+          _createdAt > $lastCreatedAt || 
+          (_createdAt == $lastCreatedAt && _id > $lastId)
+        )`
+          : "";
+
+      const query = `*[
+      _type == "${dataType}"
+      ${filterCondition}
+    ] | order(_createdAt asc)[0...${limit}]{
+      _id,
+      _createdAt,
+      image{
         ...,
-        image{
-          ...,
-          "width": asset->metadata.dimensions.width,
-          "height": asset->metadata.dimensions.height
-        }
-      } | order(_createdAt asc)`;
+        "width": asset->metadata.dimensions.width,
+        "height": asset->metadata.dimensions.height
+      }
+    }`;
 
-      const data = await ctx.sanityClient.fetch<GalleryImage[]>(query, {
-        ...input,
-      });
+      const countQuery = `count(*[_type == "${dataType}"])`;
+      const totalCount = await ctx.sanityClient.fetch<number>(countQuery);
 
-      if (!data[0]) throwSanityErrorMessage({ dataType });
+      const params =
+        cursor?._createdAt && cursor?._id
+          ? {
+              lastCreatedAt: cursor._createdAt,
+              lastId: cursor._id,
+            }
+          : {};
 
-      return data;
+      const data = await ctx.sanityClient.fetch<GalleryImage[]>(query, params);
+
+      let nextCursor: typeof cursor | undefined = undefined;
+
+      const nextItem = data.at(-1);
+      nextCursor = {
+        _createdAt: nextItem?._createdAt,
+        _id: nextItem?._id,
+      };
+
+      return {
+        items: data,
+        nextCursor,
+        totalCount,
+      };
     }),
 });
