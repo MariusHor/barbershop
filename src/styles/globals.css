@@ -14,8 +14,8 @@
     --popover: 0 0% 100%;
     --popover-foreground: 222.2 84% 4.9%;
 
-    --primary: 3, 84%, 57%;
-    --primary-foreground: 3, 78%, 62%;
+    --primary: 103, 80%, 59%;
+    --primary-foreground: 103, 40%, 59%;
 
     --secondary: 210 40% 96.1%;
     --secondary-foreground: 222.2 47.4% 11.2%;
@@ -38,7 +38,7 @@
 
     --radius: 0.5rem;
 
-    --header-height: 80px;
+    --header-height: 100px;
   }
 }
 

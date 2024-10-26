@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
-import { useMeasure } from "@uidotdev/usehooks";
+import { useHover, useMeasure } from "@uidotdev/usehooks";
 import { motion } from "framer-motion";
 import { Icon } from "@iconify-icon/react";
 
@@ -10,6 +10,13 @@ import { Button } from "@/components/ui/button";
 import { capitalize, cn } from "@/utils/helpers";
 import { api } from "@/utils/api";
 import { useStore } from "@/store";
+import { Logo } from "@/components";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
 
 export function MainLayout({ children }: { children: React.ReactNode }) {
   return (
@@ -46,18 +53,22 @@ const Header = (): React.JSX.Element | null => {
         { "bg-white shadow-md": isScrolled },
       )}
     >
-      <div className="container-lg relative flex h-full items-center justify-end">
-        <HamburgerMenu
-          routes={routes}
-          currentRoute={currentRoute}
-          isScrolled={isScrolled}
-        />
-        <DesktopNavLinks
-          routes={routes}
-          currentRoute={currentRoute}
-          itemClassName="text-dark"
-          shouldHideOnMobile
-        />
+      <div className="container-lg relative flex h-full items-center justify-between">
+        {isScrolled && <Logo className="md:max-w-30 max-w-20" />}
+
+        <div className="flex h-full w-full items-center justify-end">
+          <HamburgerMenu
+            routes={routes}
+            currentRoute={currentRoute}
+            isScrolled={isScrolled}
+          />
+          <DesktopNavLinks
+            routes={routes}
+            currentRoute={currentRoute}
+            itemClassName="text-dark"
+            shouldHideOnMobile
+          />
+        </div>
       </div>
     </header>
   );
@@ -76,10 +87,17 @@ const HamburgerMenu = ({
   const [containerRef, { height }] = useMeasure();
   const menuOpen = useStore((state) => state.menuOpen);
   const setMenuOpen = useStore((state) => state.setMenuOpen);
+  const [ref, isBtnHovered] = useHover();
 
   const instagramData = locationData?.socialPlatforms?.find(
     (platform) => platform.name === "instagram",
   );
+
+  const btnStroke = isBtnHovered
+    ? "hsl(var(--primary-foreground))"
+    : isScrolled || menuOpen
+      ? "hsl(var(--dark))"
+      : "hsl(var(--muted))";
 
   const sidebarVariants = {
     open: {
@@ -158,8 +176,8 @@ const HamburgerMenu = ({
               >
                 <Link
                   href={route.path}
-                  className={cn("hover:text-primary", {
-                    "text-primary": currentRoute === route.path,
+                  className={cn("hover:text-primary-foreground", {
+                    "text-primary-foreground": currentRoute === route.path,
                   })}
                   onClick={() => setMenuOpen(!menuOpen)}
                 >
@@ -182,7 +200,10 @@ const HamburgerMenu = ({
             }}
           >
             Contacteaza-ne la{" "}
-            <Link href={`mailto:${locationData?.email}`} className="underline">
+            <Link
+              href={`mailto:${locationData?.email}`}
+              className="underline hover:text-primary-foreground"
+            >
               {locationData?.email}
             </Link>
           </motion.p>
@@ -219,27 +240,28 @@ const HamburgerMenu = ({
       )}
 
       <Button
+        ref={ref}
         variant="ghost"
         onClick={() => setMenuOpen(!menuOpen)}
         className="relative z-20 ml-3 p-0 hover:bg-transparent"
       >
         <svg width="23" height="23" viewBox="0 0 23 23">
           <motion.path
-            key={isScrolled.toString() + 1}
+            key={isScrolled.toString() + isBtnHovered.toString() + 1}
             fill="transparent"
             strokeWidth="3"
             strokeLinecap="round"
             variants={{
               closed: {
                 d: "M 2 2.5 L 20 2.5",
-                stroke: isScrolled ? "hsl(var(--dark))" : "hsl(var(--muted))",
+                stroke: btnStroke,
                 transition: { delay: 0.8 },
               },
-              open: { d: "M 3 16.5 L 17 2.5", stroke: "hsl(var(--dark))" },
+              open: { d: "M 3 16.5 L 17 2.5", stroke: btnStroke },
             }}
           />
           <motion.path
-            key={isScrolled.toString() + 2}
+            key={isScrolled.toString() + isBtnHovered.toString() + 2}
             fill="transparent"
             strokeWidth="3"
             strokeLinecap="round"
@@ -247,25 +269,25 @@ const HamburgerMenu = ({
             variants={{
               closed: {
                 opacity: 1,
-                stroke: isScrolled ? "hsl(var(--dark))" : "hsl(var(--muted))",
+                stroke: btnStroke,
                 transition: { delay: 0.8 },
               },
-              open: { opacity: 0, stroke: "hsl(var(--dark))" },
+              open: { opacity: 0, stroke: btnStroke },
             }}
             transition={{ duration: 0.1 }}
           />
           <motion.path
-            key={isScrolled.toString() + 3}
+            key={isScrolled.toString() + isBtnHovered.toString() + 3}
             fill="transparent"
             strokeWidth="3"
             strokeLinecap="round"
             variants={{
               closed: {
                 d: "M 2 16.346 L 20 16.346",
-                stroke: isScrolled ? "hsl(var(--dark))" : "hsl(var(--muted))",
+                stroke: btnStroke,
                 transition: { delay: 0.8 },
               },
-              open: { d: "M 3 2.5 L 17 16.346", stroke: "hsl(var(--dark))" },
+              open: { d: "M 3 2.5 L 17 16.346", stroke: btnStroke },
             }}
           />
         </svg>
@@ -302,10 +324,10 @@ const DesktopNavLinks = ({
             <Link
               href={route.path}
               className={cn(
-                "font-300 text-1xl uppercase hover:text-primary",
+                "font-300 text-1xl uppercase hover:text-primary-foreground",
                 itemClassName,
                 {
-                  "text-primary": currentRoute === route.path,
+                  "text-primary-foreground": currentRoute === route.path,
                 },
               )}
             >
@@ -326,7 +348,7 @@ const Footer = (): React.JSX.Element => {
 
   return (
     <footer className="bg-black">
-      <div className="sticky bottom-0 m-auto flex max-w-[1024px] flex-col items-center justify-center gap-8 py-16 lg:flex-row lg:items-start lg:gap-20">
+      <div className="sticky bottom-0 m-auto grid max-w-[1024px] grid-cols-1 flex-col items-center justify-center gap-8 py-16 lg:grid-cols-3 lg:items-start lg:gap-20">
         <Column title="Meniu">
           <DesktopNavLinks
             routes={routes}
@@ -336,26 +358,27 @@ const Footer = (): React.JSX.Element => {
           />
         </Column>
 
-        <Separator
-          orientation="vertical"
-          className="h-auto bg-dark-foreground"
-        />
-
         <Column title="Locatii">
-          <div className="flex flex-col gap-2">
-            <p className="font-black">{locationData?.name}</p>
-            <p>{locationData?.street}</p>
-            <p>
-              {locationData?.zip} {locationData?.city}
-            </p>
-            <p>{locationData?.phone}</p>
-          </div>
+          <Accordion
+            type="single"
+            collapsible
+            className="w-40 lg:w-full"
+            defaultValue="item-1"
+          >
+            <AccordionItem value="item-1" className="border-b-dark-foreground">
+              <AccordionTrigger className="pb-2 pt-0 font-black hover:text-primary-foreground hover:no-underline">
+                {locationData?.name}
+              </AccordionTrigger>
+              <AccordionContent className="flex flex-col gap-2">
+                <span>{locationData?.street}</span>
+                <span>
+                  {locationData?.zip} {locationData?.city}
+                </span>
+                <span>{locationData?.phone}</span>
+              </AccordionContent>
+            </AccordionItem>
+          </Accordion>
         </Column>
-
-        <Separator
-          orientation="vertical"
-          className="h-auto bg-dark-foreground"
-        />
 
         <Column title="Orar">
           <div className="flex flex-col gap-2">
@@ -369,8 +392,8 @@ const Footer = (): React.JSX.Element => {
       <Separator className="bg-dark-foreground" />
 
       <p className="m-auto w-fit p-4 text-center text-sm font-[300] text-muted-foreground lg:text-base">
-        ©2023 {siteSettings?.title}. All content is the property of{" "}
-        {siteSettings?.title} unless otherwise noted.
+        ©{new Date().getFullYear()} {siteSettings?.title}. All content is the
+        property of {siteSettings?.title} unless otherwise noted.
       </p>
     </footer>
   );
@@ -384,7 +407,7 @@ const Column = ({
   children: React.ReactNode;
 }): React.JSX.Element => {
   return (
-    <div className="flex h-full max-h-96 flex-col gap-4 text-center text-white lg:text-start">
+    <div className="flex h-full max-h-96 flex-col items-center gap-4 text-center text-white lg:text-start">
       <h3 className="mb-4 text-3xl font-[300] text-muted-foreground">
         {title}
       </h3>

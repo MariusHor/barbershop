@@ -19,6 +19,7 @@ import { Logo, ScheduleButton, SocialLinks } from "@/components";
 import { useEffect, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import { Separator } from "@/components/ui/separator";
 
 export const getServerSideProps = async () => {
   const ssg = getSSGHelper();
@@ -86,7 +87,9 @@ const Page: NextPageWithLayout<
           ),
         )}
 
-      <section className="bg-background-secondary pb-16">
+      <Separator className="bg-muted-foreground" />
+
+      <section className="bg-background py-16">
         <div className="container-md flex flex-col items-center justify-center gap-6">
           <Logo />
 
@@ -174,7 +177,7 @@ const HeroSection = ({ data }: { data: PageSection }) => {
                 key={index}
                 variant={"ghost"}
                 className={cn(
-                  "p-0 text-6xl font-black text-muted hover:bg-transparent hover:text-primary md:text-8xl 2xl:text-9xl",
+                  "p-0 text-6xl font-black text-muted hover:bg-transparent hover:text-primary-foreground md:text-8xl 2xl:text-9xl",
                   {
                     "text-primary": activeSlideIndex === index,
                   },
@@ -201,7 +204,7 @@ const HeroSection = ({ data }: { data: PageSection }) => {
       </div>
       <div className="relative hidden flex-col items-center justify-center gap-16 overflow-hidden bg-white px-20 lg:flex">
         <div
-          className="relative z-10 aspect-square w-full select-none overflow-hidden border-[1px] border-solid border-dark"
+          className="relative z-10 aspect-square w-full select-none overflow-hidden border-[1px] border-solid border-muted-foreground"
           style={{
             maxHeight: carouselElMaxHeight,
             maxWidth: DEFAULT_CAROUSEL_SIZE,
@@ -221,7 +224,6 @@ const HeroSection = ({ data }: { data: PageSection }) => {
             rewind={true}
             autoPlaySpeed={4000}
             beforeChange={handleBeforeSlideChange}
-            rtl
           >
             {imagesData.map((item, index) => (
               <Image
@@ -311,9 +313,14 @@ const ColumnSection = ({
             size={"default"}
             variant={"ghost"}
             asChild
-            className="flex gap-2 p-0 text-lg hover:bg-transparent hover:text-primary"
+            className="flex gap-2 p-0 text-lg hover:bg-transparent hover:text-primary-foreground"
           >
-            <Link href={data.linkButton?.href}>
+            <Link
+              href={data.linkButton?.href}
+              target={
+                data.linkButton.href.includes("https") ? "_blank" : "_self"
+              }
+            >
               {data.linkButton?.text}
               <ArrowRightIcon style={{ width: "20px", height: "20px" }} />
             </Link>
@@ -360,14 +367,14 @@ const RowSection = ({
   return (
     <section
       className={cn(
-        "grid max-h-[968px] grid-rows-2 overflow-hidden border-solid border-dark lg:max-h-[484px] lg:grid-cols-2 lg:grid-rows-1",
+        "grid max-h-[968px] grid-rows-2 overflow-hidden border-solid border-muted-foreground lg:max-h-[484px] lg:grid-cols-2 lg:grid-rows-1",
         className,
       )}
     >
       {data?.image && (
         <div
           className={cn(
-            "h-full w-full border-t-[1px] border-solid border-dark object-cover lg:max-h-[484px] lg:border-t-0",
+            "h-full w-full border-t-[1px] border-solid border-muted-foreground object-cover lg:max-h-[484px] lg:border-t-0",
             {
               "order-2 lg:border-l-[1px]": reverse,
               "order-2 lg:order-[0]": !reverse,
@@ -391,7 +398,9 @@ const RowSection = ({
       <div
         className={cn(
           "container-md flex flex-col items-center justify-center gap-6 py-24 text-center text-dark lg:items-start lg:px-12 lg:text-left",
-          { "border-solid border-dark lg:border-l-[1px]": !reverse },
+          {
+            "border-solid border-muted-foreground lg:border-l-[1px]": !reverse,
+          },
         )}
       >
         {data.title && (
@@ -412,9 +421,14 @@ const RowSection = ({
             size={"default"}
             variant={"ghost"}
             asChild
-            className="flex gap-2 p-0 text-lg hover:bg-transparent hover:text-primary"
+            className="flex gap-2 p-0 text-lg hover:bg-transparent hover:text-primary-foreground"
           >
-            <Link href={data.linkButton.href}>
+            <Link
+              href={data.linkButton.href}
+              target={
+                data.linkButton.href.includes("https") ? "_blank" : "_self"
+              }
+            >
               {data.linkButton?.text}
               <ArrowRightIcon style={{ width: "20px", height: "20px" }} />
             </Link>
