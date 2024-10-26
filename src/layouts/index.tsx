@@ -369,7 +369,7 @@ const Footer = (): React.JSX.Element => {
               <AccordionTrigger className="pb-2 pt-0 font-black hover:text-primary-foreground hover:no-underline">
                 {locationData?.name}
               </AccordionTrigger>
-              <AccordionContent className="flex flex-col gap-2">
+              <AccordionContent className="flex flex-col gap-2 text-left">
                 <span>{locationData?.street}</span>
                 <span>
                   {locationData?.zip} {locationData?.city}
@@ -381,9 +381,12 @@ const Footer = (): React.JSX.Element => {
         </Column>
 
         <Column title="Orar">
-          <div className="flex flex-col gap-2">
+          <div className="flex flex-col text-left">
             {locationData?.timetables?.map((item, index) => (
-              <p key={index}>{item}</p>
+              <div key={index} className="grid grid-cols-2 gap-2">
+                <p>{item.split(":")[0]}:</p>
+                <p>{item.slice(item.indexOf(":") + 1)}</p>
+              </div>
             ))}
           </div>
         </Column>
