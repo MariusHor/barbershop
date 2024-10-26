@@ -10,7 +10,7 @@ import { Button } from "@/components/ui/button";
 import { capitalize, cn } from "@/utils/helpers";
 import { api } from "@/utils/api";
 import { useStore } from "@/store";
-import { Logo } from "@/components";
+import { Logo, SocialLinks } from "@/components";
 import {
   Accordion,
   AccordionContent,
@@ -19,10 +19,27 @@ import {
 } from "@/components/ui/accordion";
 
 export function MainLayout({ children }: { children: React.ReactNode }) {
+  const { data: siteSettings } = api.content.getSiteSettings.useQuery();
+
   return (
     <>
       <Header />
-      <main className="flex-grow">{children}</main>
+      <main className="flex-grow">
+        {children} <Separator className="bg-muted-foreground" />
+        <section className="bg-background py-16">
+          <div className="container-md flex flex-col items-center justify-center gap-6">
+            <Logo />
+
+            <p className="max-w-[512px] text-center text-lg leading-7 text-dark-foreground">
+              Stay in the loop on special events, new arrivals, and exclusive
+              collaborations brought to you by the crew at {siteSettings?.title}
+              .
+            </p>
+
+            <SocialLinks />
+          </div>
+        </section>
+      </main>
       <Footer />
     </>
   );
@@ -31,12 +48,15 @@ export function MainLayout({ children }: { children: React.ReactNode }) {
 const Header = (): React.JSX.Element | null => {
   const { data: routes } = api.content.getRoutes.useQuery();
   const currentRoute = usePathname();
-  const [isScrolled, setIsScrolled] = useState(false);
+  const [showNavbar, setShowNavbar] = useState(false);
 
   useEffect(() => {
+    const showNavbarOnRoute = !!currentRoute?.includes("galerie");
+    setShowNavbar(showNavbarOnRoute);
+
     const handleScroll = () => {
       const isTop = window.scrollY === 0;
-      setIsScrolled(!isTop);
+      setShowNavbar(showNavbarOnRoute || !isTop);
     };
 
     window.addEventListener("scroll", handleScroll);
@@ -44,23 +64,23 @@ const Header = (): React.JSX.Element | null => {
     return () => {
       window.removeEventListener("scroll", handleScroll);
     };
-  }, []);
+  }, [currentRoute]);
 
   return (
     <header
       className={cn(
         "fixed z-50 mx-auto flex h-header w-full items-center text-lg transition",
-        { "bg-white shadow-md": isScrolled },
+        { "bg-white shadow-md": showNavbar },
       )}
     >
       <div className="container-lg relative flex h-full items-center justify-between">
-        {isScrolled && <Logo className="md:max-w-30 max-w-20" />}
+        {showNavbar && <Logo className="md:max-w-30 max-w-20" />}
 
         <div className="flex h-full w-full items-center justify-end">
           <HamburgerMenu
             routes={routes}
             currentRoute={currentRoute}
-            isScrolled={isScrolled}
+            showNavbar={showNavbar}
           />
           <DesktopNavLinks
             routes={routes}
@@ -77,11 +97,11 @@ const Header = (): React.JSX.Element | null => {
 const HamburgerMenu = ({
   routes,
   currentRoute,
-  isScrolled,
+  showNavbar,
 }: {
   routes: { path: string; name: string }[] | undefined;
   currentRoute: string | null;
-  isScrolled: boolean;
+  showNavbar: boolean;
 }): React.JSX.Element | null => {
   const { data: locationData } = api.content.getShopLocation.useQuery();
   const [containerRef, { height }] = useMeasure();
@@ -95,7 +115,7 @@ const HamburgerMenu = ({
 
   const btnStroke = isBtnHovered
     ? "hsl(var(--primary-foreground))"
-    : isScrolled || menuOpen
+    : showNavbar || menuOpen
       ? "hsl(var(--dark))"
       : "hsl(var(--muted))";
 
@@ -232,7 +252,7 @@ const HamburgerMenu = ({
               icon={`mdi:${instagramData.name}`}
               className={cn(
                 "text-4xl text-inherit hover:text-primary-foreground",
-                { "text-dark": isScrolled || currentRoute !== "/" },
+                { "text-dark": showNavbar || currentRoute !== "/" },
               )}
             />
           </motion.span>
@@ -247,7 +267,7 @@ const HamburgerMenu = ({
       >
         <svg width="23" height="23" viewBox="0 0 23 23">
           <motion.path
-            key={isScrolled.toString() + isBtnHovered.toString() + 1}
+            key={showNavbar.toString() + isBtnHovered.toString() + 1}
             fill="transparent"
             strokeWidth="3"
             strokeLinecap="round"
@@ -261,7 +281,7 @@ const HamburgerMenu = ({
             }}
           />
           <motion.path
-            key={isScrolled.toString() + isBtnHovered.toString() + 2}
+            key={showNavbar.toString() + isBtnHovered.toString() + 2}
             fill="transparent"
             strokeWidth="3"
             strokeLinecap="round"
@@ -277,7 +297,7 @@ const HamburgerMenu = ({
             transition={{ duration: 0.1 }}
           />
           <motion.path
-            key={isScrolled.toString() + isBtnHovered.toString() + 3}
+            key={showNavbar.toString() + isBtnHovered.toString() + 3}
             fill="transparent"
             strokeWidth="3"
             strokeLinecap="round"

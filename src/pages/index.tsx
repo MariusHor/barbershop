@@ -5,9 +5,7 @@ import Image from "next/image";
 import Marquee from "react-fast-marquee";
 import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
-import { ArrowRightIcon } from "@radix-ui/react-icons";
-import PhotoAlbum from "react-photo-album";
-import { useMeasure, useWindowSize } from "@uidotdev/usehooks";
+import { useMeasure } from "@uidotdev/usehooks";
 
 import type { NextPageWithLayout } from "./_app";
 import { cn, getPageTitle } from "@/utils/helpers";
@@ -15,11 +13,14 @@ import { getSSGHelper } from "@/utils/getSSGHelper";
 import { api } from "@/utils/api";
 import { type PageSection } from "@/utils/types";
 import { urlFor } from "@/lib/sanity/client";
-import { Logo, ScheduleButton, SocialLinks } from "@/components";
+import {
+  ColumnSection,
+  Gallery,
+  RowSection,
+  ScheduleButton,
+} from "@/components";
 import { useEffect, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
-import Link from "next/link";
-import { Separator } from "@/components/ui/separator";
 
 export const getServerSideProps = async () => {
   const ssg = getSSGHelper();
@@ -56,6 +57,17 @@ const Page: NextPageWithLayout<
     throw new Error("Missing 'Acasa' page Sanity sections data");
   }
 
+  const { data: galleryImages } = api.content.getGalleryImages.useQuery(
+    {},
+    { enabled: !!pageData.sections.some((section) => section.withGallery) },
+  );
+  const _galleryImages =
+    galleryImages?.map((item) => ({
+      src: urlFor(item.image).url(),
+      width: item.image.width ?? 0,
+      height: item.image.height ?? 0,
+    })) ?? [];
+
   const heroSectionData = pageData.sections.find(
     (section) => section.value === "intro",
   );
@@ -68,39 +80,26 @@ const Page: NextPageWithLayout<
       </Head>
 
       {heroSectionData && <HeroSection data={heroSectionData} />}
-      {pageData.sections
-        .slice(1)
-        .map((section, index) =>
-          section.style.includes("column") ? (
-            <ColumnSection key={index} data={section} />
-          ) : (
-            <RowSection
-              key={index}
-              data={section}
-              className={
-                section.style.includes("reversed")
-                  ? "border-b-[1px] border-t-[1px]"
-                  : "border-b-[1px]"
-              }
-              reverse={section.style.includes("reversed")}
-            />
-          ),
-        )}
-
-      <Separator className="bg-muted-foreground" />
-
-      <section className="bg-background py-16">
-        <div className="container-md flex flex-col items-center justify-center gap-6">
-          <Logo />
-
-          <p className="max-w-[512px] text-center text-lg leading-7 text-dark-foreground">
-            Stay in the loop on special events, new arrivals, and exclusive
-            collaborations brought to you by the crew at {siteSettings?.title}.
-          </p>
-
-          <SocialLinks />
-        </div>
-      </section>
+      {pageData.sections.slice(1).map((section, index) =>
+        section.style.includes("column") ? (
+          <ColumnSection key={index} data={section}>
+            {section.withGallery
+              ? ({ width }) => <Gallery width={width} data={_galleryImages} />
+              : undefined}
+          </ColumnSection>
+        ) : (
+          <RowSection
+            key={index}
+            data={section}
+            className={
+              section.style.includes("reversed")
+                ? "border-b-[1px] border-t-[1px]"
+                : "border-b-[1px]"
+            }
+            reverse={section.style.includes("reversed")}
+          />
+        ),
+      )}
     </>
   );
 };
@@ -245,195 +244,6 @@ const HeroSection = ({ data }: { data: PageSection }) => {
             </Marquee>
           )}
         </div>
-      </div>
-    </section>
-  );
-};
-
-const ColumnSection = ({
-  data,
-  className = "",
-}: {
-  data: PageSection;
-  className?: string;
-}) => {
-  const { data: galleryImages } = api.content.getGalleryImages.useQuery(
-    {},
-    { enabled: !!data.withGallery },
-  );
-  const albumImages =
-    galleryImages?.map((item) => ({
-      src: urlFor(item.image).url(),
-      width: item.image.width ?? 0,
-      height: item.image.height ?? 0,
-    })) ?? [];
-  const { width, height } = useWindowSize();
-  const rootEl = useRef<HTMLElement>(null);
-  const [rootElHeight, setRootElHeight] = useState(0);
-
-  useEffect(() => {
-    if (!rootEl.current) return;
-
-    setRootElHeight(parseFloat(getComputedStyle(rootEl.current).height));
-  }, [rootEl, width]);
-
-  return (
-    <section
-      className={cn(
-        "flex min-h-screen flex-col items-center justify-center gap-16 bg-background-secondary",
-        className,
-        {
-          "py-16":
-            (width && width > 1328) || (height && rootElHeight >= height),
-        },
-      )}
-      ref={rootEl}
-    >
-      <div className="container-md flex flex-col items-center justify-center gap-12 text-center lg:gap-16">
-        {data.title && (
-          <h2 className="max-w-[1024px] text-5xl font-semibold text-primary-foreground md:text-6xl lg:text-7xl">
-            {data.title}
-          </h2>
-        )}
-
-        {data.subtitle && (
-          <h3 className="max-w-[1024px] text-2xl text-dark-foreground md:text-3xl lg:text-4xl">
-            {data.subtitle}
-          </h3>
-        )}
-
-        {data.content && (
-          <p className="max-w-[786px] text-center text-lg leading-8 text-dark-foreground lg:leading-9">
-            {data.content}
-          </p>
-        )}
-
-        {data.linkButton?.href && (
-          <Button
-            size={"default"}
-            variant={"ghost"}
-            asChild
-            className="flex gap-2 p-0 text-lg hover:bg-transparent hover:text-primary-foreground"
-          >
-            <Link
-              href={data.linkButton?.href}
-              target={
-                data.linkButton.href.includes("https") ? "_blank" : "_self"
-              }
-            >
-              {data.linkButton?.text}
-              <ArrowRightIcon style={{ width: "20px", height: "20px" }} />
-            </Link>
-          </Button>
-        )}
-      </div>
-
-      {data.withGallery && width && (
-        <div className="w-full">
-          <PhotoAlbum
-            componentsProps={{
-              containerProps: {
-                style: {
-                  gap: width < 768 ? "1px" : width < 1024 ? "2px" : "8px",
-                },
-              },
-              columnContainerProps: {
-                style: {
-                  width: width < 768 ? "100%" : width < 1024 ? "50%" : "33%",
-                  gap: width < 768 ? "1px" : width < 1024 ? "2px" : "8px",
-                },
-              },
-              imageProps: { style: { width: "100%", marginBottom: 0 } },
-            }}
-            columns={width < 768 ? 1 : width < 1024 ? 2 : 3}
-            layout={"masonry"}
-            photos={albumImages}
-          />
-        </div>
-      )}
-    </section>
-  );
-};
-
-const RowSection = ({
-  data,
-  className = "",
-  reverse = false,
-}: {
-  data: PageSection;
-  className?: string;
-  reverse?: boolean;
-}) => {
-  return (
-    <section
-      className={cn(
-        "grid max-h-[968px] grid-rows-2 overflow-hidden border-solid border-muted-foreground lg:max-h-[484px] lg:grid-cols-2 lg:grid-rows-1",
-        className,
-      )}
-    >
-      {data?.image && (
-        <div
-          className={cn(
-            "h-full w-full border-t-[1px] border-solid border-muted-foreground object-cover lg:max-h-[484px] lg:border-t-0",
-            {
-              "order-2 lg:border-l-[1px]": reverse,
-              "order-2 lg:order-[0]": !reverse,
-            },
-          )}
-        >
-          <Image
-            src={urlFor(data.image).url()}
-            alt={
-              data.image.alt ??
-              `Image representing the ${data.title?.toLowerCase()}`
-            }
-            width={data.image.width}
-            height={data.image.height}
-            className="h-full w-full object-cover"
-            loading="lazy"
-          />
-        </div>
-      )}
-
-      <div
-        className={cn(
-          "container-md flex flex-col items-center justify-center gap-6 py-24 text-center text-dark lg:items-start lg:px-12 lg:text-left",
-          {
-            "border-solid border-muted-foreground lg:border-l-[1px]": !reverse,
-          },
-        )}
-      >
-        {data.title && (
-          <h2 className="text-3xl text-dark lg:text-4xl">{data.title}</h2>
-        )}
-        {data.subtitle && (
-          <h3 className="text-2xl text-dark-foreground lg:text-3xl">
-            {data.subtitle}
-          </h3>
-        )}
-        {data.content && (
-          <p className="mt-4 max-w-[548px] text-lg leading-7 text-dark-foreground lg:leading-8">
-            {data.content}
-          </p>
-        )}
-        {data.linkButton?.href && (
-          <Button
-            size={"default"}
-            variant={"ghost"}
-            asChild
-            className="flex gap-2 p-0 text-lg hover:bg-transparent hover:text-primary-foreground"
-          >
-            <Link
-              href={data.linkButton.href}
-              target={
-                data.linkButton.href.includes("https") ? "_blank" : "_self"
-              }
-            >
-              {data.linkButton?.text}
-              <ArrowRightIcon style={{ width: "20px", height: "20px" }} />
-            </Link>
-          </Button>
-        )}
       </div>
     </section>
   );
