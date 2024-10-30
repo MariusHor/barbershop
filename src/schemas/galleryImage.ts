@@ -1,5 +1,5 @@
 import { type Rule } from "@sanity/types";
-import { SANITY_DOC_TYPES } from "@/utils/constants";
+import { SANITY_DOC_TYPES } from "../utils/constants";
 
 const galleryImage = {
   name: SANITY_DOC_TYPES.galleryImage,

@@ -13,6 +13,8 @@ export const RowSection = ({
   reverse = false,
   maxHeight = "484px",
   titleClassName,
+  subtitleClassName,
+  contentClassName,
   imageContainerClassName,
 }: {
   data: PageSection;
@@ -20,6 +22,8 @@ export const RowSection = ({
   reverse?: boolean;
   maxHeight?: string;
   titleClassName?: string;
+  subtitleClassName?: string;
+  contentClassName?: string;
   imageContainerClassName?: string;
 }) => {
   const [isImageLoading, setImageLoading] = useState(true);
@@ -74,12 +78,22 @@ export const RowSection = ({
           </h2>
         )}
         {data.subtitle && (
-          <h3 className="text-2xl text-dark-foreground lg:text-3xl">
+          <h3
+            className={cn(
+              "text-md text-dark-foreground md:text-lg xl:text-xl",
+              subtitleClassName,
+            )}
+          >
             {data.subtitle}
           </h3>
         )}
         {data.content && (
-          <p className="mt-4 max-w-[548px] text-lg leading-7 text-dark-foreground lg:leading-8">
+          <p
+            className={cn(
+              "mt-4 max-w-[548px] text-lg leading-7 text-dark-foreground lg:leading-8",
+              contentClassName,
+            )}
+          >
             {data.content}
           </p>
         )}

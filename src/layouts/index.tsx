@@ -34,7 +34,7 @@ const Header = (): React.JSX.Element | null => {
   const [showNavbar, setShowNavbar] = useState(false);
 
   useEffect(() => {
-    const showNavbarOnRoute = !!currentRoute?.includes("galerie");
+    const showNavbarOnRoute = currentRoute !== "/";
     setShowNavbar(showNavbarOnRoute);
 
     const handleScroll = () => {

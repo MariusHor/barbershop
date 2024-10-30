@@ -72,7 +72,8 @@ const Page: NextPageWithLayout<
             )}
             reverse={section.style.includes("reversed")}
             maxHeight="100vh"
-            titleClassName="text-4xl text-dark font-bold lg:text-5xl"
+            titleClassName="text-3xl font-black sm:text-4xl md:text-5xl xl:text-6xl"
+            contentClassName="max-w-[684px]"
             imageContainerClassName="order-0"
           />
         ),

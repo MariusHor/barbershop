@@ -180,16 +180,12 @@ const HeroSection = ({ data }: { data: PageSection }) => {
           </h1>
 
           {data?.subtitle && (
-            <p className="max-w-[736px] text-center text-lg text-white opacity-100 sm:text-xl md:text-2xl xl:text-3xl">
+            <h2 className="max-w-[736px] text-center text-lg text-white opacity-100 sm:text-xl md:text-2xl xl:text-3xl">
               {data?.subtitle}
-            </p>
+            </h2>
           )}
 
-          <ScheduleButton
-            className="bg-white text-dark hover:text-muted xl:mt-4"
-            text={data.linkButton?.text}
-            href={data.linkButton?.href}
-          />
+          <ScheduleButton className="bg-white text-dark hover:text-muted xl:mt-4" />
         </div>
       </div>
       <div className="relative hidden flex-col items-center justify-center gap-16 overflow-hidden bg-white px-20 lg:flex">

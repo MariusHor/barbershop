@@ -1,17 +1,11 @@
 import { type Rule } from "@sanity/types";
 import { SANITY_DOC_TYPES } from "../utils/constants";
 
-const siteLogo = {
-  name: SANITY_DOC_TYPES.siteLogo,
+const galleryImage = {
+  name: SANITY_DOC_TYPES.servicesImage,
   type: "document",
-  title: "Logo",
+  title: "Imagini Servicii",
   fields: [
-    {
-      name: "name",
-      type: "string",
-      title: "Nume Fisier",
-      validation: (rule: Rule) => rule.required().min(4).max(50),
-    },
     {
       name: "image",
       type: "image",
@@ -45,7 +39,20 @@ const siteLogo = {
         },
       ],
     },
+    {
+      name: "name",
+      type: "string",
+      title: "Nume serviciu",
+      validation: (rule: Rule) => rule.required().min(5).max(40),
+    },
   ],
+  preview: {
+    select: {
+      title: "image.asset.originalFilename",
+      width: "image.asset.metadata.dimensions.width",
+      height: "image.asset.metadata.dimensions.height",
+    },
+  },
 };
 
-export default siteLogo;
+export default galleryImage;

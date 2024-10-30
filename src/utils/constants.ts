@@ -9,5 +9,6 @@ export const SANITY_DOC_TYPES = Object.freeze({
   shopLocation: "shopLocation",
   page: "page",
   galleryImage: "galleryImage",
+  servicesImage: "servicesImage",
   barber: "barber",
 });

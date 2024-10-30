@@ -138,6 +138,29 @@ export type Barber = {
   };
 };
 
+export type ServicesImage = {
+  _id: string;
+  _type: "servicesImage";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  image: {
+    asset?: {
+      _ref: string;
+      _type: "reference";
+      _weak?: boolean;
+      [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+    };
+    hotspot?: SanityImageHotspot;
+    crop?: SanityImageCrop;
+    alt: string;
+    width?: number;
+    height?: number;
+    _type: "image";
+  };
+  name: string;
+};
+
 export type GalleryImage = {
   _id: string;
   _type: "galleryImage";
@@ -281,6 +304,7 @@ export type AllSanitySchemaTypes =
   | Page
   | Slug
   | Barber
+  | ServicesImage
   | GalleryImage
   | ShopLocation
   | SiteLogo
