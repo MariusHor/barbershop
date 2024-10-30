@@ -134,7 +134,7 @@ const Page: NextPageWithLayout<
             </Carousel>
           </div>
         </div>
-        <div className="absolute bottom-0 z-50 h-[var(--header-height)] max-w-[100vw] border-t-[1px] border-solid border-muted-foreground bg-white py-6">
+        <div className="absolute bottom-0 z-40 h-[var(--header-height)] max-w-[100vw] border-t-[1px] border-solid border-muted-foreground bg-white py-6">
           <Marquee autoFill pauseOnHover className="max-w-[100vw]">
             <Logo className="w-16" />
             <span className="font-500 ml-4 mr-40 text-3xl">
