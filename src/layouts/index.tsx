@@ -362,13 +362,11 @@ const Footer = (): React.JSX.Element => {
         </Column>
 
         <Column title="Locatii">
-          <Accordion
-            type="single"
-            collapsible
-            className="w-40 lg:w-full"
-            defaultValue="item-1"
-          >
-            <AccordionItem value="item-1" className="border-b-dark-foreground">
+          <Accordion type="single" collapsible className="w-40 lg:w-full">
+            <AccordionItem
+              value={locationData?.name ?? ""}
+              className="border-b-dark-foreground"
+            >
               <AccordionTrigger className="pb-2 pt-0 font-black hover:text-primary-foreground hover:no-underline">
                 {locationData?.name}
               </AccordionTrigger>

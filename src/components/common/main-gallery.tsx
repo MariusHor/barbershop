@@ -45,7 +45,7 @@ export const MainGallery = ({
           <Button
             onClick={() => fetchNextPage()}
             variant={"outline"}
-            className="m-auto h-14 w-fit rounded-none border-muted-foreground bg-background-secondary text-lg font-[300] text-dark hover:bg-primary-foreground hover:text-muted"
+            className="m-auto h-14 w-36 rounded-none border-muted-foreground bg-background-secondary text-lg font-[300] text-dark hover:bg-primary-foreground hover:text-muted"
           >
             {isFetching && !isLoading ? <BaseSpinner /> : "Mai multe"}
           </Button>
