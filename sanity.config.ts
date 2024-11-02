@@ -5,8 +5,10 @@ import { visionTool } from "@sanity/vision";
 import { schemaTypes } from "./src/schemas";
 import { customDeskStructure } from "./src/lib/sanity/deskStructure";
 
-const projectId = process.env.SANITY_STUDIO_PROJECT_ID!;
-const dataset = process.env.MODE!;
+const projectId =
+  process.env.SANITY_STUDIO_PROJECT_ID! ||
+  process.env.NEXT_PUBLIC_SANITY_PROJECT_ID!;
+const dataset = process.env.MODE! || process.env.NODE_ENV;
 
 export default defineConfig({
   projectId,
