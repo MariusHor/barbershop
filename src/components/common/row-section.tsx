@@ -80,7 +80,7 @@ export const RowSection = ({
         {data.subtitle && (
           <h3
             className={cn(
-              "text-md text-dark-foreground md:text-lg xl:text-xl",
+              "text-base text-dark-foreground md:text-lg xl:text-xl",
               subtitleClassName,
             )}
           >

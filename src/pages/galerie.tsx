@@ -38,7 +38,7 @@ const Page: NextPageWithLayout<
   });
 
   if (!pageData?.sections?.length) {
-    throw new Error("Missing 'Acasa' page Sanity sections data");
+    throw new Error("Missing 'Galerie' page Sanity sections data");
   }
 
   return (
@@ -57,7 +57,7 @@ const Page: NextPageWithLayout<
             subTitleClassName="font-black"
           >
             {section.withGallery
-              ? ({ width }) => <MainGallery pageData={pageData} width={width} />
+              ? ({ width }) => <MainGallery width={width} />
               : undefined}
           </ColumnSection>
         ) : (

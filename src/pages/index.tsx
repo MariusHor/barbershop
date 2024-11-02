@@ -78,7 +78,7 @@ const Page: NextPageWithLayout<
             className="bg-background-secondary"
           >
             {section.withGallery
-              ? ({ width }) => <MainGallery pageData={pageData} width={width} />
+              ? ({ width }) => <MainGallery width={width} />
               : undefined}
           </ColumnSection>
         ) : (

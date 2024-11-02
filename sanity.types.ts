@@ -138,12 +138,14 @@ export type Barber = {
   };
 };
 
-export type ServicesImage = {
+export type Services = {
   _id: string;
-  _type: "servicesImage";
+  _type: "services";
   _createdAt: string;
   _updatedAt: string;
   _rev: string;
+  name: string;
+  price: number;
   image: {
     asset?: {
       _ref: string;
@@ -153,12 +155,29 @@ export type ServicesImage = {
     };
     hotspot?: SanityImageHotspot;
     crop?: SanityImageCrop;
-    alt: string;
-    width?: number;
-    height?: number;
     _type: "image";
   };
-  name: string;
+  description: Array<{
+    children?: Array<{
+      marks?: Array<string>;
+      text?: string;
+      _type: "span";
+      _key: string;
+    }>;
+    style?: "normal" | "h2" | "h3";
+    listItem?: "bullet" | "number";
+    markDefs?: Array<{
+      href?: string;
+      _type: "link";
+      _key: string;
+    }>;
+    level?: number;
+    _type: "block";
+    _key: string;
+  }>;
+  details: Array<string>;
+  duration: number;
+  order?: number;
 };
 
 export type GalleryImage = {
@@ -304,7 +323,7 @@ export type AllSanitySchemaTypes =
   | Page
   | Slug
   | Barber
-  | ServicesImage
+  | Services
   | GalleryImage
   | ShopLocation
   | SiteLogo

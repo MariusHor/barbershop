@@ -1,17 +1,10 @@
 import { urlFor } from "@/lib/sanity/client";
 import { api } from "@/utils/api";
-import { type Page } from "sanity.types";
 import { Gallery } from "./gallery";
 import { Button } from "../ui/button";
 import { BaseSpinner } from "../base/base-spinner";
 
-export const MainGallery = ({
-  pageData,
-  width,
-}: {
-  pageData: Page;
-  width: number;
-}) => {
+export const MainGallery = ({ width }: { width: number }) => {
   const {
     data: galleryImages,
     isFetching,
@@ -20,7 +13,6 @@ export const MainGallery = ({
   } = api.content.getGalleryImages.useInfiniteQuery(
     { limit: 2 },
     {
-      enabled: !!pageData?.sections?.some((section) => section.withGallery),
       getNextPageParam: (lastPage) => lastPage.nextCursor,
     },
   );

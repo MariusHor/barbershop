@@ -6,7 +6,7 @@ import type {
   SiteSettings,
   Page,
   GalleryImage,
-  ServicesImage,
+  Services,
 } from "sanity.types";
 import { createTRPCRouter, publicProcedure } from "../trpc";
 import { TRPCError } from "@trpc/server";
@@ -57,6 +57,15 @@ export const sanityContentRouter = createTRPCRouter({
     if (!data[0]) throwSanityErrorMessage({ dataType });
 
     return data[0];
+  }),
+  getServicesData: publicProcedure.query(async ({ ctx }) => {
+    const dataType = SANITY_DOC_TYPES.services;
+    const query = `*[_type == "${dataType}"]`;
+    const data = await ctx.sanityClient.fetch<Services[]>(query);
+
+    if (!data.length) throwSanityErrorMessage({ dataType });
+
+    return data;
   }),
   getPageData: publicProcedure
     .input(z.object({ slug: z.string() }))
@@ -142,72 +151,6 @@ export const sanityContentRouter = createTRPCRouter({
           : {};
 
       const data = await ctx.sanityClient.fetch<GalleryImage[]>(query, params);
-
-      let nextCursor: typeof cursor | undefined = undefined;
-
-      const nextItem = data.at(-1);
-      nextCursor = {
-        _createdAt: nextItem?._createdAt,
-        _id: nextItem?._id,
-      };
-
-      return {
-        items: data,
-        nextCursor,
-        totalCount,
-      };
-    }),
-  getServicesImages: publicProcedure
-    .input(
-      z.object({
-        limit: z.number().min(1).max(100).nullish(),
-        cursor: z
-          .object({
-            _createdAt: z.string().nullish(),
-            _id: z.string().nullish(),
-          })
-          .nullish(),
-      }),
-    )
-    .query(async ({ ctx, input }) => {
-      const limit = input.limit ?? 50;
-      const { cursor } = input;
-      const dataType = SANITY_DOC_TYPES.servicesImage;
-
-      const filterCondition =
-        cursor?._createdAt && cursor?._id
-          ? `&& (
-          _createdAt > $lastCreatedAt || 
-          (_createdAt == $lastCreatedAt && _id > $lastId)
-        )`
-          : "";
-
-      const query = `*[
-      _type == "${dataType}"
-      ${filterCondition}
-    ] | order(_createdAt asc)[0...${limit}]{
-      _id,
-      _createdAt,
-      name,
-      image{
-        ...,
-        "width": asset->metadata.dimensions.width,
-        "height": asset->metadata.dimensions.height
-      }
-    }`;
-
-      const countQuery = `count(*[_type == "${dataType}"])`;
-      const totalCount = await ctx.sanityClient.fetch<number>(countQuery);
-
-      const params =
-        cursor?._createdAt && cursor?._id
-          ? {
-              lastCreatedAt: cursor._createdAt,
-              lastId: cursor._id,
-            }
-          : {};
-
-      const data = await ctx.sanityClient.fetch<ServicesImage[]>(query, params);
 
       let nextCursor: typeof cursor | undefined = undefined;
 
