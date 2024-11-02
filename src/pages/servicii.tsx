@@ -20,6 +20,7 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel";
+import { StayInTouch } from "@/components/common/stay-in-touch";
 
 export const getServerSideProps = async () => {
   const ssg = getSSGHelper();
@@ -143,6 +144,8 @@ const Page: NextPageWithLayout<
           </Marquee>
         </div>
       </section>
+
+      <StayInTouch className="bg-background-secondary" />
     </>
   );
 };

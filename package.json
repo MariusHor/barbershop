@@ -6,10 +6,14 @@
   "scripts": {
     "build": "next build",
     "dev": "next dev",
+    "start": "next start",
     "check-types": "tsc --noemit",
     "lint": "next lint && npm run check-types",
-    "sanity-generate": "npx sanity schema extract --enforce-required-fields && npx sanity typegen generate",
-    "start": "next start"
+    "sanity:docs": "npx sanity docs",
+    "sanity:build": "npx sanity build",
+    "sanity:start": "npx sanity dev",
+    "sanity:deploy": "npx sanity deploy",
+    "sanity:generate": "npx sanity schema extract --enforce-required-fields && npx sanity typegen generate"
   },
   "dependencies": {
     "@portabletext/react": "^3.1.0",

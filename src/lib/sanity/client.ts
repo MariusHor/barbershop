@@ -2,9 +2,9 @@ import { type SanityImageSource } from "@sanity/image-url/lib/types/types";
 import imageUrlBuilder from "@sanity/image-url";
 import { createClient } from "next-sanity";
 
-const projectId = process.env.NEXT_PUBLIC_SANITY_PROJECT_ID;
-const dataset = process.env.NEXT_PUBLIC_SANITY_DATASET;
-const apiVersion = process.env.NEXT_PUBLIC_SANITY_API_VERSION ?? "2024-03-29";
+const projectId = process.env.SANITY_STUDIO_PROJECT_ID;
+const apiVersion = process.env.SANITY_STUDIO_API_VERSION;
+const dataset = process.env.MODE;
 
 export const client = createClient({
   projectId,

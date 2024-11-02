@@ -5,7 +5,11 @@ import { defineCliConfig } from "sanity/cli";
 const dev = process.env.NODE_ENV !== "production";
 loadEnvConfig(__dirname, dev, { info: () => null, error: console.error });
 
-const projectId = process.env.NEXT_PUBLIC_SANITY_PROJECT_ID;
-const dataset = process.env.NEXT_PUBLIC_SANITY_DATASET;
+const studioHost = process.env.SANITY_STUDIO_HOST;
+const projectId = process.env.SANITY_STUDIO_PROJECT_ID;
+const dataset = process.env.MODE;
 
-export default defineCliConfig({ api: { projectId, dataset } });
+export default defineCliConfig({
+  api: { projectId, dataset },
+  studioHost,
+});

@@ -5,14 +5,13 @@ import { visionTool } from "@sanity/vision";
 import { schemaTypes } from "./src/schemas";
 import { customDeskStructure } from "./src/lib/sanity/deskStructure";
 
-const projectId = process.env.NEXT_PUBLIC_SANITY_PROJECT_ID! || "ae4dl49v";
-const dataset = process.env.NEXT_PUBLIC_SANITY_DATASET! || "production";
+const projectId = process.env.SANITY_STUDIO_PROJECT_ID!;
+const dataset = process.env.MODE!;
 
 export default defineConfig({
-  basePath: "/studio", // <-- important that `basePath` matches the route you're mounting your studio from
-
   projectId,
   dataset,
+  basePath: "/studio",
   plugins: [
     structureTool({
       structure: customDeskStructure,
