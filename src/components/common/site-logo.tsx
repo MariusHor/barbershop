@@ -66,6 +66,11 @@ export const SiteLogo = ({
       alt="website logo"
       width={_width}
       height={_height}
+      linkProps={{
+        prefetch: true,
+        "aria-label": "Catre pagina principala",
+      }}
+      imageProps={{ priority: true, loading: "eager" }}
       className={cn(siteLogoVariants({ size }), className)}
     />
   );
