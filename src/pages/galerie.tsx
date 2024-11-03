@@ -5,7 +5,7 @@ import Head from "next/head";
 import { api } from "@/utils/api";
 import { cn, getPageTitle } from "@/utils/helpers";
 import { getSSGHelper } from "@/utils/getSSGHelper";
-import { ColumnSection, RowSection, MainGallery } from "@/components";
+import { ColumnSection, RowSection, GalleryPhotoAlbum } from "@/components";
 import { StayInTouch } from "@/components/common/stay-in-touch";
 
 export const getServerSideProps = async () => {
@@ -57,7 +57,7 @@ const Page: NextPageWithLayout<
             subTitleClassName="font-black"
           >
             {section.withGallery
-              ? ({ width }) => <MainGallery width={width} />
+              ? ({ width }) => <GalleryPhotoAlbum width={width} />
               : undefined}
           </ColumnSection>
         ) : (

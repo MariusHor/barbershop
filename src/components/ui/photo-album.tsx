@@ -1,9 +1,9 @@
-import PhotoAlbum, {
+import BasePhotoAlbum, {
   type Photo,
   type PhotoAlbumProps,
 } from "react-photo-album";
 
-export const Gallery = <T extends Photo>({
+export const PhotoAlbum = <T extends Photo>({
   data,
   width,
   layout = "masonry",
@@ -16,7 +16,7 @@ export const Gallery = <T extends Photo>({
 
   return (
     <div className="w-full">
-      <PhotoAlbum
+      <BasePhotoAlbum
         componentsProps={{
           containerProps: {
             style: {

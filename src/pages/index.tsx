@@ -17,7 +17,7 @@ import {
   ColumnSection,
   RowSection,
   ScheduleButton,
-  MainGallery,
+  GalleryPhotoAlbum,
 } from "@/components";
 import { useEffect, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
@@ -78,7 +78,7 @@ const Page: NextPageWithLayout<
             className="bg-background-secondary"
           >
             {section.withGallery
-              ? ({ width }) => <MainGallery width={width} />
+              ? ({ width }) => <GalleryPhotoAlbum width={width} />
               : undefined}
           </ColumnSection>
         ) : (
