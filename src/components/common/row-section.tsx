@@ -73,7 +73,7 @@ export const RowSection = ({
           {data.subtitle}
         </Text>
 
-        <Text variant={"body"} className="max-w-[786px]" leading={"normal"}>
+        <Text variant={"body"} className="max-w-[624px]" leading={"normal"}>
           {data.content}
         </Text>
 

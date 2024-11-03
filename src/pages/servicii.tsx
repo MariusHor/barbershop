@@ -101,7 +101,9 @@ const IntroSection = ({
 
         <Text variant={"h4"}>{data?.subtitle}</Text>
 
-        <div className="flex flex-col items-center gap-2 lg:gap-0">
+        <Text variant={"body"} className="max-w-[624px] px-4">{data?.content}</Text>
+
+        <div className="flex flex-col items-center gap-4 lg:gap-0">
           <ButtonLink
             href={data?.linkButton?.href}
             variant={"ghost"}
