@@ -2,9 +2,8 @@ import { cn } from "@/utils/helpers";
 import { type PageSection } from "@/utils/types";
 import { useWindowSize } from "@uidotdev/usehooks";
 import { useEffect, useRef, useState } from "react";
-import { Button } from "../ui/button";
-import Link from "next/link";
 import { ArrowRightIcon } from "@radix-ui/react-icons";
+import { ButtonLink } from "./button-link";
 
 export const ColumnSection = ({
   children,
@@ -71,22 +70,15 @@ export const ColumnSection = ({
         )}
 
         {data.linkButton?.href && (
-          <Button
+          <ButtonLink
             size={"default"}
             variant={"ghost"}
-            asChild
             className="flex gap-2 p-0 text-lg hover:bg-transparent hover:text-primary-foreground"
+            href={data.linkButton?.href}
           >
-            <Link
-              href={data.linkButton?.href}
-              target={
-                data.linkButton.href.includes("https") ? "_blank" : "_self"
-              }
-            >
-              {data.linkButton?.text}
-              <ArrowRightIcon style={{ width: "20px", height: "20px" }} />
-            </Link>
-          </Button>
+            {data.linkButton?.text}
+            <ArrowRightIcon style={{ width: "20px", height: "20px" }} />
+          </ButtonLink>
         )}
       </div>
 

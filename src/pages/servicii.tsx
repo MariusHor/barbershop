@@ -8,8 +8,6 @@ import { getSSGHelper } from "@/utils/getSSGHelper";
 import { SiteLogo, ScheduleButton } from "@/components";
 import Marquee from "react-fast-marquee";
 import { usePathname } from "next/navigation";
-import { Button } from "@/components/ui/button";
-import Link from "next/link";
 import { ArrowRightIcon } from "@radix-ui/react-icons";
 import Image from "next/image";
 import { urlFor } from "@/lib/sanity/client";
@@ -30,6 +28,7 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
+import { ButtonLink } from "@/components/common/button-link";
 
 export const getServerSideProps = async () => {
   const ssg = getSSGHelper();
@@ -111,22 +110,15 @@ const IntroSection = ({
 
         <div className="flex flex-col items-center gap-2 lg:gap-0">
           {data?.linkButton?.href && (
-            <Button
+            <ButtonLink
               size={"default"}
               variant={"ghost"}
-              asChild
+              href={data.linkButton.href}
               className="flex gap-2 p-0 text-lg hover:bg-transparent hover:text-primary-foreground"
             >
-              <Link
-                href={data.linkButton.href}
-                target={
-                  data.linkButton.href.includes("https") ? "_blank" : "_self"
-                }
-              >
-                {data.linkButton?.text}
-                <ArrowRightIcon style={{ width: "20px", height: "20px" }} />
-              </Link>
-            </Button>
+              {data.linkButton?.text}
+              <ArrowRightIcon style={{ width: "20px", height: "20px" }} />
+            </ButtonLink>
           )}
           <ScheduleButton
             variant={"outline"}

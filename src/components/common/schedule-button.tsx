@@ -1,10 +1,10 @@
 import { type VariantProps } from "class-variance-authority";
 import { type Url } from "next/dist/shared/lib/router/router";
-import Link from "next/link";
 
-import { Button, type buttonVariants } from "../ui/button";
+import { type buttonVariants } from "../ui/button";
 import { cn } from "@/utils/helpers";
 import { api } from "@/utils/api";
+import { ButtonLink } from "./button-link";
 
 export type ScheduleButtonProps = {
   text?: string;
@@ -29,18 +29,16 @@ export const ScheduleButton = ({
   if (!linkHref) return null;
 
   return (
-    <Button
+    <ButtonLink
       size={size}
+      variant={variant}
+      href={linkHref}
       className={cn(
         "h-14 w-fit rounded-none text-lg font-[400] text-muted hover:bg-primary-foreground",
         className,
       )}
-      variant={variant}
-      asChild
     >
-      <Link href={linkHref} target="_blank">
-        {text ?? "Programeaza"}
-      </Link>
-    </Button>
+      {text ?? "Programeaza"}
+    </ButtonLink>
   );
 };
