@@ -72,11 +72,7 @@ const Page: NextPageWithLayout<
       {heroSectionData && <HeroSection data={heroSectionData} />}
       {pageData.sections.slice(1).map((section, index) =>
         section.style.includes("column") ? (
-          <ColumnSection
-            key={index}
-            data={section}
-            className="bg-background-secondary"
-          >
+          <ColumnSection key={index} data={section}>
             {section.withGallery
               ? ({ width }) => <GalleryPhotoAlbum width={width} />
               : undefined}
@@ -85,16 +81,17 @@ const Page: NextPageWithLayout<
           <RowSection
             key={index}
             data={section}
-            className={
+            className={cn(
               section.style.includes("reversed")
                 ? "border-b-[1px] border-t-[1px]"
-                : "border-b-[1px]"
-            }
+                : "border-b-[1px]",
+              "bg-secondary",
+            )}
             reverse={section.style.includes("reversed")}
           />
         ),
       )}
-      <StayInTouch className="bg-background-secondary" />
+      <StayInTouch />
     </>
   );
 };
@@ -165,14 +162,14 @@ const HeroSection = ({ data }: { data: PageSection }) => {
             {data.title?.split("").map((letter, index) => (
               <Button
                 key={index}
+                onClick={() => handleSlideSelect(index)}
                 variant={"ghost"}
                 className={cn(
-                  "p-0 text-6xl font-black text-muted hover:bg-transparent hover:text-primary-foreground md:text-8xl 2xl:text-9xl",
+                  "p-0 text-6xl font-black text-primary-foreground hover:text-primary md:text-8xl 2xl:text-9xl",
                   {
                     "text-primary": activeSlideIndex === index,
                   },
                 )}
-                onClick={() => handleSlideSelect(index)}
               >
                 {letter}
               </Button>
@@ -185,7 +182,7 @@ const HeroSection = ({ data }: { data: PageSection }) => {
             </h2>
           )}
 
-          <ScheduleButton className="bg-white text-dark hover:text-muted xl:mt-4" />
+          <ScheduleButton variant={"secondary"} className="xl:mt-4" />
         </div>
       </div>
       <div className="relative hidden flex-col items-center justify-center gap-16 overflow-hidden bg-white px-20 lg:flex">
@@ -224,13 +221,17 @@ const HeroSection = ({ data }: { data: PageSection }) => {
             ))}
           </Carousel>
         </div>
-        <div className="absolute bottom-0 bg-background-secondary py-6">
-          {data.marqueeText && (
-            <Marquee autoFill pauseOnHover>
-              <span className="font-500 mr-8 text-3xl">{data.marqueeText}</span>
-            </Marquee>
-          )}
-        </div>
+        {data.marqueeText && (
+          <Marquee
+            autoFill
+            pauseOnHover
+            className="!absolute bottom-0 bg-background py-6"
+          >
+            <span className="font-500 ml-8 text-3xl text-secondary-foreground">
+              {data.marqueeText}
+            </span>
+          </Marquee>
+        )}
       </div>
     </section>
   );

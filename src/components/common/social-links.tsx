@@ -1,7 +1,7 @@
-import Link from "next/link";
 import { Icon } from "@iconify-icon/react";
 
 import { api } from "@/utils/api";
+import { ButtonLink } from "./button-link";
 
 export const SocialLinks = () => {
   const { data } = api.content.getShopLocation.useQuery();
@@ -11,17 +11,12 @@ export const SocialLinks = () => {
   return (
     <div className="flex w-fit gap-2">
       {data.socialPlatforms.map((platform) => (
-        <Link
-          href={platform.link}
-          target="_blank"
-          key={platform.name}
-          className="flex justify-center"
-        >
+        <ButtonLink href={platform.link} key={platform.name} variant={"ghost"}>
           <Icon
             icon={`mdi:${platform.name}`}
-            className="text-4xl hover:text-primary-foreground lg:text-5xl"
+            className="text-3xl lg:text-4xl"
           />
-        </Link>
+        </ButtonLink>
       ))}
     </div>
   );

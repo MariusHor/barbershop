@@ -44,7 +44,7 @@ export const ColumnSection = ({
         {data.title && (
           <h2
             className={cn(
-              "max-w-[1024px] text-5xl font-semibold text-primary-foreground md:text-6xl lg:text-7xl",
+              "max-w-[1024px] text-5xl font-black text-foreground md:text-6xl lg:text-7xl",
               titleClassName,
             )}
           >
@@ -64,14 +64,13 @@ export const ColumnSection = ({
         )}
 
         {data.content && (
-          <p className="max-w-[786px] text-center text-lg leading-8 text-dark-foreground lg:leading-9">
+          <p className="max-w-[786px] text-center text-lg leading-8 text-foreground lg:leading-9">
             {data.content}
           </p>
         )}
 
         {data.linkButton?.href && (
           <ButtonLink
-            size={"default"}
             variant={"ghost"}
             className="flex gap-2 p-0 text-lg hover:bg-transparent hover:text-primary-foreground"
             href={data.linkButton?.href}

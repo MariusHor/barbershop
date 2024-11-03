@@ -76,7 +76,7 @@ const Page: NextPageWithLayout<
 
       <ServicesSection />
 
-      <StayInTouch className="bg-background-secondary" />
+      <StayInTouch className="bg-primary-foreground"/>
     </>
   );
 };
@@ -94,7 +94,7 @@ const IntroSection = ({
   }));
 
   return (
-    <section className="relative mt-[var(--header-height)] grid h-[calc(100vh_-var(--header-height))] w-full overflow-hidden bg-background-secondary lg:grid-cols-2">
+    <section className="relative mt-[var(--header-height)] grid h-[calc(100vh_-var(--header-height))] w-full overflow-hidden lg:grid-cols-2">
       <div className="relative z-40 flex h-[calc(100vh_-var(--header-height)*_2)] flex-col items-center justify-center gap-4 px-4 text-center lg:gap-8 lg:px-0">
         {data?.title && (
           <h1 className="text-3xl font-black sm:text-4xl md:text-5xl xl:text-6xl">
@@ -111,25 +111,21 @@ const IntroSection = ({
         <div className="flex flex-col items-center gap-2 lg:gap-0">
           {data?.linkButton?.href && (
             <ButtonLink
-              size={"default"}
-              variant={"ghost"}
               href={data.linkButton.href}
-              className="flex gap-2 p-0 text-lg hover:bg-transparent hover:text-primary-foreground"
+              variant={"ghost"}
+              className="flex gap-2"
             >
               {data.linkButton?.text}
               <ArrowRightIcon style={{ width: "20px", height: "20px" }} />
             </ButtonLink>
           )}
-          <ScheduleButton
-            variant={"outline"}
-            className="bg-primary-foreground text-muted hover:border-muted-foreground hover:bg-background-secondary hover:text-dark xl:mt-4"
-          />
+          <ScheduleButton className="xl:mt-4" />
         </div>
       </div>
       <div className="hidden h-[calc(100vh_-var(--header-height)*_2)] flex-col items-center justify-center gap-16 bg-white lg:flex">
         <div className="relative z-10 h-full w-full select-none overflow-hidden">
-          <Carousel className="h-full bg-background-secondary">
-            <CarouselContent className="-ml-1 h-full bg-background-secondary">
+          <Carousel className="h-full">
+            <CarouselContent className="-ml-1 h-full">
               {imagesData?.map((item, index) => (
                 <CarouselItem key={index} className="relative h-full pl-1">
                   <Image
@@ -156,7 +152,7 @@ const IntroSection = ({
       </div>
       <div className="absolute bottom-0 z-40 h-[var(--header-height)] max-w-[100vw] border-t-[1px] border-solid border-muted-foreground bg-white py-6">
         <Marquee autoFill pauseOnHover className="max-w-[100vw]">
-          <SiteLogo className="w-16" />
+          <SiteLogo size={"sm"} />
           <span className="font-500 ml-4 mr-40 text-3xl">
             - {capitalize(currentRoute?.slice(1) ?? "")}
           </span>
@@ -170,7 +166,7 @@ const ServicesSection = () => {
   const { data } = api.content.getServicesData.useQuery();
 
   return (
-    <section className="bg-background-secondary" id="lista">
+    <section id="lista" className="bg-primary-foreground">
       <div className="m-auto flex max-w-[1048px] flex-col items-center gap-24 px-4 pb-8 pt-28">
         <h3 className="max-w-[1024px] text-center text-2xl font-black text-dark-foreground md:text-3xl lg:text-4xl">
           Lista completa
@@ -186,7 +182,7 @@ const ServicesSection = () => {
               value={service.name}
               className="border-b-muted-foreground"
             >
-              <AccordionTrigger className="pb-4 pt-0 hover:text-primary-foreground hover:no-underline lg:pb-8">
+              <AccordionTrigger className="pb-4 pt-0 hover:text-primary hover:no-underline lg:pb-8">
                 <div className="flex flex-col text-start">
                   <span className="text-2xl">{service.name}</span>
                   <span className="text-sm italic">{service.price} RON</span>
@@ -219,7 +215,7 @@ const ServicesSection = () => {
 
                     <ScheduleButton
                       variant={"outline"}
-                      className="mt-4 bg-primary-foreground text-base text-muted hover:border-muted-foreground hover:bg-background-secondary hover:text-dark lg:mt-8"
+                      className="mt-4 lg:mt-8"
                     />
                   </div>
                   <div className="hidden lg:block">

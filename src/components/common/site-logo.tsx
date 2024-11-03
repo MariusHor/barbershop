@@ -6,7 +6,7 @@ import { cn } from "@/utils/helpers";
 import { Skeleton } from "@/components/ui/skeleton";
 import { cva, type VariantProps } from "class-variance-authority";
 
-const siteLogoVariants = cva("transition-all duration-200", {
+const siteLogoVariants = cva("transition-all duration-200 block", {
   variants: {
     size: {
       sm: "max-w-[50px] sm:max-w-[60px] md:max-w-[70px]",
@@ -67,7 +67,6 @@ export const SiteLogo = ({
       width={_width}
       height={_height}
       linkProps={{
-        prefetch: true,
         "aria-label": "Catre pagina principala",
       }}
       imageProps={{ priority: true, loading: "eager" }}

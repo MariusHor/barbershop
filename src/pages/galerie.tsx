@@ -53,7 +53,7 @@ const Page: NextPageWithLayout<
           <ColumnSection
             key={index}
             data={section}
-            className="bg-background-secondary !pt-24"
+            className="!pt-24"
             subTitleClassName="font-black"
           >
             {section.withGallery
@@ -78,7 +78,7 @@ const Page: NextPageWithLayout<
           />
         ),
       )}
-      <StayInTouch className="bg-background-secondary" />
+      <StayInTouch />
     </>
   );
 };

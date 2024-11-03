@@ -98,9 +98,8 @@ export const RowSection = ({
         )}
         {data.linkButton?.href && (
           <ButtonLink
-            size={"default"}
             variant={"ghost"}
-            className="flex gap-2 p-0 text-lg hover:bg-transparent hover:text-primary-foreground"
+            className="flex gap-2"
             href={data.linkButton.href}
           >
             {data.linkButton?.text}

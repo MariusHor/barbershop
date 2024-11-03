@@ -17,6 +17,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+import { ButtonLink } from "@/components/common/button-link";
 
 export function MainLayout({ children }: { children: React.ReactNode }) {
   return (
@@ -68,7 +69,6 @@ const Header = (): React.JSX.Element | null => {
           <DesktopNavLinks
             routes={routes}
             currentRoute={currentRoute}
-            itemClassName="text-dark"
             shouldHideOnMobile
           />
         </div>
@@ -97,10 +97,10 @@ const HamburgerMenu = ({
   );
 
   const btnStroke = isBtnHovered
-    ? "hsl(var(--primary-foreground))"
+    ? "var(--primary)"
     : showNavbar || menuOpen
-      ? "hsl(var(--dark))"
-      : "hsl(var(--muted))";
+      ? "var(--foreground)"
+      : "var(--primary-foreground)";
 
   const sidebarVariants = {
     open: {
@@ -179,8 +179,8 @@ const HamburgerMenu = ({
               >
                 <Link
                   href={route.path}
-                  className={cn("hover:text-primary-foreground", {
-                    "text-primary-foreground": currentRoute === route.path,
+                  className={cn("hover:text-primary", {
+                    "text-primary": currentRoute === route.path,
                   })}
                   onClick={() => setMenuOpen(!menuOpen)}
                 >
@@ -205,7 +205,7 @@ const HamburgerMenu = ({
             Contacteaza-ne la{" "}
             <Link
               href={`mailto:${locationData?.email}`}
-              className="underline hover:text-primary-foreground"
+              className="underline hover:text-primary"
             >
               {locationData?.email}
             </Link>
@@ -214,38 +214,41 @@ const HamburgerMenu = ({
       </motion.div>
 
       {!!instagramData?.link && (
-        <Link
+        <ButtonLink
+          variant={"ghost"}
           href={instagramData?.link}
-          target="_blank"
           className="z-20 flex justify-center"
         >
           <motion.span
             className="h-9"
             variants={{
               closed: {
-                color: "hsl(var(--muted))",
+                color: "var(--primary-foreground)",
                 transition: { delay: 0.8 },
               },
               open: {
-                color: "hsl(var(--dark))",
+                color: "var(--foreground)",
               },
             }}
           >
             <Icon
               icon={`mdi:${instagramData.name}`}
               className={cn(
-                "text-4xl text-inherit hover:text-primary-foreground",
-                { "text-dark": showNavbar || currentRoute !== "/" },
+                "text-4xl text-primary-foreground hover:text-primary",
+                {
+                  "text-foreground":
+                    showNavbar || menuOpen || currentRoute !== "/",
+                },
               )}
             />
           </motion.span>
-        </Link>
+        </ButtonLink>
       )}
 
       <Button
         ref={ref}
-        variant="ghost"
         onClick={() => setMenuOpen(!menuOpen)}
+        variant="ghost"
         className="relative z-20 ml-3 p-0 hover:bg-transparent"
       >
         <svg width="23" height="23" viewBox="0 0 23 23">
@@ -324,18 +327,15 @@ const DesktopNavLinks = ({
       >
         {routes?.map((route, index) => (
           <li key={index}>
-            <Link
+            <ButtonLink
               href={route.path}
-              className={cn(
-                "font-300 text-1xl uppercase hover:text-primary-foreground",
-                itemClassName,
-                {
-                  "text-primary-foreground": currentRoute === route.path,
-                },
-              )}
+              variant={"link"}
+              className={cn("uppercase", itemClassName, {
+                "text-primary": currentRoute === route.path,
+              })}
             >
               {capitalize(route.name)}
-            </Link>
+            </ButtonLink>
           </li>
         ))}
       </ul>

@@ -41,7 +41,7 @@ export const GalleryPhotoAlbum = ({ width }: { width: number }) => {
           <Button
             onClick={handleFetchMore}
             variant="outline"
-            className="m-auto h-14 w-36 rounded-none border-muted-foreground bg-background-secondary text-lg font-[300] text-dark hover:bg-primary-foreground hover:text-muted"
+            className="m-auto h-14 w-36"
             disabled={isFetchingMore}
           >
             {isFetchingMore ? <Spinner /> : "Mai multe"}
