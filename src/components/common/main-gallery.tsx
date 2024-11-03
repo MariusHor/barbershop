@@ -2,7 +2,7 @@ import { urlFor } from "@/lib/sanity/client";
 import { api } from "@/utils/api";
 import { Gallery } from "./gallery";
 import { Button } from "../ui/button";
-import { BaseSpinner } from "../base/base-spinner";
+import { Spinner } from "../ui/spinner";
 
 export const MainGallery = ({ width }: { width: number }) => {
   const {
@@ -39,7 +39,7 @@ export const MainGallery = ({ width }: { width: number }) => {
             variant={"outline"}
             className="m-auto h-14 w-36 rounded-none border-muted-foreground bg-background-secondary text-lg font-[300] text-dark hover:bg-primary-foreground hover:text-muted"
           >
-            {isFetching && !isLoading ? <BaseSpinner /> : "Mai multe"}
+            {isFetching && !isLoading ? <Spinner /> : "Mai multe"}
           </Button>
         )}
       </div>

@@ -1,5 +1,5 @@
 import { api } from "@/utils/api";
-import { Logo } from "./logo";
+import { SiteLogo } from "./site-logo";
 import { SocialLinks } from "./social-links";
 import { cn } from "@/utils/helpers";
 
@@ -9,7 +9,7 @@ export const StayInTouch = ({ className }: { className?: string }) => {
   return (
     <section className={cn("py-16", className)}>
       <div className="container-md flex flex-col items-center justify-center gap-6">
-        <Logo />
+        <SiteLogo />
 
         <p className="max-w-[512px] text-center text-lg leading-7 text-dark-foreground">
           Stay in the loop on special events, new arrivals, and exclusive

@@ -5,7 +5,7 @@ import Head from "next/head";
 import { api } from "@/utils/api";
 import { capitalize, getPageTitle } from "@/utils/helpers";
 import { getSSGHelper } from "@/utils/getSSGHelper";
-import { Logo, ScheduleButton } from "@/components";
+import { SiteLogo, ScheduleButton } from "@/components";
 import Marquee from "react-fast-marquee";
 import { usePathname } from "next/navigation";
 import { Button } from "@/components/ui/button";
@@ -164,7 +164,7 @@ const IntroSection = ({
       </div>
       <div className="absolute bottom-0 z-40 h-[var(--header-height)] max-w-[100vw] border-t-[1px] border-solid border-muted-foreground bg-white py-6">
         <Marquee autoFill pauseOnHover className="max-w-[100vw]">
-          <Logo className="w-16" />
+          <SiteLogo className="w-16" />
           <span className="font-500 ml-4 mr-40 text-3xl">
             - {capitalize(currentRoute?.slice(1) ?? "")}
           </span>

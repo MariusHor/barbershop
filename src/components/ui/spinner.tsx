@@ -1,6 +1,6 @@
 import { cn } from "@/utils/helpers";
 
-export const BaseSpinner = ({ className }: { className?: string }) => {
+export const Spinner = ({ className }: { className?: string }) => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"

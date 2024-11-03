@@ -10,7 +10,7 @@ import { Button } from "@/components/ui/button";
 import { capitalize, cn } from "@/utils/helpers";
 import { api } from "@/utils/api";
 import { useStore } from "@/store";
-import { Logo } from "@/components";
+import { SiteLogo } from "@/components";
 import {
   Accordion,
   AccordionContent,
@@ -57,7 +57,7 @@ const Header = (): React.JSX.Element | null => {
       )}
     >
       <div className="container-lg relative flex h-full items-center justify-between">
-        {showNavbar && <Logo className="md:max-w-30 max-w-20" />}
+        <SiteLogo className={cn({ hidden: !showNavbar })} />
 
         <div className="flex h-full w-full items-center justify-end">
           <HamburgerMenu
