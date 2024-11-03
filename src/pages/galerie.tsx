@@ -3,7 +3,7 @@ import { type NextPageWithLayout } from "./_app";
 import Head from "next/head";
 
 import { api } from "@/utils/api";
-import { cn, getPageTitle } from "@/utils/helpers";
+import { getPageTitle } from "@/utils/helpers";
 import { getSSGHelper } from "@/utils/getSSGHelper";
 import { ColumnSection, RowSection, GalleryPhotoAlbum } from "@/components";
 import { StayInTouch } from "@/components/common/stay-in-touch";
@@ -13,7 +13,7 @@ export const getServerSideProps = async () => {
 
   await Promise.all([
     ssg.content.getGalleryImages.prefetch({
-      limit: 2,
+      limit: 10,
     }),
     ssg.content.getPageData.prefetch({ slug: "galerie" }),
     ssg.content.getSiteSettings.prefetch(),
@@ -53,8 +53,7 @@ const Page: NextPageWithLayout<
           <ColumnSection
             key={index}
             data={section}
-            className="!pt-24"
-            subTitleClassName="font-black"
+            className="bg-secondary !pt-24"
           >
             {section.withGallery
               ? ({ width }) => <GalleryPhotoAlbum width={width} />
@@ -64,21 +63,13 @@ const Page: NextPageWithLayout<
           <RowSection
             key={index}
             data={section}
-            className={cn(
-              section.style.includes("reversed")
-                ? "border-b-[1px] border-t-[1px]"
-                : "border-b-[1px]",
-              "h-screen",
-            )}
+            className="h-screen pt-[calc(var(--header-height)_-24px)] md:pt-[var(--header-height)]"
             reverse={section.style.includes("reversed")}
             maxHeight="100vh"
-            titleClassName="text-3xl font-black sm:text-4xl md:text-5xl xl:text-6xl"
-            contentClassName="max-w-[684px]"
-            imageContainerClassName="order-0"
           />
         ),
       )}
-      <StayInTouch />
+      <StayInTouch className="bg-secondary" />
     </>
   );
 };

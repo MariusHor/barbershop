@@ -9,7 +9,7 @@ export const GalleryPhotoAlbum = ({ width }: { width: number }) => {
   const [isFetchingMore, setIsFetchingMore] = useState(false);
   const { data: galleryImages, fetchNextPage } =
     api.content.getGalleryImages.useInfiniteQuery(
-      { limit: 2 },
+      { limit: 10 },
       {
         getNextPageParam: (lastPage) => lastPage.nextCursor,
       },

@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
-import Link from "next/link";
 import { useHover, useMeasure } from "@uidotdev/usehooks";
 import { motion } from "framer-motion";
 import { Icon } from "@iconify-icon/react";
@@ -18,6 +17,7 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { ButtonLink } from "@/components/common/button-link";
+import { Text } from "@/components/ui/text";
 
 export function MainLayout({ children }: { children: React.ReactNode }) {
   return (
@@ -53,7 +53,7 @@ const Header = (): React.JSX.Element | null => {
   return (
     <header
       className={cn(
-        "fixed z-50 mx-auto flex h-header w-full items-center text-lg transition",
+        "fixed z-50 mx-auto flex h-[calc(var(--header-height)_-24px)] w-full items-center text-lg transition md:h-header",
         { "bg-white shadow-md": showNavbar },
       )}
     >
@@ -177,38 +177,42 @@ const HamburgerMenu = ({
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.95 }}
               >
-                <Link
+                <ButtonLink
                   href={route.path}
-                  className={cn("hover:text-primary", {
-                    "text-primary": currentRoute === route.path,
-                  })}
+                  variant={"link"}
                   onClick={() => setMenuOpen(!menuOpen)}
                 >
-                  <span className="font-300 text-base sm:text-xl">
+                  <Text variant={"caption"} as={"span"}>
                     {"0" + (index + 1)}
-                  </span>
-                  <span className="font-400 text-3xl sm:text-5xl">
+                  </Text>
+                  <Text
+                    variant={"h2"}
+                    as={"span"}
+                    className={cn({
+                      "text-primary": currentRoute === route.path,
+                    })}
+                  >
                     {route.name}
-                  </span>
-                </Link>
+                  </Text>
+                </ButtonLink>
               </motion.li>
             ))}
           </ul>
 
           <motion.p
-            className="absolute bottom-[5%] left-1/2 max-w-80 -translate-x-1/2 text-center text-base sm:text-lg"
+            className="absolute bottom-[5%] left-1/2 max-w-80 -translate-x-1/2 text-center"
             variants={{
               closed: { opacity: 0 },
               open: { opacity: 1 },
             }}
           >
-            Contacteaza-ne la{" "}
-            <Link
-              href={`mailto:${locationData?.email}`}
-              className="underline hover:text-primary"
-            >
+            <Text variant={"body"} as="span">
+              Contacteaza-ne la{" "}
+            </Text>
+
+            <ButtonLink variant={"link"} href={`mailto:${locationData?.email}`}>
               {locationData?.email}
-            </Link>
+            </ButtonLink>
           </motion.p>
         </div>
       </motion.div>
@@ -220,7 +224,7 @@ const HamburgerMenu = ({
           className="z-20 flex justify-center"
         >
           <motion.span
-            className="h-9"
+            className="flex"
             variants={{
               closed: {
                 color: "var(--primary-foreground)",
@@ -234,7 +238,7 @@ const HamburgerMenu = ({
             <Icon
               icon={`mdi:${instagramData.name}`}
               className={cn(
-                "text-4xl text-primary-foreground hover:text-primary",
+                "text-3xl text-primary-foreground hover:text-primary",
                 {
                   "text-foreground":
                     showNavbar || menuOpen || currentRoute !== "/",
@@ -362,20 +366,31 @@ const Footer = (): React.JSX.Element => {
         </Column>
 
         <Column title="Locatii">
-          <Accordion type="single" collapsible className="w-40 lg:w-full">
+          <Accordion
+            type="single"
+            collapsible
+            className="w-40 lg:w-full"
+            defaultValue={locationData?.name}
+          >
             <AccordionItem
               value={locationData?.name ?? ""}
               className="border-b-dark-foreground"
             >
-              <AccordionTrigger className="pb-2 pt-0 font-black hover:text-primary-foreground hover:no-underline">
-                {locationData?.name}
+              <AccordionTrigger className="pb-2 pt-0 hover:no-underline">
+                <Text variant={"caption"} className="font-[500] text-muted">
+                  {locationData?.name}
+                </Text>
               </AccordionTrigger>
               <AccordionContent className="flex flex-col gap-2 text-left">
-                <span>{locationData?.street}</span>
-                <span>
+                <Text variant={"caption"} className="text-muted">
+                  {locationData?.street}
+                </Text>
+                <Text variant={"caption"} className="text-muted">
                   {locationData?.zip} {locationData?.city}
-                </span>
-                <span>{locationData?.phone}</span>
+                </Text>
+                <Text variant={"caption"} className="text-muted">
+                  {locationData?.phone}
+                </Text>
               </AccordionContent>
             </AccordionItem>
           </Accordion>
@@ -385,8 +400,12 @@ const Footer = (): React.JSX.Element => {
           <div className="flex flex-col text-left">
             {locationData?.timetables?.map((item, index) => (
               <div key={index} className="grid grid-cols-2 gap-2">
-                <p>{item.split(":")[0]}:</p>
-                <p>{item.slice(item.indexOf(":") + 1)}</p>
+                <Text variant={"caption"} className="text-muted">
+                  {item.split(":")[0]}:
+                </Text>
+                <Text variant={"caption"} className="text-muted">
+                  {item.slice(item.indexOf(":") + 1)}
+                </Text>
               </div>
             ))}
           </div>
@@ -395,10 +414,14 @@ const Footer = (): React.JSX.Element => {
 
       <Separator className="bg-dark-foreground" />
 
-      <p className="m-auto w-fit p-4 text-center text-sm font-[300] text-muted-foreground lg:text-base">
+      <Text
+        variant={"caption"}
+        align={"center"}
+        className="p-4 text-secondary-foreground"
+      >
         ©{new Date().getFullYear()} {siteSettings?.title}. All content is the
         property of {siteSettings?.title} unless otherwise noted.
-      </p>
+      </Text>
     </footer>
   );
 };
@@ -411,10 +434,10 @@ const Column = ({
   children: React.ReactNode;
 }): React.JSX.Element => {
   return (
-    <div className="flex h-full max-h-96 flex-col items-center gap-4 text-center text-white lg:text-start">
-      <h3 className="mb-4 text-3xl font-[300] text-muted-foreground">
+    <div className="flex h-full max-h-96 flex-col items-center gap-8 text-center lg:text-start">
+      <Text variant={"h4"} className="text-muted">
         {title}
-      </h3>
+      </Text>
       {children}
     </div>
   );

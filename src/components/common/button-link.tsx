@@ -4,7 +4,7 @@ import { Button, type ButtonProps } from "@/components/ui/button";
 import { type UrlObject } from "url";
 
 type ButtonLinkProps = {
-  href: string | UrlObject;
+  href?: string | UrlObject;
   children?: ReactNode;
   external?: boolean;
   className?: string;
@@ -15,7 +15,7 @@ type ButtonLinkProps = {
     >;
   };
 
-function isExternalLink(href: string | UrlObject): boolean {
+function isExternalLink(href?: string | UrlObject): boolean {
   if (typeof href === "string") {
     return href.startsWith("http") || href.startsWith("//");
   }
@@ -46,6 +46,8 @@ export const ButtonLink = forwardRef<HTMLButtonElement, ButtonLinkProps>(
     ref,
   ) => {
     const _isExternalLink = useMemo(() => isExternalLink(href), [href]);
+
+    if (!href) return null;
 
     return (
       <Button

@@ -20,8 +20,9 @@ import {
   GalleryPhotoAlbum,
 } from "@/components";
 import { useEffect, useRef, useState } from "react";
-import { Button } from "@/components/ui/button";
 import { StayInTouch } from "@/components/common/stay-in-touch";
+import { AnimatedTitle } from "@/components/common/animated-title";
+import { Text } from "@/components/ui/text";
 
 export const getServerSideProps = async () => {
   const ssg = getSSGHelper();
@@ -72,7 +73,11 @@ const Page: NextPageWithLayout<
       {heroSectionData && <HeroSection data={heroSectionData} />}
       {pageData.sections.slice(1).map((section, index) =>
         section.style.includes("column") ? (
-          <ColumnSection key={index} data={section}>
+          <ColumnSection
+            key={index}
+            data={section}
+            className={cn({ "justify-start": !!section.withGallery })}
+          >
             {section.withGallery
               ? ({ width }) => <GalleryPhotoAlbum width={width} />
               : undefined}
@@ -158,29 +163,15 @@ const HeroSection = ({ data }: { data: PageSection }) => {
         )}
 
         <div className="relative z-40 flex h-full flex-col items-center justify-center gap-16">
-          <h1 className="flex gap-4 text-center opacity-100 md:gap-6 xl:gap-8">
-            {data.title?.split("").map((letter, index) => (
-              <Button
-                key={index}
-                onClick={() => handleSlideSelect(index)}
-                variant={"ghost"}
-                className={cn(
-                  "p-0 text-6xl font-black text-primary-foreground hover:text-primary md:text-8xl 2xl:text-9xl",
-                  {
-                    "text-primary": activeSlideIndex === index,
-                  },
-                )}
-              >
-                {letter}
-              </Button>
-            ))}
-          </h1>
+          <AnimatedTitle
+            activeIndex={activeSlideIndex}
+            onLetterClick={(index) => handleSlideSelect(index)}
+            title={data.title}
+          />
 
-          {data?.subtitle && (
-            <h2 className="max-w-[736px] text-center text-lg text-white opacity-100 sm:text-xl md:text-2xl xl:text-3xl">
-              {data?.subtitle}
-            </h2>
-          )}
+          <Text variant={"h2"} className="text-primary-foreground">
+            {data.subtitle}
+          </Text>
 
           <ScheduleButton variant={"secondary"} className="xl:mt-4" />
         </div>
@@ -225,11 +216,11 @@ const HeroSection = ({ data }: { data: PageSection }) => {
           <Marquee
             autoFill
             pauseOnHover
-            className="!absolute bottom-0 bg-background py-6"
+            className="!absolute bottom-0 bg-background py-6 border-t-[1px] border-secondary-foreground"
           >
-            <span className="font-500 ml-8 text-3xl text-secondary-foreground">
+            <Text variant="body" className="ml-40 !text-2xl font-black">
               {data.marqueeText}
-            </span>
+            </Text>
           </Marquee>
         )}
       </div>

@@ -4,19 +4,16 @@ import { useWindowSize } from "@uidotdev/usehooks";
 import { useEffect, useRef, useState } from "react";
 import { ArrowRightIcon } from "@radix-ui/react-icons";
 import { ButtonLink } from "./button-link";
+import { Text } from "../ui/text";
 
 export const ColumnSection = ({
   children,
   data,
-  className = "",
-  titleClassName = "",
-  subTitleClassName = "",
+  className,
 }: {
   children?: ({ width }: { width: number }) => React.ReactNode;
   data: PageSection;
   className?: string;
-  titleClassName?: string;
-  subTitleClassName?: string;
 }) => {
   const { width, height } = useWindowSize();
   const rootEl = useRef<HTMLElement>(null);
@@ -41,44 +38,24 @@ export const ColumnSection = ({
       ref={rootEl}
     >
       <div className="container-md flex flex-col items-center justify-center gap-12 text-center lg:gap-16">
-        {data.title && (
-          <h2
-            className={cn(
-              "max-w-[1024px] text-5xl font-black text-foreground md:text-6xl lg:text-7xl",
-              titleClassName,
-            )}
-          >
-            {data.title}
-          </h2>
-        )}
+        <Text variant={"h2"}>{data.title}</Text>
 
-        {data.subtitle && (
-          <h3
-            className={cn(
-              "max-w-[1024px] text-2xl text-dark-foreground md:text-3xl lg:text-4xl",
-              subTitleClassName,
-            )}
-          >
-            {data.subtitle}
-          </h3>
-        )}
+        <Text variant={"h2"} as="h3">
+          {data.subtitle}
+        </Text>
 
-        {data.content && (
-          <p className="max-w-[786px] text-center text-lg leading-8 text-foreground lg:leading-9">
-            {data.content}
-          </p>
-        )}
+        <Text variant={"body"} className="max-w-[786px]" leading={"loose"}>
+          {data.content}
+        </Text>
 
-        {data.linkButton?.href && (
-          <ButtonLink
-            variant={"ghost"}
-            className="flex gap-2 p-0 text-lg hover:bg-transparent hover:text-primary-foreground"
-            href={data.linkButton?.href}
-          >
-            {data.linkButton?.text}
-            <ArrowRightIcon style={{ width: "20px", height: "20px" }} />
-          </ButtonLink>
-        )}
+        <ButtonLink
+          variant={"ghost"}
+          className="flex gap-2 p-0 text-lg hover:bg-transparent hover:text-primary-foreground"
+          href={data.linkButton?.href}
+        >
+          {data.linkButton?.text}
+          <ArrowRightIcon style={{ width: "20px", height: "20px" }} />
+        </ButtonLink>
       </div>
 
       {width && children?.({ width })}

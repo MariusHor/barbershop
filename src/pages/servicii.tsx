@@ -29,6 +29,7 @@ import {
 } from "@/components/ui/accordion";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
 import { ButtonLink } from "@/components/common/button-link";
+import { Text } from "@/components/ui/text";
 
 export const getServerSideProps = async () => {
   const ssg = getSSGHelper();
@@ -76,7 +77,7 @@ const Page: NextPageWithLayout<
 
       <ServicesSection />
 
-      <StayInTouch className="bg-primary-foreground"/>
+      <StayInTouch className="bg-primary-foreground" />
     </>
   );
 };
@@ -96,29 +97,19 @@ const IntroSection = ({
   return (
     <section className="relative mt-[var(--header-height)] grid h-[calc(100vh_-var(--header-height))] w-full overflow-hidden lg:grid-cols-2">
       <div className="relative z-40 flex h-[calc(100vh_-var(--header-height)*_2)] flex-col items-center justify-center gap-4 px-4 text-center lg:gap-8 lg:px-0">
-        {data?.title && (
-          <h1 className="text-3xl font-black sm:text-4xl md:text-5xl xl:text-6xl">
-            {data?.title}
-          </h1>
-        )}
+        <Text variant={"h2"}>{data?.title}</Text>
 
-        {data?.subtitle && (
-          <h2 className="max-w-[736px] text-center text-base text-dark-foreground md:text-lg xl:text-xl">
-            {data?.subtitle}
-          </h2>
-        )}
+        <Text variant={"h4"}>{data?.subtitle}</Text>
 
         <div className="flex flex-col items-center gap-2 lg:gap-0">
-          {data?.linkButton?.href && (
-            <ButtonLink
-              href={data.linkButton.href}
-              variant={"ghost"}
-              className="flex gap-2"
-            >
-              {data.linkButton?.text}
-              <ArrowRightIcon style={{ width: "20px", height: "20px" }} />
-            </ButtonLink>
-          )}
+          <ButtonLink
+            href={data?.linkButton?.href}
+            variant={"ghost"}
+            className="flex gap-2"
+          >
+            {data?.linkButton?.text}
+            <ArrowRightIcon style={{ width: "20px", height: "20px" }} />
+          </ButtonLink>
           <ScheduleButton className="xl:mt-4" />
         </div>
       </div>
@@ -136,9 +127,15 @@ const IntroSection = ({
                     height={984}
                     priority
                   />
-                  <div className="absolute bottom-0 left-1 right-0 flex justify-between p-4 text-2xl italic text-muted">
+                  <div className="absolute bottom-0 left-1 right-0 flex justify-between p-4">
                     <span className="absolute inset-0 z-0 bg-black opacity-50"></span>
-                    <span className="relative z-10">{item.name}</span>
+                    <Text
+                      variant={"caption"}
+                      as={"span"}
+                      className="relative z-10 !text-lg italic text-muted"
+                    >
+                      {item.name}
+                    </Text>
                     <div className="flex gap-4">
                       <CarouselPrevious className="relative left-0 text-foreground" />
                       <CarouselNext className="relative right-0 text-foreground" />
@@ -150,14 +147,17 @@ const IntroSection = ({
           </Carousel>
         </div>
       </div>
-      <div className="absolute bottom-0 z-40 h-[var(--header-height)] max-w-[100vw] border-t-[1px] border-solid border-muted-foreground bg-white py-6">
-        <Marquee autoFill pauseOnHover className="max-w-[100vw]">
-          <SiteLogo size={"sm"} />
-          <span className="font-500 ml-4 mr-40 text-3xl">
-            - {capitalize(currentRoute?.slice(1) ?? "")}
-          </span>
-        </Marquee>
-      </div>
+
+      <Marquee
+        autoFill
+        pauseOnHover
+        className="!absolute bottom-0 z-40 h-[calc(var(--header-height)_-24px)] max-w-[100vw] border-t-[1px] border-solid border-secondary-foreground bg-white py-6 md:h-header"
+      >
+        <SiteLogo size={"sm"} />
+        <Text variant={"body"} className="ml-4 mr-40 !text-2xl">
+          - {capitalize(currentRoute?.slice(1) ?? "")}
+        </Text>
+      </Marquee>
     </section>
   );
 };
@@ -168,9 +168,10 @@ const ServicesSection = () => {
   return (
     <section id="lista" className="bg-primary-foreground">
       <div className="m-auto flex max-w-[1048px] flex-col items-center gap-24 px-4 pb-8 pt-28">
-        <h3 className="max-w-[1024px] text-center text-2xl font-black text-dark-foreground md:text-3xl lg:text-4xl">
-          Lista completa
-        </h3>
+        <Text variant={"h2"} className="max-w-[1024px]">
+          Lista servicii
+        </Text>
+
         <Accordion
           type="single"
           collapsible
@@ -180,12 +181,16 @@ const ServicesSection = () => {
             <AccordionItem
               key={service.name}
               value={service.name}
-              className="border-b-muted-foreground"
+              className="border-b-secondary-foreground"
             >
               <AccordionTrigger className="pb-4 pt-0 hover:text-primary hover:no-underline lg:pb-8">
                 <div className="flex flex-col text-start">
-                  <span className="text-2xl">{service.name}</span>
-                  <span className="text-sm italic">{service.price} RON</span>
+                  <Text variant={"h4"} as="span">
+                    {service.name}
+                  </Text>
+                  <Text variant={"caption"} as="span" className="italic">
+                    {service.price} RON
+                  </Text>
                 </div>
               </AccordionTrigger>
               <AccordionContent className="flex flex-col gap-2 pb-4 text-left lg:pb-8">
@@ -196,22 +201,26 @@ const ServicesSection = () => {
                       components={{
                         block: {
                           normal: ({ children }) => (
-                            <p className="mb-4 text-base sm:text-lg lg:mb-8">
+                            <Text variant={"body"} className="mb-4 lg:mb-8">
                               {children}
-                            </p>
+                            </Text>
                           ),
                         },
                       }}
                     />
                     <ul className="list-inside list-disc text-base sm:text-lg">
                       {service.details.map((detail, index) => (
-                        <li key={index}>{detail}</li>
+                        <li key={index}>
+                          <Text variant={"body"} as="span">
+                            {detail}
+                          </Text>
+                        </li>
                       ))}
                     </ul>
 
-                    <p className="mt-4 text-base sm:text-lg lg:mt-8">
+                    <Text variant={"body"} className="mt-4 lg:mt-8">
                       Durata: {service.duration} minute
-                    </p>
+                    </Text>
 
                     <ScheduleButton
                       variant={"outline"}

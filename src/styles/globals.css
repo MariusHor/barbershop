@@ -11,10 +11,10 @@
     --primary-foreground: hsl(0 0% 100%);
 
     --secondary: hsl(0, 0%, 100%);
-    --secondary-foreground: hsl(222.2 47.4% 11.2%);
+    --secondary-foreground: hsl(0, 0%, 64%);
 
     --muted: hsl(210 40% 96.1%);
-    --muted-foreground: hsl(207, 6%, 69%);
+    --muted-foreground: hsl(0, 0%, 33%);
 
     --accent: hsl(103, 80%, 59%);
     --accent-foreground: hsl(103, 80%, 79%);
@@ -35,7 +35,7 @@
     --ring: hsl(222.2 84% 4.9%);
 
     --radius: 0.5rem;
-    --header-height: 100px;
+    --header-height: 88px;
   }
 }
 
@@ -45,7 +45,7 @@
   }
 
   body {
-    @apply bg-background leading-7 text-foreground;
+    @apply bg-background;
   }
 
   html,
