@@ -11,7 +11,7 @@ export const FollowSection = ({ className }: { className?: string }) => {
   return (
     <Section className={cn("py-16 text-center", className)} spacing="1">
       <Container size="1">
-        <Flex items="center" justify="center" direction="col" gap="0">
+        <Flex items="center" justify="center" direction="col">
           <SiteLogo size={"lg"} />
           <CustomPortableText value={siteSettings?.followCta?.text} />
           <SocialLinks />

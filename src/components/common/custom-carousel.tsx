@@ -59,7 +59,6 @@ export const CustomCarousel = forwardRef<
             alt={item.image.alt ?? `Carousel image ${index + 1}`}
             width={item.image.width}
             height={item.image.height}
-            className="relative z-0 h-full w-full object-cover"
             priority={index === 0}
             loading={index === 0 ? "eager" : "lazy"}
           />

@@ -3,10 +3,18 @@ import { type NextPageWithLayout } from "./_app";
 import Head from "next/head";
 
 import { api } from "@/utils/api";
-import { getPageTitle } from "@/utils/helpers";
+import { getPageTitle, getSectionContent } from "@/utils/helpers";
 import { getSSGHelper } from "@/utils/getSSGHelper";
-import { ColumnSection, RowSection, GalleryPhotoAlbum } from "@/components";
-import { StayInTouch } from "@/components/common/follow-section";
+import { GalleryPhotoAlbum } from "@/components";
+import { FollowSection } from "@/components/common/follow-section";
+import { type PageSection } from "@/utils/types";
+import { useWindowSize } from "@uidotdev/usehooks";
+import { Container, Flex, Grid, Section } from "@/components/ui/layout";
+import { Text } from "@/components/ui/text";
+import CustomPortableText from "@/components/common/custom-portable-text";
+import { ButtonLink } from "@/components/common/button-link";
+import { ArrowRightIcon } from "@radix-ui/react-icons";
+import CustomImage from "@/components/common/custom-image";
 
 export const getServerSideProps = async () => {
   const ssg = getSSGHelper();
@@ -41,6 +49,9 @@ const Page: NextPageWithLayout<
     throw new Error("Missing 'Galerie' page Sanity sections data");
   }
 
+  const heroSectionData = getSectionContent(pageData, "hero");
+  const gallerySectionData = getSectionContent(pageData, "gallery");
+
   return (
     <>
       <Head>
@@ -48,29 +59,78 @@ const Page: NextPageWithLayout<
         <meta name="description" content={siteSettings?.description} />
       </Head>
 
-      {pageData.sections.map((section, index) =>
-        section.style.includes("column") ? (
-          <ColumnSection
-            key={index}
-            data={section}
-            className="bg-secondary !pt-24"
-          >
-            {section.withGallery
-              ? ({ width }) => <GalleryPhotoAlbum width={width} />
-              : undefined}
-          </ColumnSection>
-        ) : (
-          <RowSection
-            key={index}
-            data={section}
-            className="h-screen pt-[calc(var(--header-height)_-24px)] md:pt-[var(--header-height)]"
-            reverse={section.style.includes("reversed")}
-            maxHeight="100vh"
-          />
-        ),
-      )}
-      <StayInTouch className="bg-secondary" />
+      {heroSectionData && <HeroSection data={heroSectionData} />}
+      {gallerySectionData && <GallerySection data={gallerySectionData} />}
+      <FollowSection className="bg-secondary" />
     </>
+  );
+};
+
+const HeroSection = ({ data }: { data: PageSection }) => {
+  return (
+    <Section className="bg-secondary" heightScreen>
+      <Grid
+        cols={{
+          base: 1,
+          lg: 2,
+        }}
+        heightFull
+        className="pt-[calc(var(--header-height)_-24px)] md:pt-[var(--header-height)]"
+      >
+        <CustomImage
+          src={data?.image}
+          alt={data?.image?.alt}
+          width={data?.image?.width}
+          height={data?.image?.height}
+          className="hidden lg:block"
+        />
+
+        <Container size="2">
+          <Flex
+            direction="col"
+            justify="center"
+            gap="2"
+            heightFull
+            className="text-center lg:items-baseline lg:text-left"
+          >
+            <Text variant="h2">{data?.title}</Text>
+            <Text variant="h4">{data?.subtitle}</Text>
+            <CustomPortableText value={data?.text} />
+            <ButtonLink
+              variant={"ghost"}
+              className="flex gap-2"
+              href={data?.sectionSpecific?.linkButton?.href}
+            >
+              {data?.sectionSpecific?.linkButton?.text}
+              <ArrowRightIcon style={{ width: "20px", height: "20px" }} />
+            </ButtonLink>
+          </Flex>
+        </Container>
+      </Grid>
+    </Section>
+  );
+};
+
+const GallerySection = ({ data }: { data: PageSection }) => {
+  const { width } = useWindowSize();
+
+  return (
+    <Section className="relative pb-16">
+      <Container size="2" className="py-32">
+        <Flex
+          direction="col"
+          justify="center"
+          gap="2"
+          heightFull
+          className="text-center"
+        >
+          <Text variant="h2">{data?.title}</Text>
+          <Text variant="h4">{data?.subtitle}</Text>
+          <CustomPortableText value={data?.text} />
+        </Flex>
+      </Container>
+      {width && <GalleryPhotoAlbum width={width} />}
+    </Section>
   );
 };
 

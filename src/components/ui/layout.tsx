@@ -10,7 +10,6 @@ const containerSizes = {
 } as const;
 
 const spaceScale = {
-  "0": "gap-0 p-0", // 0rem, 0px
   "1": "gap-1 p-1", // 0.25rem, 4px
   "2": "gap-2 p-2", // 0.5rem, 8px
   "3": "gap-4 p-4", // 1rem, 16px
@@ -75,9 +74,9 @@ export const Section = forwardRef<HTMLElement, SectionProps>(
   (
     {
       as: Component = "section",
-      spacing = "5",
       heightFull = false,
       heightScreen = false,
+      spacing,
       className,
       children,
       ...props
@@ -89,7 +88,7 @@ export const Section = forwardRef<HTMLElement, SectionProps>(
         ref={ref}
         className={cn(
           { "h-full": heightFull, "h-screen": heightScreen },
-          spaceScale[spacing],
+          spacing && spaceScale[spacing],
           className,
         )}
         {...props}
@@ -124,9 +123,9 @@ export const Grid = forwardRef<HTMLElement, GridProps>(
     {
       as: Component = "div",
       cols = 1,
-      gap = "4",
       heightFull = false,
       heightScreen = false,
+      gap,
       items,
       justify,
       className,
@@ -156,7 +155,7 @@ export const Grid = forwardRef<HTMLElement, GridProps>(
           "grid",
           { "h-full": heightFull, "h-screen": heightScreen },
           getResponsiveCols(),
-          spaceScale[gap].split(" ")[0],
+          gap && spaceScale[gap].split(" ")[0],
           items && `items-${items}`,
           justify && `justify-${justify}`,
           className,
@@ -185,10 +184,10 @@ export const Flex = forwardRef<HTMLElement, FlexProps>(
       as: Component = "div",
       direction = "row",
       wrap = false,
-      gap = "4",
       inline = false,
       heightFull = false,
       heightScreen = false,
+      gap,
       items,
       justify,
       className,
@@ -208,7 +207,7 @@ export const Flex = forwardRef<HTMLElement, FlexProps>(
           inline ? "inline-flex" : "flex",
           direction === "col" && "flex-col",
           wrap && "flex-wrap",
-          spaceScale[gap].split(" ")[0],
+          gap && spaceScale[gap].split(" ")[0],
           justify && `justify-${justify}`,
           className,
         )}

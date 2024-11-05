@@ -233,7 +233,7 @@ const ServicesSection = () => {
                     />
                   </div>
                   <div className="hidden lg:block">
-                    <AspectRatio ratio={16 / 9}>
+                    <AspectRatio ratio={16 /AspectRatio 9}>
                       <Image
                         width={504}
                         height={504}

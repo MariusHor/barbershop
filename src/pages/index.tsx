@@ -6,7 +6,7 @@ import "react-multi-carousel/lib/styles.css";
 import { useMeasure, useWindowSize } from "@uidotdev/usehooks";
 
 import type { NextPageWithLayout } from "./_app";
-import { getPageTitle } from "@/utils/helpers";
+import { getPageTitle, getSectionContent } from "@/utils/helpers";
 import { getSSGHelper } from "@/utils/getSSGHelper";
 import { api } from "@/utils/api";
 import { type PageSection } from "@/utils/types";
@@ -44,10 +44,6 @@ export const getServerSideProps = async () => {
       trpcState: ssg.dehydrate(),
     },
   };
-};
-
-const getSectionContent = (pageData: Page, type: string) => {
-  return pageData.sections.find((section) => section.type === type)?.content;
 };
 
 const Page: NextPageWithLayout<
@@ -118,14 +114,13 @@ const HeroSection = ({ data }: { data: PageSection }) => {
   }
 
   return (
-    <Section spacing="0" className="h-screen bg-black" ref={rootElement}>
+    <Section className="bg-black" ref={rootElement}>
       <Grid
         cols={{
           base: 1,
           lg: 2,
         }}
-        gap="0"
-        heightFull
+        heightScreen
       >
         <div className="relative">
           <div className="absolute left-0 top-0 h-full w-full grayscale">
@@ -192,7 +187,8 @@ const HeroSection = ({ data }: { data: PageSection }) => {
           </div>
           <MarqueeText
             text={data?.sectionSpecific?.marqueeText}
-            className="!absolute bottom-0 border-t-[1px] border-secondary-foreground bg-background py-6"
+            className="!absolute bottom-0 border-t-[1px] border-secondary-foreground bg-foreground py-6"
+            textClassName="text-background"
           />
         </Flex>
       </Grid>
@@ -222,17 +218,13 @@ const SpotlightSection = ({ data }: { data: PageSection }) => {
 
 const LocationSection = ({ data }: { data: PageSection }) => {
   return (
-    <Section
-      className="border-t-[1px] border-solid border-secondary-foreground bg-primary-foreground"
-      spacing="0"
-    >
+    <Section className="border-t-[1px] border-solid border-secondary-foreground bg-primary-foreground">
       <Grid
         heightFull
         cols={{
           base: 1,
           lg: 2,
         }}
-        gap="0"
       >
         <CustomImage
           src={data?.image}
@@ -269,17 +261,13 @@ const LocationSection = ({ data }: { data: PageSection }) => {
 
 const ServicesSection = ({ data }: { data: PageSection }) => {
   return (
-    <Section
-      className="border-y-[1px] border-solid border-secondary-foreground bg-primary-foreground"
-      spacing="0"
-    >
+    <Section className="border-y-[1px] border-solid border-secondary-foreground bg-primary-foreground">
       <Grid
         heightFull
         cols={{
           base: 1,
           lg: 2,
         }}
-        gap="0"
       >
         <CustomImage
           src={data?.image}
@@ -317,7 +305,7 @@ const GallerySection = ({ data }: { data: PageSection }) => {
   const { width } = useWindowSize();
 
   return (
-    <Section spacing="0" className="relative pb-16">
+    <Section className="relative pb-16">
       <Container size="2" className="py-32">
         <Flex
           direction="col"
@@ -339,7 +327,7 @@ const GallerySection = ({ data }: { data: PageSection }) => {
       >
         <ButtonLink
           variant={"ghost"}
-          className="my-4 flex gap-2 mr-48 font-black"
+          className="my-4 mr-48 flex gap-2 font-black"
           href={data?.sectionSpecific?.linkButton?.href}
         >
           {data?.sectionSpecific?.linkButton?.text}
