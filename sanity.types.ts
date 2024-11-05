@@ -76,33 +76,51 @@ export type Page = {
   _rev: string;
   title: string;
   order: number;
-  path: string;
   slug: Slug;
-  sections?: Array<{
-    style: "column" | "row" | "row-reversed";
-    value: "intro" | "location" | "services" | "follow" | "about";
-    title?: string;
-    subtitle?: string;
-    content?: string;
-    withGallery?: boolean;
-    linkButton?: {
-      text: string;
-      href?: string;
-    };
-    marqueeText?: string;
-    image?: {
-      asset?: {
-        _ref: string;
-        _type: "reference";
-        _weak?: boolean;
-        [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+  sections: Array<{
+    type: "hero" | "spotlight" | "location" | "services" | "about" | "gallery";
+    content?: {
+      title?: string;
+      subtitle?: string;
+      text?: Array<{
+        children?: Array<{
+          marks?: Array<string>;
+          text?: string;
+          _type: "span";
+          _key: string;
+        }>;
+        style?: "normal" | "h2" | "h3";
+        listItem?: "bullet" | "number";
+        markDefs?: Array<{
+          href?: string;
+          _type: "link";
+          _key: string;
+        }>;
+        level?: number;
+        _type: "block";
+        _key: string;
+      }>;
+      sectionSpecific?: {
+        marqueeText?: string;
+        linkButton?: {
+          text: string;
+          href?: string;
+        };
       };
-      hotspot?: SanityImageHotspot;
-      crop?: SanityImageCrop;
-      alt: string;
-      width?: number;
-      height?: number;
-      _type: "image";
+      image?: {
+        asset?: {
+          _ref: string;
+          _type: "reference";
+          _weak?: boolean;
+          [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+        };
+        hotspot?: SanityImageHotspot;
+        crop?: SanityImageCrop;
+        alt: string;
+        width?: number;
+        height?: number;
+        _type: "image";
+      };
     };
     _type: "section";
     _key: string;
@@ -312,6 +330,26 @@ export type SiteSettings = {
   title: string;
   description: string;
   scheduleLink: string;
+  followCta?: {
+    text?: Array<{
+      children?: Array<{
+        marks?: Array<string>;
+        text?: string;
+        _type: "span";
+        _key: string;
+      }>;
+      style?: "normal" | "h2" | "h3";
+      listItem?: "bullet" | "number";
+      markDefs?: Array<{
+        href?: string;
+        _type: "link";
+        _key: string;
+      }>;
+      level?: number;
+      _type: "block";
+      _key: string;
+    }>;
+  };
 };
 
 export type AllSanitySchemaTypes =

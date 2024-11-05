@@ -2,14 +2,24 @@ import { urlFor } from "@/lib/sanity/client";
 import { api } from "@/utils/api";
 import { PhotoAlbum } from "../ui/photo-album";
 import { Button } from "../ui/button";
-import { Spinner } from "../ui/spinner";
 import { useState } from "react";
+import { cn } from "@/utils/helpers";
 
-export const GalleryPhotoAlbum = ({ width }: { width: number }) => {
+export const GalleryPhotoAlbum = ({
+  width,
+  limit = 10,
+  className,
+  showMoreBtn = false,
+}: {
+  width: number;
+  limit?: number;
+  className?: string;
+  showMoreBtn?: boolean;
+}) => {
   const [isFetchingMore, setIsFetchingMore] = useState(false);
   const { data: galleryImages, fetchNextPage } =
     api.content.getGalleryImages.useInfiniteQuery(
-      { limit: 10 },
+      { limit },
       {
         getNextPageParam: (lastPage) => lastPage.nextCursor,
       },
@@ -35,16 +45,16 @@ export const GalleryPhotoAlbum = ({ width }: { width: number }) => {
 
   return (
     !!_galleryImages?.length && (
-      <div className="flex w-full flex-col gap-8">
+      <div className={cn("flex w-full flex-col gap-8", className)}>
         <PhotoAlbum width={width} data={_galleryImages} />
-        {hasMoreItems && (
+        {hasMoreItems && showMoreBtn && (
           <Button
             onClick={handleFetchMore}
             variant="outline"
             className="m-auto h-14 w-36"
-            disabled={isFetchingMore}
+            isLoading={isFetchingMore}
           >
-            {isFetchingMore ? <Spinner /> : "Mai multe"}
+            Mai multe
           </Button>
         )}
       </div>

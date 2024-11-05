@@ -19,7 +19,7 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel";
-import { StayInTouch } from "@/components/common/stay-in-touch";
+import { StayInTouch } from "@/components/common/follow-section";
 import { type Page as PageData } from "sanity.types";
 import {
   Accordion,
@@ -101,9 +101,11 @@ const IntroSection = ({
 
         <Text variant={"h4"}>{data?.subtitle}</Text>
 
-        <Text variant={"body"} className="max-w-[624px] px-4">{data?.content}</Text>
+        <Text variant={"body"} className="max-w-[624px] px-4">
+          {data?.content}
+        </Text>
 
-        <div className="flex flex-col items-center gap-4 lg:gap-0 mt-8">
+        <div className="mt-8 flex flex-col items-center gap-4 lg:gap-0">
           <ButtonLink
             href={data?.linkButton?.href}
             variant={"ghost"}

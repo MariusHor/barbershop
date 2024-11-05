@@ -47,7 +47,7 @@ export function AnimatedTitle({
             onClick={() => onLetterClick(index)}
             className={cn(
               "relative p-0 text-6xl font-black transition-colors duration-200",
-              "text-primary-foreground hover:text-primary md:text-8xl 2xl:text-9xl",
+              "text-primary-foreground hover:text-primary md:text-7xl 2xl:text-9xl",
               "focus:outline-none focus-visible:ring-2",
               activeIndex === index && "text-primary",
             )}

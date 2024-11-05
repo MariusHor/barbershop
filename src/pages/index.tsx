@@ -1,28 +1,27 @@
 import { type InferGetServerSidePropsType } from "next";
 import Head from "next/head";
 import { type Page } from "sanity.types";
-import Image from "next/image";
-import Marquee from "react-fast-marquee";
-import Carousel from "react-multi-carousel";
+import type Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
-import { useMeasure } from "@uidotdev/usehooks";
+import { useMeasure, useWindowSize } from "@uidotdev/usehooks";
 
 import type { NextPageWithLayout } from "./_app";
-import { cn, getPageTitle } from "@/utils/helpers";
+import { getPageTitle } from "@/utils/helpers";
 import { getSSGHelper } from "@/utils/getSSGHelper";
 import { api } from "@/utils/api";
 import { type PageSection } from "@/utils/types";
-import { urlFor } from "@/lib/sanity/client";
-import {
-  ColumnSection,
-  RowSection,
-  ScheduleButton,
-  GalleryPhotoAlbum,
-} from "@/components";
+import { ScheduleButton, GalleryPhotoAlbum } from "@/components";
 import { useEffect, useRef, useState } from "react";
-import { StayInTouch } from "@/components/common/stay-in-touch";
 import { AnimatedTitle } from "@/components/common/animated-title";
 import { Text } from "@/components/ui/text";
+import { Container, Flex, Grid, Section } from "@/components/ui/layout";
+import { ButtonLink } from "@/components/common/button-link";
+import { ArrowRightIcon } from "@radix-ui/react-icons";
+import CustomImage from "@/components/common/custom-image";
+import CustomPortableText from "@/components/common/custom-portable-text";
+import MarqueeText from "@/components/common/marquee-text";
+import CustomCarousel from "@/components/common/custom-carousel";
+import { FollowSection } from "@/components/common/follow-section";
 
 export const getServerSideProps = async () => {
   const ssg = getSSGHelper();
@@ -32,7 +31,7 @@ export const getServerSideProps = async () => {
   await Promise.all([
     pageData,
     ssg.content.getGalleryImages.prefetch({
-      limit: pageData?.sections?.[0]?.title?.length,
+      limit: 10,
     }),
     ssg.content.getSiteSettings.prefetch(),
     ssg.content.getSiteLogo.prefetch(),
@@ -47,6 +46,10 @@ export const getServerSideProps = async () => {
   };
 };
 
+const getSectionContent = (pageData: Page, type: string) => {
+  return pageData.sections.find((section) => section.type === type)?.content;
+};
+
 const Page: NextPageWithLayout<
   InferGetServerSidePropsType<typeof getServerSideProps>
 > = () => {
@@ -59,9 +62,11 @@ const Page: NextPageWithLayout<
     throw new Error("Missing 'Acasa' page Sanity sections data");
   }
 
-  const heroSectionData = pageData.sections.find(
-    (section) => section.value === "intro",
-  );
+  const heroSectionData = getSectionContent(pageData, "hero");
+  const spotlightSectionData = getSectionContent(pageData, "spotlight");
+  const locationSectionData = getSectionContent(pageData, "location");
+  const servicesSectionData = getSectionContent(pageData, "services");
+  const gallerySectionData = getSectionContent(pageData, "gallery");
 
   return (
     <>
@@ -71,54 +76,27 @@ const Page: NextPageWithLayout<
       </Head>
 
       {heroSectionData && <HeroSection data={heroSectionData} />}
-      {pageData.sections.slice(1).map((section, index) =>
-        section.style.includes("column") ? (
-          <ColumnSection
-            key={index}
-            data={section}
-            className={cn({ "justify-start": !!section.withGallery })}
-          >
-            {section.withGallery
-              ? ({ width }) => <GalleryPhotoAlbum width={width} />
-              : undefined}
-          </ColumnSection>
-        ) : (
-          <RowSection
-            key={index}
-            data={section}
-            className={cn(
-              section.style.includes("reversed")
-                ? "border-b-[1px] border-t-[1px]"
-                : "border-b-[1px]",
-              "bg-secondary",
-            )}
-            reverse={section.style.includes("reversed")}
-          />
-        ),
-      )}
-      <StayInTouch />
+      {spotlightSectionData && <SpotlightSection data={spotlightSectionData} />}
+      {locationSectionData && <LocationSection data={locationSectionData} />}
+      {servicesSectionData && <ServicesSection data={servicesSectionData} />}
+      {gallerySectionData && <GallerySection data={gallerySectionData} />}
+      <FollowSection className="bg-secondary" />
     </>
   );
 };
 
 const HeroSection = ({ data }: { data: PageSection }) => {
   const { data: imagesData } = api.content.getGalleryImages.useQuery({
-    limit: data.title?.length,
+    limit: data?.title?.length,
   });
 
   const DEFAULT_CAROUSEL_SIZE = 564;
   const [rootElement, { height: rootElHeight }] = useMeasure();
   const carouselElement = useRef<Carousel>(null);
-  const [carouselElMaxHeight, setCarouselElementMaxHeight] = useState(0);
-  const [isImageLoading, setImageLoading] = useState(true);
+  const [carouselElMaxHeight, setCarouselElementMaxHeight] = useState(
+    DEFAULT_CAROUSEL_SIZE,
+  );
   const [activeSlideIndex, setActiveSlideIndex] = useState(0);
-  const heroImage = data?.image;
-  const responsiveCarousel = {
-    general: {
-      breakpoint: { min: 0, max: 4000 },
-      items: 1,
-    },
-  };
 
   useEffect(() => {
     if (!rootElHeight) return;
@@ -140,91 +118,235 @@ const HeroSection = ({ data }: { data: PageSection }) => {
   }
 
   return (
-    <section
-      className="relative grid h-screen w-full bg-black lg:grid-cols-2"
-      ref={rootElement}
-    >
-      <div className="relative">
-        {heroImage && (
+    <Section spacing="0" className="h-screen bg-black" ref={rootElement}>
+      <Grid
+        cols={{
+          base: 1,
+          lg: 2,
+        }}
+        gap="0"
+        heightFull
+      >
+        <div className="relative">
           <div className="absolute left-0 top-0 h-full w-full grayscale">
-            <Image
-              src={urlFor(heroImage).url()}
-              alt={heroImage.alt ?? "hero image"}
-              width={heroImage.width}
-              height={heroImage.height}
-              className={cn(
-                "h-full w-full object-cover opacity-40",
-                `${isImageLoading ? "blur" : "remove-blur"}`,
-              )}
-              onLoad={() => setImageLoading(false)}
+            <CustomImage
+              src={data?.image}
+              alt={data?.image?.alt}
+              width={data?.image?.width}
+              height={data?.image?.height}
+              loading="eager"
+              className="opacity-40"
               priority
             />
           </div>
-        )}
-
-        <div className="relative z-40 flex h-full flex-col items-center justify-center gap-16">
-          <AnimatedTitle
-            activeIndex={activeSlideIndex}
-            onLetterClick={(index) => handleSlideSelect(index)}
-            title={data.title}
-          />
-
-          <Text variant={"h2"} className="text-primary-foreground">
-            {data.subtitle}
-          </Text>
-
-          <ScheduleButton variant={"secondary"} className="xl:mt-4" />
-        </div>
-      </div>
-      <div className="relative hidden flex-col items-center justify-center gap-16 overflow-hidden bg-white px-20 lg:flex">
-        <div
-          className="relative z-10 aspect-square w-full select-none overflow-hidden border-[1px] border-solid border-muted-foreground"
-          style={{
-            maxHeight: carouselElMaxHeight,
-            maxWidth: DEFAULT_CAROUSEL_SIZE,
-          }}
-        >
-          <Carousel
-            ref={carouselElement}
-            responsive={responsiveCarousel}
-            itemClass="h-full"
-            containerClass="h-full"
-            sliderClass="h-full"
-            ssr={true}
-            draggable={false}
-            swipeable={false}
-            arrows={false}
-            autoPlay={true}
-            rewind={true}
-            autoPlaySpeed={4000}
-            beforeChange={handleBeforeSlideChange}
+          <Flex
+            direction="col"
+            items="center"
+            justify="center"
+            gap="6"
+            className="relative z-40 h-full"
           >
-            {imagesData?.items.map((item, index) => (
-              <Image
-                key={index}
-                src={urlFor(item.image).url()}
-                alt={item.image.alt ?? "hero image"}
-                width={item.image.width}
-                height={item.image.height}
-                className="relative z-0 h-full w-full select-none object-cover"
-                priority
-              />
-            ))}
-          </Carousel>
-        </div>
-        {data.marqueeText && (
-          <Marquee
-            autoFill
-            pauseOnHover
-            className="!absolute bottom-0 bg-background py-6 border-t-[1px] border-secondary-foreground"
-          >
-            <Text variant="body" className="ml-40 !text-2xl font-black">
-              {data.marqueeText}
+            <AnimatedTitle
+              activeIndex={activeSlideIndex}
+              onLetterClick={(index) => handleSlideSelect(index)}
+              title={data?.title}
+            />
+            <Text variant="h2" className="text-primary-foreground">
+              {data?.subtitle}
             </Text>
-          </Marquee>
-        )}
-      </div>
-    </section>
+            <ScheduleButton
+              variant="secondary"
+              className="xl:mt-4"
+              href={data?.sectionSpecific?.linkButton?.href}
+            >
+              {data?.sectionSpecific?.linkButton?.text}
+            </ScheduleButton>
+          </Flex>
+        </div>
+        <Flex
+          direction="col"
+          items="center"
+          justify="center"
+          gap="6"
+          className="relative hidden bg-white px-20 lg:flex"
+        >
+          <div
+            className="relative z-10 aspect-square h-full w-full rounded-md bg-black shadow-2xl"
+            style={{
+              maxHeight: carouselElMaxHeight,
+              maxWidth: DEFAULT_CAROUSEL_SIZE,
+            }}
+          >
+            <CustomCarousel
+              ref={carouselElement}
+              images={imagesData?.items}
+              beforeChange={handleBeforeSlideChange}
+              className="rounded-md border-[1px] border-solid border-muted-foreground"
+              responsive={{
+                general: {
+                  breakpoint: { min: 0, max: 4000 },
+                  items: 1,
+                },
+              }}
+            />
+          </div>
+          <MarqueeText
+            text={data?.sectionSpecific?.marqueeText}
+            className="!absolute bottom-0 border-t-[1px] border-secondary-foreground bg-background py-6"
+          />
+        </Flex>
+      </Grid>
+    </Section>
+  );
+};
+
+const SpotlightSection = ({ data }: { data: PageSection }) => {
+  return (
+    <Section className="bg-background text-center" heightScreen>
+      <Container heightFull>
+        <Flex
+          direction="col"
+          items="center"
+          justify="center"
+          gap="2"
+          heightFull
+        >
+          <Text variant="h2">{data?.title}</Text>
+          <Text variant="h4">{data?.subtitle}</Text>
+          <CustomPortableText value={data?.text} />
+        </Flex>
+      </Container>
+    </Section>
+  );
+};
+
+const LocationSection = ({ data }: { data: PageSection }) => {
+  return (
+    <Section
+      className="border-t-[1px] border-solid border-secondary-foreground bg-primary-foreground"
+      spacing="0"
+    >
+      <Grid
+        heightFull
+        cols={{
+          base: 1,
+          lg: 2,
+        }}
+        gap="0"
+      >
+        <CustomImage
+          src={data?.image}
+          alt={data?.image?.alt}
+          width={data?.image?.width}
+          height={data?.image?.height}
+          className="lg:order-4"
+        />
+        <Container size="2" className="order-2 py-32">
+          <Flex
+            direction="col"
+            justify="center"
+            gap="2"
+            heightFull
+            className="text-center lg:items-baseline lg:text-left"
+          >
+            <Text variant="h2">{data?.title}</Text>
+            <Text variant="h4">{data?.subtitle}</Text>
+            <CustomPortableText value={data?.text} />
+            <ButtonLink
+              variant={"ghost"}
+              className="flex gap-2"
+              href={data?.sectionSpecific?.linkButton?.href}
+            >
+              {data?.sectionSpecific?.linkButton?.text}
+              <ArrowRightIcon style={{ width: "20px", height: "20px" }} />
+            </ButtonLink>
+          </Flex>
+        </Container>
+      </Grid>
+    </Section>
+  );
+};
+
+const ServicesSection = ({ data }: { data: PageSection }) => {
+  return (
+    <Section
+      className="border-y-[1px] border-solid border-secondary-foreground bg-primary-foreground"
+      spacing="0"
+    >
+      <Grid
+        heightFull
+        cols={{
+          base: 1,
+          lg: 2,
+        }}
+        gap="0"
+      >
+        <CustomImage
+          src={data?.image}
+          alt={data?.image?.alt}
+          width={data?.image?.width}
+          height={data?.image?.height}
+        />
+        <Container size="2" className="py-32">
+          <Flex
+            direction="col"
+            justify="center"
+            gap="2"
+            heightFull
+            className="text-center lg:items-baseline lg:text-left"
+          >
+            <Text variant="h2">{data?.title}</Text>
+            <Text variant="h4">{data?.subtitle}</Text>
+            <CustomPortableText value={data?.text} />
+            <ButtonLink
+              variant={"ghost"}
+              className="flex gap-2"
+              href={data?.sectionSpecific?.linkButton?.href}
+            >
+              {data?.sectionSpecific?.linkButton?.text}
+              <ArrowRightIcon style={{ width: "20px", height: "20px" }} />
+            </ButtonLink>
+          </Flex>
+        </Container>
+      </Grid>
+    </Section>
+  );
+};
+
+const GallerySection = ({ data }: { data: PageSection }) => {
+  const { width } = useWindowSize();
+
+  return (
+    <Section spacing="0" className="relative pb-16">
+      <Container size="2" className="py-32">
+        <Flex
+          direction="col"
+          justify="center"
+          gap="2"
+          heightFull
+          className="text-center"
+        >
+          <Text variant="h2">{data?.title}</Text>
+          <Text variant="h4">{data?.subtitle}</Text>
+          <CustomPortableText value={data?.text} />
+        </Flex>
+      </Container>
+      {width && <GalleryPhotoAlbum width={width} />}
+
+      <MarqueeText
+        text={data?.sectionSpecific?.marqueeText}
+        className="!absolute bottom-0 border-b-[1px] border-solid border-secondary-foreground"
+      >
+        <ButtonLink
+          variant={"ghost"}
+          className="my-4 flex gap-2 mr-48 font-black"
+          href={data?.sectionSpecific?.linkButton?.href}
+        >
+          {data?.sectionSpecific?.linkButton?.text}
+          <ArrowRightIcon style={{ width: "20px", height: "20px" }} />
+        </ButtonLink>
+      </MarqueeText>
+    </Section>
   );
 };
 

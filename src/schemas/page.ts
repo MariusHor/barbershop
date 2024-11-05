@@ -1,51 +1,34 @@
 import { type Rule } from "@sanity/types";
-import { type Page } from "sanity.types";
+import { Image, PageSectionBase } from "./blocks";
 
 const page = {
   name: "page",
   type: "document",
-  title: "Pagini",
+  title: "Pages",
+  groups: [
+    {
+      name: "pageInfo",
+      title: "Page Information",
+    },
+    {
+      name: "sections",
+      title: "Sections",
+    },
+  ],
   fields: [
     {
       name: "title",
-      title: "Titlu pagina",
+      title: "Page title",
       type: "string",
       validation: (rule: Rule) => rule.required(),
+      group: "pageInfo",
     },
     {
       name: "order",
-      title: "Ordine",
+      title: "Order",
       type: "number",
-      validation: (rule: Rule) =>
-        rule
-          .required()
-          .integer()
-          .positive()
-          .min(1)
-          .custom(async (order: string | number, context) => {
-            const { document } = context;
-            const client = context.getClient({ apiVersion: "2023-08-27" });
-
-            const existingPages: Page[] = await client.fetch(
-              `*[_type == "page" && _id != $id && order == $order]`,
-              { id: document?._id, order },
-            );
-
-            if (
-              existingPages.length > 0 &&
-              existingPages[0]?._id !== document?._id.replace("drafts.", "")
-            ) {
-              return `Ordine ${order} este deja folosită. Vă rugăm să alegeți un alt număr.`;
-            }
-
-            return true;
-          }),
-    },
-    {
-      name: "path",
-      title: "Adresa relativa",
-      type: "string",
-      validation: (rule: Rule) => rule.required(),
+      validation: (rule: Rule) => rule.required().integer().positive().min(1),
+      group: "pageInfo",
     },
     {
       name: "slug",
@@ -56,123 +39,88 @@ const page = {
         source: "title",
         maxLength: 96,
       },
+      group: "pageInfo",
     },
     {
       name: "sections",
+      title: "Sections",
       type: "array",
-      title: "Sectiuni pagina",
+      group: "sections",
+      validation: (rule: Rule) => rule.required().min(1),
       of: [
         {
-          name: "section",
           type: "object",
-          title: "Sectiune",
+          name: "section",
+          title: "Section",
           fields: [
             {
-              name: "style",
-              title: "Stil",
+              name: "type",
               type: "string",
-              validation: (rule: Rule) => rule.required().min(1),
+              title: "Section Type",
+              validation: (rule: Rule) => rule.required(),
               options: {
                 list: [
-                  { title: "Column", value: "column" },
-                  { title: "Row", value: "row" },
-                  { title: "Row reversed", value: "row-reversed" },
+                  { title: "Hero", value: "hero" },
+                  { title: "Spotlight", value: "spotlight" },
+                  { title: "Location", value: "location" },
+                  { title: "Services", value: "services" },
+                  { title: "About", value: "about" },
+                  { title: "Gallery", value: "gallery" },
                 ],
               },
-              initialValue: "classic",
-            },
-            {
-              name: "value",
-              title: "Valoare",
-              type: "string",
-              validation: (rule: Rule) => rule.required().min(1),
-              options: {
-                list: [
-                  { title: "Intro", value: "intro" },
-                  { title: "Locatie", value: "location" },
-                  { title: "Servicii", value: "services" },
-                  { title: "Urmareste", value: "follow" },
-                  { title: "Despre", value: "about" },
-                ],
-              },
-              initialValue: "intro",
-            },
-            {
-              name: "title",
-              title: "Titlu",
-              type: "string",
-            },
-            {
-              name: "subtitle",
-              title: "Subtitlu",
-              type: "string",
             },
             {
               name: "content",
-              title: "Continut",
-              type: "string",
-            },
-            {
-              name: "withGallery",
-              title: "Galerie",
-              type: "boolean",
-            },
-            {
-              name: "linkButton",
-              title: "Buton link",
               type: "object",
+              title: "Content",
               fields: [
+                ...PageSectionBase,
                 {
-                  name: "text",
-                  type: "string",
-                  title: "Text",
-                  validation: (rule: Rule) => rule.required(),
+                  name: "sectionSpecific",
+                  type: "object",
+                  title: "Specific Content",
+                  fields: [
+                    {
+                      name: "marqueeText",
+                      type: "string",
+                      title: "Marquee Text",
+                    },
+                    {
+                      name: "linkButton",
+                      type: "object",
+                      title: "Link Button",
+                      fields: [
+                        {
+                          name: "text",
+                          type: "string",
+                          title: "Text",
+                          validation: (rule: Rule) => rule.required(),
+                        },
+                        {
+                          name: "href",
+                          type: "string",
+                          title: "Target URL",
+                        },
+                      ],
+                    },
+                  ],
                 },
-                {
-                  name: "href",
-                  type: "string",
-                  title: "Catre",
-                },
-              ],
-            },
-            {
-              name: "marqueeText",
-              title: "Text animat",
-              type: "string",
-            },
-            {
-              name: "image",
-              type: "image",
-              title: "Imagine",
-              fields: [
-                {
-                  name: "alt",
-                  type: "string",
-                  title: "Text alternativ",
-                  validation: (rule: Rule) =>
-                    rule
-                      .required()
-                      .warning(
-                        "Textul alternativ poate fi de ajutor atunci cand imaginea nu poate fi incarcata.",
-                      ),
-                },
-                {
-                  name: "width",
-                  type: "number",
-                  title: "Lățime",
-                  readOnly: true,
-                  hidden: true,
-                },
-                {
-                  name: "height",
-                  type: "number",
-                  title: "Înălțime",
-                  readOnly: true,
-                  hidden: true,
-                },
+                Image,
               ],
             },
           ],
+          preview: {
+            select: {
+              title: "content.title",
+              type: "type",
+            },
+            prepare({ title, type }: { title: string; type: string }) {
+              return {
+                title: title || "Untitled Section",
+                subtitle: `${type.charAt(0).toUpperCase() + type.slice(1)} Section`,
+              };
+            },
+          },
         },
       ],
     },

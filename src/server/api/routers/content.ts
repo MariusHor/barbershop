@@ -75,10 +75,13 @@ export const sanityContentRouter = createTRPCRouter({
         ...,
         sections[]{
           ...,
-          image{
+          content{
             ...,
-            "width": asset->metadata.dimensions.width,
-            "height": asset->metadata.dimensions.height
+            image{
+              ...,
+              "width": asset->metadata.dimensions.width,
+              "height": asset->metadata.dimensions.height
+            }
           }
         }
       }`;
@@ -93,13 +96,16 @@ export const sanityContentRouter = createTRPCRouter({
     }),
   getRoutes: publicProcedure.query(async ({ ctx }) => {
     const dataType = SANITY_DOC_TYPES.page;
-    const query = `*[_type == "${dataType}"] | order(order asc)`;
+    const query = `*[_type == "${dataType}"] | order(order asc) { title }`;
 
     const data = await ctx.sanityClient.fetch<Page[]>(query);
 
     if (!data[0]) throwSanityErrorMessage({ dataType });
 
-    return data.map((page) => ({ name: page.title, path: page.path }));
+    return data.map((page) => ({
+      name: page.title,
+      path: `/${page.title.toLowerCase()}`,
+    }));
   }),
   getGalleryImages: publicProcedure
     .input(

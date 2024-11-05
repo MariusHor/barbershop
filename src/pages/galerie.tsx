@@ -6,7 +6,7 @@ import { api } from "@/utils/api";
 import { getPageTitle } from "@/utils/helpers";
 import { getSSGHelper } from "@/utils/getSSGHelper";
 import { ColumnSection, RowSection, GalleryPhotoAlbum } from "@/components";
-import { StayInTouch } from "@/components/common/stay-in-touch";
+import { StayInTouch } from "@/components/common/follow-section";
 
 export const getServerSideProps = async () => {
   const ssg = getSSGHelper();

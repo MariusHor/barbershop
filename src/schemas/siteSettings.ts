@@ -1,5 +1,6 @@
 import { type Rule } from "@sanity/types";
 import { SANITY_DOC_TYPES } from "../utils/constants";
+import { Text } from "./blocks";
 
 const siteSettings = {
   name: SANITY_DOC_TYPES.siteSettings,
@@ -23,6 +24,12 @@ const siteSettings = {
       type: "url",
       title: "Link programari",
       validation: (rule: Rule) => rule.required().min(20),
+    },
+    {
+      type: "object",
+      name: "followCta",
+      title: "Follow CTA",
+      fields: [Text],
     },
   ],
 };
