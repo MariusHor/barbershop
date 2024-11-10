@@ -5,7 +5,7 @@ import Head from "next/head";
 import { api } from "@/utils/api";
 import { getPageTitle, getSectionContent } from "@/utils/helpers";
 import { getSSGHelper } from "@/utils/getSSGHelper";
-import { GalleryPhotoAlbum } from "@/components";
+import { GalleryPhotoAlbum, ScheduleButton } from "@/components";
 import { FollowSection } from "@/components/common/follow-section";
 import { type PageSection } from "@/utils/types";
 import { useWindowSize } from "@uidotdev/usehooks";
@@ -91,19 +91,21 @@ const HeroSection = ({ data }: { data: PageSection }) => {
             justify="center"
             gap="2"
             heightFull
-            className="text-center lg:items-baseline lg:text-left"
+            className="items-center text-center lg:items-baseline lg:text-left"
           >
             <Text variant="h2">{data?.title}</Text>
             <Text variant="h4">{data?.subtitle}</Text>
             <CustomPortableText value={data?.text} />
             <ButtonLink
-              variant={"ghost"}
-              className="flex gap-2"
               href={data?.sectionSpecific?.linkButton?.href}
+              variant={"ghost"}
+              size={"default"}
+              className="flex gap-2"
             >
               {data?.sectionSpecific?.linkButton?.text}
               <ArrowRightIcon style={{ width: "20px", height: "20px" }} />
             </ButtonLink>
+            <ScheduleButton className="hover:bg-background" />
           </Flex>
         </Container>
       </Grid>
@@ -115,7 +117,7 @@ const GallerySection = ({ data }: { data: PageSection }) => {
   const { width } = useWindowSize();
 
   return (
-    <Section className="relative pb-16">
+    <Section className="relative pb-16" id="lista-completa">
       <Container size="2" className="py-32">
         <Flex
           direction="col"

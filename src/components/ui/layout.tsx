@@ -64,8 +64,6 @@ Container.displayName = "Container";
 
 interface SectionProps extends BaseProps {
   spacing?: keyof typeof spaceScale;
-  container?: boolean;
-  containerSize?: keyof typeof containerSizes;
   heightFull?: boolean;
   heightScreen?: boolean;
 }

@@ -104,7 +104,7 @@ export const sanityContentRouter = createTRPCRouter({
 
     return data.map((page) => ({
       name: page.title,
-      path: `/${page.title.toLowerCase()}`,
+      path: page.title === "Acasa" ? "/" : `/${page.title.toLowerCase()}`,
     }));
   }),
   getGalleryImages: publicProcedure
