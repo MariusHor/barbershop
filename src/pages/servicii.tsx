@@ -1,11 +1,14 @@
-import { type InferGetServerSidePropsType } from "next";
+import {
+  type GetServerSidePropsContext,
+  type InferGetServerSidePropsType,
+} from "next";
 import { type NextPageWithLayout } from "./_app";
 import Head from "next/head";
 
 import { api } from "@/utils/api";
-import { capitalize, getPageTitle, getSectionContent } from "@/utils/helpers";
+import { capitalize, getPageTitle } from "@/utils/helpers";
 import { getSSGHelper } from "@/utils/getSSGHelper";
-import { SiteLogo, ScheduleButton } from "@/components";
+import { SiteLogo, AppointmentsButton } from "@/components";
 import { usePathname } from "next/navigation";
 import { ArrowRightIcon } from "@radix-ui/react-icons";
 import Image from "next/image";
@@ -28,18 +31,22 @@ import {
 import { AspectRatio } from "@/components/ui/aspect-ratio";
 import { ButtonLink } from "@/components/common/button-link";
 import { Text } from "@/components/ui/text";
-import { type PageSection } from "@/utils/types";
+import { type PageSectionContent } from "@/utils/types";
 import CustomPortableText from "@/components/common/custom-portable-text";
 import MarqueeText from "@/components/common/marquee-text";
 import { Container, Flex, Grid, Section } from "@/components/ui/layout";
 import CustomImage from "@/components/common/custom-image";
 import { useEffect, useState } from "react";
+import { usePageSectionsData } from "@/composables/usePageSectionsData";
 
-export const getServerSideProps = async () => {
+export const getServerSideProps = async (
+  context: GetServerSidePropsContext,
+) => {
+  const slug = context.resolvedUrl.slice(1);
   const ssg = getSSGHelper();
 
   await Promise.all([
-    ssg.content.getPageData.prefetch({ slug: "servicii" }),
+    ssg.content.getPageData.prefetch({ slug }),
     ssg.content.getServicesData.prefetch(),
     ssg.content.getSiteSettings.prefetch(),
     ssg.content.getSiteLogo.prefetch(),
@@ -57,16 +64,9 @@ export const getServerSideProps = async () => {
 const Page: NextPageWithLayout<
   InferGetServerSidePropsType<typeof getServerSideProps>
 > = () => {
+  const { heroSectionData, servicesSectionData, pageData } =
+    usePageSectionsData();
   const { data: siteSettings } = api.content.getSiteSettings.useQuery();
-  const { data: pageData } = api.content.getPageData.useQuery({
-    slug: "servicii",
-  });
-
-  if (!pageData?.sections?.length) {
-    throw new Error("Missing 'Servicii' page Sanity sections data");
-  }
-
-  const heroSectionData = getSectionContent(pageData, "hero");
 
   return (
     <>
@@ -76,14 +76,14 @@ const Page: NextPageWithLayout<
       </Head>
 
       <HeroSection data={heroSectionData} />
-      <ServicesSection />
+      <ServicesSection data={servicesSectionData} />
 
       <FollowSection className="bg-primary-foreground" />
     </>
   );
 };
 
-const HeroSection = ({ data }: { data: PageSection | undefined }) => {
+const HeroSection = ({ data }: { data: PageSectionContent | undefined }) => {
   const currentRoute = usePathname();
   const { data: servicesData } = api.content.getServicesData.useQuery();
   const imagesData = servicesData?.map((service) => ({
@@ -108,13 +108,14 @@ const HeroSection = ({ data }: { data: PageSection | undefined }) => {
   }, [carouselApi, imagesData]);
 
   return (
-    <Section className="relative mt-[var(--header-height)] h-[calc(100vh_-var(--header-height))]">
+    <Section className="relative" heightScreen>
       <Grid
         cols={{
           base: 1,
           lg: 2,
         }}
-        className="h-[calc(100vh_-var(--header-height)*_2)]"
+        heightFull
+        className="py-[var(--header-h)] md:py-[var(--header-h-md)]"
       >
         <Container className="text-center" heightFull>
           <Flex
@@ -124,7 +125,7 @@ const HeroSection = ({ data }: { data: PageSection | undefined }) => {
             gap="4"
             heightFull
           >
-            <Text variant={"h2"}>{data?.title}</Text>
+            <Text variant={"h1"}>{data?.title}</Text>
             <Text variant={"h4"}>{data?.subtitle}</Text>
             <CustomPortableText value={data?.text} />
             <Flex
@@ -143,7 +144,7 @@ const HeroSection = ({ data }: { data: PageSection | undefined }) => {
                 {data?.sectionSpecific?.linkButton?.text}
                 <ArrowRightIcon style={{ width: "20px", height: "20px" }} />
               </ButtonLink>
-              <ScheduleButton />
+              <AppointmentsButton />
             </Flex>
           </Flex>
         </Container>
@@ -184,7 +185,7 @@ const HeroSection = ({ data }: { data: PageSection | undefined }) => {
           </Flex>
         </Carousel>
 
-        <MarqueeText className="!absolute bottom-0 z-40 h-[calc(var(--header-height)_-24px)] max-w-[100vw] border-t-[1px] border-solid border-secondary-foreground bg-white py-6 md:h-header">
+        <MarqueeText className="!absolute bottom-0 z-40 h-header border-t-[1px] border-solid border-secondary-foreground bg-white py-6 md:h-header-md">
           <SiteLogo size={"sm"} />
           <Text variant={"body"} className="ml-4 mr-40 !text-2xl">
             - {capitalize(currentRoute?.slice(1) ?? "")}
@@ -195,36 +196,31 @@ const HeroSection = ({ data }: { data: PageSection | undefined }) => {
   );
 };
 
-const ServicesSection = () => {
-  const { data } = api.content.getServicesData.useQuery();
+const ServicesSection = ({ data }: { data: PageSectionContent }) => {
+  const { data: servicesListData } = api.content.getServicesData.useQuery();
 
   return (
     <Section className="bg-primary-foreground" id="lista-completa">
-      <Container className="pb-16 pt-28">
-        <Flex
-          direction="col"
-          items="center"
-          gap="7"
-          className="m-auto max-w-[1048px]"
-        >
-          <Text variant={"h2"} className="max-w-[1024px]">
-            Lista servicii
-          </Text>
+      <Container className="py-16">
+        <Flex direction="col" items="center" gap="7">
+          <Text variant="h2">{data?.title}</Text>
+          <Text variant="h5">{data?.subtitle}</Text>
+          <CustomPortableText value={data?.text} />
 
           <Accordion
             type="single"
             collapsible
             className="flex w-full flex-col gap-4 lg:gap-8"
           >
-            {data?.map((service) => (
+            {servicesListData?.map((service) => (
               <AccordionItem
-                key={service.name}
+                key={service._id}
                 value={service.name}
                 className="border-b-secondary-foreground"
               >
-                <AccordionTrigger className="pb-4 pt-0 hover:text-primary hover:no-underline lg:pb-8">
+                <AccordionTrigger className="pb-4 pt-0 hover:text-primary hover:no-underline">
                   <div className="flex flex-col text-start">
-                    <Text variant={"h4"} as="span">
+                    <Text variant={"h6"} className="font-normal">
                       {service.name}
                     </Text>
                     <Text variant={"caption"} as="span" className="italic">
@@ -232,7 +228,7 @@ const ServicesSection = () => {
                     </Text>
                   </div>
                 </AccordionTrigger>
-                <AccordionContent className="flex flex-col gap-2 pb-4 text-left lg:pb-8">
+                <AccordionContent className="flex flex-col gap-2 pb-4 text-left">
                   <div className="grid-cols-2 gap-8 lg:grid">
                     <div>
                       <CustomPortableText value={service.description} />
@@ -250,7 +246,7 @@ const ServicesSection = () => {
                         Durata: {service.duration} minute
                       </Text>
 
-                      <ScheduleButton
+                      <AppointmentsButton
                         variant={"outline"}
                         className="mt-4 lg:mt-8"
                       />

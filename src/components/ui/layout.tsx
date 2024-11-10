@@ -98,6 +98,23 @@ export const Section = forwardRef<HTMLElement, SectionProps>(
 );
 Section.displayName = "Section";
 
+const itemsClasses = {
+  start: "items-start",
+  end: "items-end",
+  center: "items-center",
+  baseline: "items-baseline",
+  stretch: "items-stretch",
+} as const;
+
+const justifyClasses = {
+  start: "justify-start",
+  end: "justify-end",
+  center: "justify-center",
+  between: "justify-between",
+  around: "justify-around",
+  evenly: "justify-evenly",
+} as const;
+
 interface ResponsiveCols {
   base?: 1 | 2 | 3 | 4 | 5 | 6 | 12;
   sm?: 1 | 2 | 3 | 4 | 5 | 6 | 12;
@@ -154,8 +171,8 @@ export const Grid = forwardRef<HTMLElement, GridProps>(
           { "h-full": heightFull, "h-screen": heightScreen },
           getResponsiveCols(),
           gap && spaceScale[gap].split(" ")[0],
-          items && `items-${items}`,
-          justify && `justify-${justify}`,
+          items && itemsClasses[items],
+          justify && justifyClasses[justify],
           className,
         )}
         {...props}
@@ -200,13 +217,13 @@ export const Flex = forwardRef<HTMLElement, FlexProps>(
           {
             "h-full": heightFull,
             "h-screen": heightScreen,
-            [`items-${items}`]: items,
           },
           inline ? "inline-flex" : "flex",
           direction === "col" && "flex-col",
           wrap && "flex-wrap",
           gap && spaceScale[gap].split(" ")[0],
-          justify && `justify-${justify}`,
+          items && itemsClasses[items],
+          justify && justifyClasses[justify],
           className,
         )}
         {...props}

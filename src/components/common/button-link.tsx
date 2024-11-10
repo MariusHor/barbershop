@@ -38,7 +38,7 @@ export const ButtonLink = forwardRef<HTMLButtonElement, ButtonLinkProps>(
       href,
       children,
       className,
-      variant = "default",
+      variant = "link",
       size = "default",
       linkProps = {},
       ...buttonProps

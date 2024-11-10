@@ -1,36 +1,21 @@
 import { type Rule } from "@sanity/types";
 import { SANITY_DOC_TYPES } from "../utils/constants";
 
-const services = {
-  name: SANITY_DOC_TYPES.services,
+const faq = {
+  name: SANITY_DOC_TYPES.faq,
   type: "document",
-  title: "Servicii",
+  title: "FAQ",
   fields: [
     {
-      name: "name",
+      name: "question",
       type: "string",
-      title: "Name",
+      title: "Question",
       validation: (rule: Rule) => rule.required(),
     },
     {
-      name: "price",
-      type: "number",
-      title: "Price",
-      validation: (rule: Rule) => rule.required().min(0),
-    },
-    {
-      name: "image",
-      type: "image",
-      title: "Image",
-      options: {
-        hotspot: true,
-      },
-      validation: (rule: Rule) => rule.required(),
-    },
-    {
-      name: "description",
+      name: "answer",
       type: "array",
-      title: "Description",
+      title: "Answer",
       of: [
         {
           type: "block",
@@ -68,32 +53,7 @@ const services = {
       ],
       validation: (rule: Rule) => rule.required(),
     },
-    {
-      name: "details",
-      type: "array",
-      title: "Details",
-      of: [{ type: "string" }],
-      validation: (rule: Rule) => rule.required(),
-    },
-    {
-      name: "duration",
-      type: "number",
-      title: "Duration - in minutes",
-      validation: (rule: Rule) => rule.required().min(0),
-    },
-    {
-      name: "order",
-      type: "number",
-      title: "Order",
-    },
   ],
-  preview: {
-    select: {
-      title: "name",
-      subtitle: "price",
-      media: "image",
-    },
-  },
 };
 
-export default services;
+export default faq;

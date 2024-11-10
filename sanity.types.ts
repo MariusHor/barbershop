@@ -68,17 +68,53 @@ export type Geopoint = {
   alt?: number;
 };
 
+export type Faq = {
+  _id: string;
+  _type: "faq";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  question: string;
+  answer: Array<{
+    children?: Array<{
+      marks?: Array<string>;
+      text?: string;
+      _type: "span";
+      _key: string;
+    }>;
+    style?: "normal" | "h2" | "h3";
+    listItem?: "bullet" | "number";
+    markDefs?: Array<{
+      href?: string;
+      _type: "link";
+      _key: string;
+    }>;
+    level?: number;
+    _type: "block";
+    _key: string;
+  }>;
+};
+
 export type Page = {
   _id: string;
   _type: "page";
   _createdAt: string;
   _updatedAt: string;
   _rev: string;
+  isIndex?: boolean;
   title: string;
   order: number;
   slug: Slug;
   sections: Array<{
-    type: "hero" | "spotlight" | "location" | "services" | "about" | "gallery";
+    type:
+      | "hero"
+      | "spotlight"
+      | "location"
+      | "services"
+      | "about"
+      | "gallery"
+      | "faq"
+      | "form";
     content?: {
       title?: string;
       subtitle?: string;
@@ -230,8 +266,10 @@ export type ShopLocation = {
   street: string;
   city: string;
   zip: number;
-  phone: string;
-  email: string;
+  appointmentsUrl?: string;
+  locationUrl?: string;
+  phone?: string;
+  email?: string;
   socialPlatforms?: Array<{
     name: "facebook" | "instagram" | "twitter";
     link: string;
@@ -329,7 +367,6 @@ export type SiteSettings = {
   _rev: string;
   title: string;
   description: string;
-  scheduleLink: string;
   followCta?: {
     text?: Array<{
       children?: Array<{
@@ -350,6 +387,17 @@ export type SiteSettings = {
       _key: string;
     }>;
   };
+  appointmentsUrl?: string;
+  locationUrl?: string;
+  phone?: string;
+  email?: string;
+  socialPlatforms?: Array<{
+    name: "facebook" | "instagram" | "twitter";
+    link: string;
+    _type: "account";
+    _key: string;
+  }>;
+  timetables?: Array<string>;
 };
 
 export type AllSanitySchemaTypes =
@@ -358,6 +406,7 @@ export type AllSanitySchemaTypes =
   | SanityImageDimensions
   | SanityFileAsset
   | Geopoint
+  | Faq
   | Page
   | Slug
   | Barber

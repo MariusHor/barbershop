@@ -5,6 +5,7 @@ import galleryImage from "./galleryImage";
 import services from "./services";
 import barber from "./barber";
 import page from "./page";
+import faq from "./faq";
 
 export const schemaTypes = [
   siteSettings,
@@ -14,4 +15,5 @@ export const schemaTypes = [
   services,
   barber,
   page,
+  faq,
 ];

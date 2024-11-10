@@ -53,7 +53,7 @@ const Header = (): React.JSX.Element | null => {
   return (
     <header
       className={cn(
-        "fixed z-50 mx-auto flex h-[calc(var(--header-height)_-24px)] w-full items-center text-lg transition md:h-header",
+        "h-header fixed z-50 mx-auto flex w-full items-center text-lg transition md:h-header-md",
         { "bg-white shadow-md": showNavbar },
       )}
     >
@@ -158,7 +158,7 @@ const HamburgerMenu = ({
       className="flex items-center justify-center gap-2 lg:hidden"
     >
       <motion.div
-        className="absolute left-0 top-0 flex h-20 w-screen flex-col justify-end bg-white"
+        className="absolute left-0 top-0 flex h-header w-screen flex-col justify-end bg-white md:h-header-md"
         variants={sidebarVariants}
       >
         <Separator />
@@ -166,9 +166,9 @@ const HamburgerMenu = ({
 
       <motion.div
         variants={listVariants}
-        className="absolute top-20 flex h-screen w-screen flex-col items-center justify-center bg-white"
+        className="absolute top-[var(--header-h)] flex h-screen w-screen flex-col items-center justify-center bg-white md:top-[var(--header-h-md)]"
       >
-        <div className="relative -mt-[calc(var(--header-height)_*2)] flex h-full w-full flex-col items-center justify-center">
+        <div className="relative -mt-[calc(var(--header-h)_*2)] flex h-full w-full flex-col items-center justify-center md:-mt-[calc(var(--header-h-md)_*2)]">
           <ul className="grid items-center justify-center gap-4 lg:gap-8">
             {routes?.map((route, index) => (
               <motion.li
@@ -179,7 +179,6 @@ const HamburgerMenu = ({
               >
                 <ButtonLink
                   href={route.path}
-                  variant={"link"}
                   onClick={() => setMenuOpen(!menuOpen)}
                 >
                   <Text variant={"caption"} as={"span"}>
@@ -210,7 +209,7 @@ const HamburgerMenu = ({
               Contacteaza-ne la{" "}
             </Text>
 
-            <ButtonLink variant={"link"} href={`mailto:${locationData?.email}`}>
+            <ButtonLink href={`mailto:${locationData?.email}`}>
               {locationData?.email}
             </ButtonLink>
           </motion.p>
@@ -333,7 +332,6 @@ const DesktopNavLinks = ({
           <li key={index}>
             <ButtonLink
               href={route.path}
-              variant={"link"}
               className={cn("uppercase", itemClassName, {
                 "text-primary": currentRoute === route.path,
               })}

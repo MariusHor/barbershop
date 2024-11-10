@@ -1,7 +1,8 @@
 import { type Url } from "next/dist/shared/lib/router/router";
-import Image, { type ImageProps } from "next/image";
+import { type ImageProps } from "next/image";
 import Link from "next/link";
 import { type ComponentPropsWithoutRef } from "react";
+import CustomImage from "./custom-image";
 
 type ImageLinkProps = {
   href: Url;
@@ -29,7 +30,7 @@ export const ImageLink = ({
 }: ImageLinkProps): React.JSX.Element => {
   return (
     <Link href={href} className={className} {...linkProps}>
-      <Image
+      <CustomImage
         src={src}
         alt={alt}
         width={width}

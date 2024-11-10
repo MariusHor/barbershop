@@ -6,7 +6,7 @@ import { api } from "@/utils/api";
 import { ButtonLink } from "./button-link";
 import { type ReactNode } from "react";
 
-export type ScheduleButtonProps = {
+export type AppointmentsButtonProps = {
   children?: ReactNode;
   className?: string;
   size?: VariantProps<typeof buttonVariants>["size"];
@@ -14,18 +14,18 @@ export type ScheduleButtonProps = {
   href?: Url;
 };
 
-export const ScheduleButton = ({
+export const AppointmentsButton = ({
   className,
   href,
-  variant,
+  variant = "default",
   children = "Programeaza",
   size = "default",
-}: ScheduleButtonProps): React.JSX.Element | null => {
+}: AppointmentsButtonProps): React.JSX.Element | null => {
   const { data } = api.content.getSiteSettings.useQuery(undefined, {
     enabled: !href,
   });
 
-  const _href = href ?? data?.scheduleLink;
+  const _href = href ?? data?.appointmentsUrl;
   if (!_href) return null;
 
   return (

@@ -1,5 +1,3 @@
-import { type Url } from "next/dist/shared/lib/router/router";
-
 import type {
   SiteLogo,
   ShopLocation,
@@ -7,6 +5,7 @@ import type {
   Page,
   GalleryImage,
   Services,
+  Faq,
 } from "sanity.types";
 import { createTRPCRouter, publicProcedure } from "../trpc";
 import { TRPCError } from "@trpc/server";
@@ -24,10 +23,7 @@ export const sanityContentRouter = createTRPCRouter({
   getSiteSettings: publicProcedure.query(async ({ ctx }) => {
     const dataType = SANITY_DOC_TYPES.siteSettings;
     const query = `*[_type == "${dataType}"]`;
-    const data =
-      await ctx.sanityClient.fetch<(SiteSettings & { scheduleLink: Url })[]>(
-        query,
-      );
+    const data = await ctx.sanityClient.fetch<SiteSettings[]>(query);
 
     if (!data[0]) throwSanityErrorMessage({ dataType });
 
@@ -67,11 +63,27 @@ export const sanityContentRouter = createTRPCRouter({
 
     return data;
   }),
+  getFaqData: publicProcedure.query(async ({ ctx }) => {
+    const dataType = SANITY_DOC_TYPES.faq;
+    const query = `*[_type == "${dataType}"]`;
+    const data = await ctx.sanityClient.fetch<Faq[]>(query);
+
+    if (!data.length) throwSanityErrorMessage({ dataType });
+
+    return data;
+  }),
   getPageData: publicProcedure
-    .input(z.object({ slug: z.string() }))
+    .input(
+      z.object({
+        slug: z.optional(z.string().or(z.null())).default(null),
+        isIndex: z.optional(z.boolean()),
+      }),
+    )
     .query(async ({ ctx, input }) => {
       const dataType = SANITY_DOC_TYPES.page;
-      const query = `*[_type == "${dataType}" && slug.current == $slug]{
+      const query = `*[_type == "${dataType}" && ${
+        input.isIndex ? "isIndex == true" : "slug.current == $slug"
+      }]{
         ...,
         sections[]{
           ...,

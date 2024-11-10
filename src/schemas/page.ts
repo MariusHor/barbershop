@@ -1,5 +1,5 @@
-import { type Rule } from "@sanity/types";
 import { Image, PageSectionBase } from "./blocks";
+import { type Rule } from "@sanity/types";
 
 const page = {
   name: "page",
@@ -16,6 +16,12 @@ const page = {
     },
   ],
   fields: [
+    {
+      name: "isIndex",
+      title: "Is Homepage",
+      type: "boolean",
+      initialValue: false,
+    },
     {
       name: "title",
       title: "Page title",
@@ -35,6 +41,7 @@ const page = {
       type: "slug",
       title: "Slug",
       validation: (rule: Rule) => rule.required(),
+      description: "Always click on generate after updating the page title",
       options: {
         source: "title",
         maxLength: 96,
@@ -66,6 +73,8 @@ const page = {
                   { title: "Services", value: "services" },
                   { title: "About", value: "about" },
                   { title: "Gallery", value: "gallery" },
+                  { title: "FAQ", value: "faq" },
+                  { title: "Form", value: "form" },
                 ],
               },
             },

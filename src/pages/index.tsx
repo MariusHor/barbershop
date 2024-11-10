@@ -6,11 +6,11 @@ import "react-multi-carousel/lib/styles.css";
 import { useMeasure, useWindowSize } from "@uidotdev/usehooks";
 
 import type { NextPageWithLayout } from "./_app";
-import { getPageTitle, getSectionContent } from "@/utils/helpers";
+import { getPageTitle } from "@/utils/helpers";
 import { getSSGHelper } from "@/utils/getSSGHelper";
 import { api } from "@/utils/api";
-import { type PageSection } from "@/utils/types";
-import { ScheduleButton, GalleryPhotoAlbum } from "@/components";
+import { type PageSectionContent } from "@/utils/types";
+import { AppointmentsButton, GalleryPhotoAlbum } from "@/components";
 import { useEffect, useRef, useState } from "react";
 import { AnimatedTitle } from "@/components/common/animated-title";
 import { Text } from "@/components/ui/text";
@@ -22,14 +22,13 @@ import CustomPortableText from "@/components/common/custom-portable-text";
 import MarqueeText from "@/components/common/marquee-text";
 import CustomCarousel from "@/components/common/custom-carousel";
 import { FollowSection } from "@/components/common/follow-section";
+import { usePageSectionsData } from "@/composables/usePageSectionsData";
 
 export const getServerSideProps = async () => {
   const ssg = getSSGHelper();
 
-  const pageData = await ssg.content.getPageData.fetch({ slug: "acasa" });
-
   await Promise.all([
-    pageData,
+    ssg.content.getPageData.prefetch({ isIndex: true }),
     ssg.content.getGalleryImages.prefetch({
       limit: 10,
     }),
@@ -50,19 +49,14 @@ const Page: NextPageWithLayout<
   InferGetServerSidePropsType<typeof getServerSideProps>
 > = () => {
   const { data: siteSettings } = api.content.getSiteSettings.useQuery();
-  const { data: pageData } = api.content.getPageData.useQuery({
-    slug: "acasa",
-  });
-
-  if (!pageData?.sections?.length) {
-    throw new Error("Missing 'Acasa' page Sanity sections data");
-  }
-
-  const heroSectionData = getSectionContent(pageData, "hero");
-  const spotlightSectionData = getSectionContent(pageData, "spotlight");
-  const locationSectionData = getSectionContent(pageData, "location");
-  const servicesSectionData = getSectionContent(pageData, "services");
-  const gallerySectionData = getSectionContent(pageData, "gallery");
+  const {
+    heroSectionData,
+    spotlightSectionData,
+    locationSectionData,
+    servicesSectionData,
+    gallerySectionData,
+    pageData,
+  } = usePageSectionsData();
 
   return (
     <>
@@ -81,7 +75,7 @@ const Page: NextPageWithLayout<
   );
 };
 
-const HeroSection = ({ data }: { data: PageSection }) => {
+const HeroSection = ({ data }: { data: PageSectionContent }) => {
   const { data: imagesData } = api.content.getGalleryImages.useQuery({
     limit: data?.title?.length,
   });
@@ -149,13 +143,13 @@ const HeroSection = ({ data }: { data: PageSection }) => {
             <Text variant="h2" className="text-primary-foreground">
               {data?.subtitle}
             </Text>
-            <ScheduleButton
+            <AppointmentsButton
               variant="secondary"
               className="xl:mt-4"
               href={data?.sectionSpecific?.linkButton?.href}
             >
               {data?.sectionSpecific?.linkButton?.text}
-            </ScheduleButton>
+            </AppointmentsButton>
           </Flex>
         </div>
         <Flex
@@ -196,7 +190,7 @@ const HeroSection = ({ data }: { data: PageSection }) => {
   );
 };
 
-const SpotlightSection = ({ data }: { data: PageSection }) => {
+const SpotlightSection = ({ data }: { data: PageSectionContent }) => {
   return (
     <Section className="bg-background text-center" heightScreen>
       <Container heightFull>
@@ -208,7 +202,7 @@ const SpotlightSection = ({ data }: { data: PageSection }) => {
           heightFull
         >
           <Text variant="h2">{data?.title}</Text>
-          <Text variant="h4">{data?.subtitle}</Text>
+          <Text variant="h5">{data?.subtitle}</Text>
           <CustomPortableText value={data?.text} />
         </Flex>
       </Container>
@@ -216,7 +210,7 @@ const SpotlightSection = ({ data }: { data: PageSection }) => {
   );
 };
 
-const LocationSection = ({ data }: { data: PageSection }) => {
+const LocationSection = ({ data }: { data: PageSectionContent }) => {
   return (
     <Section className="border-t-[1px] border-solid border-secondary-foreground bg-primary-foreground">
       <Grid
@@ -242,7 +236,7 @@ const LocationSection = ({ data }: { data: PageSection }) => {
             className="text-center lg:items-baseline lg:text-left"
           >
             <Text variant="h2">{data?.title}</Text>
-            <Text variant="h4">{data?.subtitle}</Text>
+            <Text variant="h5">{data?.subtitle}</Text>
             <CustomPortableText value={data?.text} />
             <ButtonLink
               variant={"ghost"}
@@ -259,7 +253,7 @@ const LocationSection = ({ data }: { data: PageSection }) => {
   );
 };
 
-const ServicesSection = ({ data }: { data: PageSection }) => {
+const ServicesSection = ({ data }: { data: PageSectionContent }) => {
   return (
     <Section className="border-y-[1px] border-solid border-secondary-foreground bg-primary-foreground">
       <Grid
@@ -284,7 +278,7 @@ const ServicesSection = ({ data }: { data: PageSection }) => {
             className="text-center lg:items-baseline lg:text-left"
           >
             <Text variant="h2">{data?.title}</Text>
-            <Text variant="h4">{data?.subtitle}</Text>
+            <Text variant="h5">{data?.subtitle}</Text>
             <CustomPortableText value={data?.text} />
             <ButtonLink
               variant={"ghost"}
@@ -301,25 +295,27 @@ const ServicesSection = ({ data }: { data: PageSection }) => {
   );
 };
 
-const GallerySection = ({ data }: { data: PageSection }) => {
+const GallerySection = ({ data }: { data: PageSectionContent }) => {
   const { width } = useWindowSize();
 
   return (
-    <Section className="relative pb-16">
-      <Container size="2" className="py-32">
-        <Flex
-          direction="col"
-          justify="center"
-          gap="2"
-          heightFull
-          className="text-center"
-        >
-          <Text variant="h2">{data?.title}</Text>
-          <Text variant="h4">{data?.subtitle}</Text>
-          <CustomPortableText value={data?.text} />
-        </Flex>
-      </Container>
-      {width && <GalleryPhotoAlbum width={width} />}
+    <Section className="relative py-20">
+      <Flex direction="col" gap="7">
+        <Container size="2">
+          <Flex
+            direction="col"
+            justify="center"
+            gap="2"
+            heightFull
+            className="text-center"
+          >
+            <Text variant="h2">{data?.title}</Text>
+            <Text variant="h5">{data?.subtitle}</Text>
+            <CustomPortableText value={data?.text} />
+          </Flex>
+        </Container>
+        {width && <GalleryPhotoAlbum width={width} />}
+      </Flex>
 
       <MarqueeText
         text={data?.sectionSpecific?.marqueeText}

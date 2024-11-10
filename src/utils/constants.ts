@@ -12,4 +12,5 @@ export const SANITY_DOC_TYPES = Object.freeze({
   servicesImage: "servicesImage",
   barber: "barber",
   services: "services",
+  faq: "faq",
 });

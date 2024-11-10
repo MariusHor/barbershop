@@ -23,7 +23,8 @@ const config = {
         "3xl": "1724px",
       },
       height: {
-        header: "var(--header-height)",
+        header: "var(--header-h)",
+        "header-md": "var(--header-h-md)",
       },
       colors: {
         border: "var(--border)",

@@ -31,26 +31,44 @@ const shopLocation = {
       validation: (rule: Rule) => rule.required().integer(),
     },
     {
+      name: "appointmentsUrl",
+      type: "url",
+      title: "Appointments Url",
+      description:
+        "If no value set, default value from General Settings will be used",
+    },
+    {
+      name: "locationUrl",
+      type: "url",
+      title: "Location Url",
+      description:
+        "If no value set, default value from General Settings will be used",
+    },
+    {
       name: "phone",
       type: "string",
-      title: "Telefon",
-      validation: (rule: Rule) => rule.required().min(8).max(30),
+      title: "Phone",
+      description:
+        "If no value set, default value from General Settings will be used",
     },
     {
       name: "email",
       type: "string",
       title: "Email",
-      validation: (rule: Rule) => rule.required().email(),
+      description:
+        "If no value set, default value from General Settings will be used",
     },
     {
       name: "socialPlatforms",
       type: "array",
-      title: "Platforme Social",
+      title: "Social Platforms",
+      description:
+        "If no value set, default value from General Settings will be used",
       of: [
         {
           name: "account",
           type: "object",
-          title: "Cont Social",
+          title: "Social Platform",
           fields: [
             {
               title: "Nume",
@@ -78,12 +96,13 @@ const shopLocation = {
     {
       name: "timetables",
       type: "array",
-      title: "Orar",
+      title: "Timetables",
+      description:
+        "If no value set, default value from General Settings will be used",
       of: [
         {
           name: "timetable",
           type: "string",
-          title: "Orar",
           validation: (rule: Rule) => rule.required().min(10).max(50),
         },
       ],
