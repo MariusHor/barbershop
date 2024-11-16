@@ -122,11 +122,11 @@ const HeroSection = ({ data }: { data: PageSectionContent | undefined }) => {
             direction="col"
             items="center"
             justify="center"
-            gap="4"
+            gap="2"
             heightFull
           >
             <Text variant={"h1"}>{data?.title}</Text>
-            <Text variant={"h4"}>{data?.subtitle}</Text>
+            <Text variant={"h5"} className="mt-2">{data?.subtitle}</Text>
             <CustomPortableText value={data?.text} />
             <Flex
               className="mt-4 lg:mt-8"

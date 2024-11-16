@@ -116,7 +116,7 @@ const GallerySection = ({ data }: { data: PageSectionContent }) => {
   const { width } = useWindowSize();
 
   return (
-    <Section className="relative py-16 bg-white" id="lista-completa">
+    <Section className="relative bg-white py-16" id="lista-completa">
       <Flex direction="col" gap="7">
         <Container size="2">
           <Flex
@@ -127,7 +127,9 @@ const GallerySection = ({ data }: { data: PageSectionContent }) => {
             className="text-center"
           >
             <Text variant="h2">{data?.title}</Text>
-            <Text variant="h5">{data?.subtitle}</Text>
+            <Text variant="h5" className="mt-2">
+              {data?.subtitle}
+            </Text>
             <CustomPortableText value={data?.text} />
           </Flex>
         </Container>
