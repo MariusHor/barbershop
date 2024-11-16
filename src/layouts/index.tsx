@@ -1,23 +1,19 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { usePathname } from "next/navigation";
 import { useHover, useMeasure } from "@uidotdev/usehooks";
 import { motion } from "framer-motion";
-import { Icon } from "@iconify-icon/react";
+import { Icon } from "@iconify/react";
 
 import { Separator } from "@/components/ui/separator";
 import { Button } from "@/components/ui/button";
 import { capitalize, cn } from "@/utils/helpers";
 import { api } from "@/utils/api";
 import { useStore } from "@/store";
-import { SiteLogo } from "@/components";
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "@/components/ui/accordion";
+import { SiteLogo, SocialLinks } from "@/components";
 import { ButtonLink } from "@/components/common/button-link";
 import { Text } from "@/components/ui/text";
+import { Container, Flex, Grid } from "@/components/ui/layout";
+import { ArrowRightIcon } from "@radix-ui/react-icons";
 
 export function MainLayout({ children }: { children: React.ReactNode }) {
   return (
@@ -32,40 +28,18 @@ export function MainLayout({ children }: { children: React.ReactNode }) {
 const Header = (): React.JSX.Element | null => {
   const { data: routes } = api.content.getRoutes.useQuery();
   const currentRoute = usePathname();
-  const [showNavbar, setShowNavbar] = useState(false);
-
-  useEffect(() => {
-    const showNavbarOnRoute = currentRoute !== "/";
-    setShowNavbar(showNavbarOnRoute);
-
-    const handleScroll = () => {
-      const isTop = window.scrollY === 0;
-      setShowNavbar(showNavbarOnRoute || !isTop);
-    };
-
-    window.addEventListener("scroll", handleScroll);
-
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-    };
-  }, [currentRoute]);
 
   return (
     <header
-      className={cn(
-        "h-header fixed z-50 mx-auto flex w-full items-center text-lg transition md:h-header-md",
-        { "bg-white shadow-md": showNavbar },
-      )}
+      className={
+        "fixed z-50 mx-auto flex h-header w-full items-center bg-white text-lg shadow-md transition md:h-header-md"
+      }
     >
       <div className="container-lg relative flex h-full items-center justify-between">
-        <SiteLogo className={cn({ hidden: !showNavbar })} />
+        <SiteLogo />
 
         <div className="flex h-full w-full items-center justify-end">
-          <HamburgerMenu
-            routes={routes}
-            currentRoute={currentRoute}
-            showNavbar={showNavbar}
-          />
+          <HamburgerMenu routes={routes} currentRoute={currentRoute} />
           <DesktopNavLinks
             routes={routes}
             currentRoute={currentRoute}
@@ -80,27 +54,27 @@ const Header = (): React.JSX.Element | null => {
 const HamburgerMenu = ({
   routes,
   currentRoute,
-  showNavbar,
 }: {
   routes: { path: string; name: string }[] | undefined;
   currentRoute: string | null;
-  showNavbar: boolean;
 }): React.JSX.Element | null => {
+  const { data: siteSettings } = api.content.getSiteSettings.useQuery();
   const { data: locationData } = api.content.getShopLocation.useQuery();
   const [containerRef, { height }] = useMeasure();
   const menuOpen = useStore((state) => state.menuOpen);
   const setMenuOpen = useStore((state) => state.setMenuOpen);
   const [ref, isBtnHovered] = useHover();
 
-  const instagramData = locationData?.socialPlatforms?.find(
-    (platform) => platform.name === "instagram",
-  );
+  const email = locationData?.email ?? siteSettings?.email;
+  const instagramData =
+    locationData?.socialPlatforms?.find(
+      (platform) => platform.name === "instagram",
+    ) ??
+    siteSettings?.socialPlatforms?.find(
+      (platform) => platform.name === "instagram",
+    );
 
-  const btnStroke = isBtnHovered
-    ? "var(--primary)"
-    : showNavbar || menuOpen
-      ? "var(--foreground)"
-      : "var(--primary-foreground)";
+  const btnStroke = isBtnHovered ? "var(--primary)" : "var(--foreground)";
 
   const sidebarVariants = {
     open: {
@@ -209,9 +183,7 @@ const HamburgerMenu = ({
               Contacteaza-ne la{" "}
             </Text>
 
-            <ButtonLink href={`mailto:${locationData?.email}`}>
-              {locationData?.email}
-            </ButtonLink>
+            <ButtonLink href={`mailto:${email}`}>{email}</ButtonLink>
           </motion.p>
         </div>
       </motion.div>
@@ -222,29 +194,10 @@ const HamburgerMenu = ({
           href={instagramData?.link}
           className="z-20 flex justify-center"
         >
-          <motion.span
-            className="flex"
-            variants={{
-              closed: {
-                color: "var(--primary-foreground)",
-                transition: { delay: 0.8 },
-              },
-              open: {
-                color: "var(--foreground)",
-              },
-            }}
-          >
-            <Icon
-              icon={`mdi:${instagramData.name}`}
-              className={cn(
-                "text-3xl text-primary-foreground hover:text-primary",
-                {
-                  "text-foreground":
-                    showNavbar || menuOpen || currentRoute !== "/",
-                },
-              )}
-            />
-          </motion.span>
+          <Icon
+            icon={`mdi:${instagramData.name}`}
+            className={cn("text-3xl text-foreground hover:text-primary")}
+          />
         </ButtonLink>
       )}
 
@@ -256,7 +209,7 @@ const HamburgerMenu = ({
       >
         <svg width="23" height="23" viewBox="0 0 23 23">
           <motion.path
-            key={showNavbar.toString() + isBtnHovered.toString() + 1}
+            key={isBtnHovered.toString() + 1}
             fill="transparent"
             strokeWidth="3"
             strokeLinecap="round"
@@ -270,7 +223,7 @@ const HamburgerMenu = ({
             }}
           />
           <motion.path
-            key={showNavbar.toString() + isBtnHovered.toString() + 2}
+            key={isBtnHovered.toString() + 2}
             fill="transparent"
             strokeWidth="3"
             strokeLinecap="round"
@@ -286,7 +239,7 @@ const HamburgerMenu = ({
             transition={{ duration: 0.1 }}
           />
           <motion.path
-            key={showNavbar.toString() + isBtnHovered.toString() + 3}
+            key={isBtnHovered.toString() + 3}
             fill="transparent"
             strokeWidth="3"
             strokeLinecap="round"
@@ -310,18 +263,24 @@ const DesktopNavLinks = ({
   currentRoute,
   direction = "row",
   itemClassName,
+  className,
   shouldHideOnMobile = false,
 }: {
   routes: { path: string; name: string }[] | undefined;
   currentRoute: string | null;
   direction?: "row" | "col";
   itemClassName?: string;
+  className?: string;
   shouldHideOnMobile?: boolean;
 }): React.JSX.Element | null => {
   if (!routes?.length) return null;
 
   return (
-    <nav className={cn("items-center lg:flex", { hidden: shouldHideOnMobile })}>
+    <nav
+      className={cn("items-center lg:flex", className, {
+        hidden: shouldHideOnMobile,
+      })}
+    >
       <ul
         className={cn("flex", {
           "flex-col gap-2": direction === "col",
@@ -330,13 +289,15 @@ const DesktopNavLinks = ({
       >
         {routes?.map((route, index) => (
           <li key={index}>
-            <ButtonLink
-              href={route.path}
-              className={cn("uppercase", itemClassName, {
-                "text-primary": currentRoute === route.path,
-              })}
-            >
-              {capitalize(route.name)}
+            <ButtonLink href={route.path} className={itemClassName}>
+              <Text
+                variant={"body"}
+                className={cn("!text-xl", {
+                  "text-primary": currentRoute === route.path,
+                })}
+              >
+                {capitalize(route.name)}
+              </Text>
             </ButtonLink>
           </li>
         ))}
@@ -351,92 +312,83 @@ const Footer = (): React.JSX.Element => {
   const { data: routes } = api.content.getRoutes.useQuery();
   const currentRoute = usePathname();
 
+  const phoneNumber = locationData?.phone ?? siteSettings?.phone;
+  const email = locationData?.email ?? siteSettings?.email;
+
   return (
-    <footer className="bg-black">
-      <div className="sticky bottom-0 m-auto grid max-w-[1024px] grid-cols-1 flex-col items-center justify-center gap-8 py-16 lg:grid-cols-3 lg:items-start lg:gap-20">
-        <Column title="Meniu">
+    <footer className="bg-secondary">
+      <Container size="4">
+        <Separator className="bg-border" />
+        <SiteLogo size={"lg"} className="m-auto h-fit py-[96px]" />
+        <Grid
+          cols={{
+            base: 1,
+            lg: 3,
+          }}
+          className="gap-12 pb-[124px]"
+        >
+          <Flex
+            direction="col"
+            justify="start"
+            items="center"
+            className="h-fit text-center lg:items-start lg:text-start"
+          >
+            <Text variant={"h5"} className="mb-4 font-black lg:mb-6">
+              Vino sa ne cunosti
+            </Text>
+            <Text variant={"caption"} className="!text-base">
+              Am creat în Iași un loc special, unde serviciile de calitate te
+              vor face să te simți ca acasă. Te așteptăm!
+            </Text>
+            <ButtonLink
+              variant={"ghost"}
+              className="flex gap-2"
+              href={siteSettings?.locationUrl}
+            >
+              Vezi mapa
+              <ArrowRightIcon style={{ width: "20px", height: "20px" }} />
+            </ButtonLink>
+          </Flex>
           <DesktopNavLinks
             routes={routes}
             currentRoute={currentRoute}
             direction="col"
-            itemClassName="text-muted"
+            className="self-center justify-self-center text-center"
           />
-        </Column>
-
-        <Column title="Locatii">
-          <Accordion
-            type="single"
-            collapsible
-            className="w-40 lg:w-full"
-            defaultValue={locationData?.name}
+          <Flex
+            justify="start"
+            direction="col"
+            items="center"
+            className="lg:items-end"
           >
-            <AccordionItem
-              value={locationData?.name ?? ""}
-              className="border-b-dark-foreground"
-            >
-              <AccordionTrigger className="pb-2 pt-0 hover:no-underline">
-                <Text variant={"caption"} className="font-[500] text-muted">
-                  {locationData?.name}
-                </Text>
-              </AccordionTrigger>
-              <AccordionContent className="flex flex-col gap-2 text-left">
-                <Text variant={"caption"} className="text-muted">
-                  {locationData?.street}
-                </Text>
-                <Text variant={"caption"} className="text-muted">
-                  {locationData?.zip} {locationData?.city}
-                </Text>
-                <Text variant={"caption"} className="text-muted">
-                  {locationData?.phone}
-                </Text>
-              </AccordionContent>
-            </AccordionItem>
-          </Accordion>
-        </Column>
+            <Text variant={"h5"} className="mb-4 font-black lg:mb-6">
+              Contacteaza-ne
+            </Text>
+            <ButtonLink href={`phone:${phoneNumber}`}>
+              <Text variant={"caption"} className="!text-base">
+                {phoneNumber}
+              </Text>
+            </ButtonLink>
+            <ButtonLink href={`mail:${email}`}>
+              <Text variant={"caption"} className="!text-base">
+                {email}
+              </Text>
+            </ButtonLink>
+            <SocialLinks />
+          </Flex>
+        </Grid>
 
-        <Column title="Orar">
-          <div className="flex flex-col text-left">
-            {locationData?.timetables?.map((item, index) => (
-              <div key={index} className="grid grid-cols-2 gap-2">
-                <Text variant={"caption"} className="text-muted">
-                  {item.split(":")[0]}:
-                </Text>
-                <Text variant={"caption"} className="text-muted">
-                  {item.slice(item.indexOf(":") + 1)}
-                </Text>
-              </div>
-            ))}
-          </div>
-        </Column>
-      </div>
+        <Separator className="bg-border" />
 
-      <Separator className="bg-dark-foreground" />
-
-      <Text
-        variant={"caption"}
-        align={"center"}
-        className="p-4 text-secondary-foreground"
-      >
-        ©{new Date().getFullYear()} {siteSettings?.title}. All content is the
-        property of {siteSettings?.title} unless otherwise noted.
-      </Text>
+        <Text
+          variant={"caption"}
+          align={"center"}
+          className="p-4 text-secondary-foreground"
+        >
+          ©{new Date().getFullYear()} {siteSettings?.title}. All content is the
+          property of {siteSettings?.title} unless otherwise noted.
+        </Text>
+      </Container>
     </footer>
-  );
-};
-
-const Column = ({
-  title,
-  children,
-}: {
-  title: string;
-  children: React.ReactNode;
-}): React.JSX.Element => {
-  return (
-    <div className="flex h-full max-h-96 flex-col items-center gap-8 text-center lg:text-start">
-      <Text variant={"h4"} className="text-muted">
-        {title}
-      </Text>
-      {children}
-    </div>
   );
 };

@@ -79,18 +79,21 @@ export interface TextProps
   children: React.ReactNode;
 }
 
-export function Text({
-  variant = "body",
-  size,
-  weight,
-  leading,
-  tracking,
-  align,
-  as,
-  children,
-  className,
-  ...props
-}: TextProps) {
+export const Text = React.forwardRef<HTMLElement, TextProps>(function Text(
+  {
+    variant = "body",
+    size,
+    weight,
+    leading,
+    tracking,
+    align,
+    as,
+    children,
+    className,
+    ...props
+  },
+  ref,
+) {
   const Component = as ?? defaultElements[variant!];
 
   if (!children) return null;
@@ -98,6 +101,7 @@ export function Text({
   return React.createElement(
     Component,
     {
+      ref,
       className: cn(
         textVariants({
           variant,
@@ -113,4 +117,17 @@ export function Text({
     },
     children,
   );
-}
+});
+
+// // Make sure your TextProps interface includes the proper HTML attributes
+// interface TextProps extends React.HTMLAttributes<HTMLElement> {
+//   variant?: "h1" | "h2" | "h3" | "h4" | "body";
+//   size?: string;
+//   weight?: string;
+//   leading?: string;
+//   tracking?: string;
+//   align?: string;
+//   as?: keyof JSX.IntrinsicElements;
+//   children: React.ReactNode;
+//   className?: string;
+// }

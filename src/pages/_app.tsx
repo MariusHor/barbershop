@@ -2,6 +2,7 @@ import { type AppProps } from "next/app";
 import { type NextPage } from "next";
 import { Work_Sans } from "next/font/google";
 import Head from "next/head";
+import { Toaster } from "@/components/ui/toaster";
 
 import { api } from "@/utils/api";
 
@@ -50,6 +51,8 @@ const MyApp = ({ Component, pageProps }: AppPropsWithLayout) => {
       <div className={cn("flex min-h-screen flex-col", workSans.className)}>
         <MainLayout>{getLayout(<Component {...pageProps} />)}</MainLayout>
       </div>
+
+      <Toaster />
     </>
   );
 };

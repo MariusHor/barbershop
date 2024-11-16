@@ -6,12 +6,10 @@ import { type NextPageWithLayout } from "./_app";
 import Head from "next/head";
 
 import { api } from "@/utils/api";
-import { capitalize, getPageTitle } from "@/utils/helpers";
+import { getPageTitle } from "@/utils/helpers";
 import { getSSGHelper } from "@/utils/getSSGHelper";
-import { SiteLogo, AppointmentsButton } from "@/components";
-import { usePathname } from "next/navigation";
+import { AppointmentsButton } from "@/components";
 import { ArrowRightIcon } from "@radix-ui/react-icons";
-import Image from "next/image";
 import { urlFor } from "@/lib/sanity/client";
 import {
   Carousel,
@@ -21,7 +19,6 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel";
-import { FollowSection } from "@/components/common/follow-section";
 import {
   Accordion,
   AccordionContent,
@@ -77,14 +74,11 @@ const Page: NextPageWithLayout<
 
       <HeroSection data={heroSectionData} />
       <ServicesSection data={servicesSectionData} />
-
-      <FollowSection className="bg-primary-foreground" />
     </>
   );
 };
 
 const HeroSection = ({ data }: { data: PageSectionContent | undefined }) => {
-  const currentRoute = usePathname();
   const { data: servicesData } = api.content.getServicesData.useQuery();
   const imagesData = servicesData?.map((service) => ({
     image: service.image,
@@ -126,7 +120,9 @@ const HeroSection = ({ data }: { data: PageSectionContent | undefined }) => {
             heightFull
           >
             <Text variant={"h1"}>{data?.title}</Text>
-            <Text variant={"h5"} className="mt-2">{data?.subtitle}</Text>
+            <Text variant={"h5"} className="mt-2">
+              {data?.subtitle}
+            </Text>
             <CustomPortableText value={data?.text} />
             <Flex
               className="mt-4 lg:mt-8"
@@ -185,10 +181,15 @@ const HeroSection = ({ data }: { data: PageSectionContent | undefined }) => {
           </Flex>
         </Carousel>
 
-        <MarqueeText className="!absolute bottom-0 z-40 h-header border-t-[1px] border-solid border-secondary-foreground bg-white py-6 md:h-header-md">
-          <SiteLogo size={"sm"} />
-          <Text variant={"body"} className="ml-4 mr-40 !text-2xl">
-            - {capitalize(currentRoute?.slice(1) ?? "")}
+        <MarqueeText className="!absolute bottom-0 z-40 h-header border-t-[1px] border-solid border-border bg-white py-6 md:h-header-md">
+          <Text variant={"body"} className="mx-40 !text-xl">
+            Relaxare și stil într-un singur loc
+          </Text>
+          <Text variant={"body"} className="mx-40 !text-xl">
+            Stilul tău, viziunea noastră
+          </Text>
+          <Text variant={"body"} className="mx-40 !text-xl">
+            Experiență și profesionalism garantat
           </Text>
         </MarqueeText>
       </Grid>
@@ -201,7 +202,7 @@ const ServicesSection = ({ data }: { data: PageSectionContent }) => {
 
   return (
     <Section className="bg-primary-foreground" id="lista-completa">
-      <Container className="py-16">
+      <Container className="py-[184px]">
         <Flex direction="col" items="center" gap="7">
           <Text variant="h2">{data?.title}</Text>
           <Text variant="h5">{data?.subtitle}</Text>
@@ -216,7 +217,7 @@ const ServicesSection = ({ data }: { data: PageSectionContent }) => {
               <AccordionItem
                 key={service._id}
                 value={service.name}
-                className="border-b-secondary-foreground"
+                className="border-b-border"
               >
                 <AccordionTrigger className="pb-4 pt-0 hover:text-primary hover:no-underline">
                   <div className="flex flex-col text-start">
@@ -253,11 +254,12 @@ const ServicesSection = ({ data }: { data: PageSectionContent }) => {
                     </div>
                     <div className="hidden lg:block">
                       <AspectRatio ratio={16 / 9}>
-                        <Image
+                        <CustomImage
                           width={504}
                           height={504}
                           src={urlFor(service.image).url()}
                           alt={service.name}
+                          className="border-2 border-border"
                         />
                       </AspectRatio>
                     </div>

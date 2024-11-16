@@ -7,6 +7,7 @@ import Head from "next/head";
 import { type z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useToast } from "@/hooks/use-toast";
 
 import { api } from "@/utils/api";
 import { getPageTitle } from "@/utils/helpers";
@@ -187,7 +188,7 @@ const FaqSection = ({ data }: { data: PageSectionContent }) => {
               <AccordionItem
                 key={item?._id}
                 value={item.question}
-                className="border-b-secondary-foreground"
+                className="border-b-border"
               >
                 <AccordionTrigger className="pt-0 hover:text-primary hover:no-underline">
                   <Text variant={"h6"} className="font-normal">
@@ -207,6 +208,8 @@ const FaqSection = ({ data }: { data: PageSectionContent }) => {
 };
 
 const FormSection = ({ data }: { data: PageSectionContent }) => {
+  const { toast } = useToast();
+
   const form = useForm<z.infer<typeof emailFormSchema>>({
     resolver: zodResolver(emailFormSchema),
     defaultValues: {
@@ -219,6 +222,10 @@ const FormSection = ({ data }: { data: PageSectionContent }) => {
   const emailMutation = api.email.send.useMutation({
     onSuccess: () => {
       form.reset();
+      toast({
+        title: "Multumim pentru mesaj!",
+        description: "Vom reveni catre tine in cel mai scurt timp.",
+      });
     },
   });
 
@@ -247,9 +254,9 @@ const FormSection = ({ data }: { data: PageSectionContent }) => {
                 name="name"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Name</FormLabel>
+                    <FormLabel>Nume</FormLabel>
                     <FormControl>
-                      <Input {...field} />
+                      <Input {...field} placeholder="nume" />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -262,7 +269,7 @@ const FormSection = ({ data }: { data: PageSectionContent }) => {
                   <FormItem>
                     <FormLabel>Email</FormLabel>
                     <FormControl>
-                      <Input {...field} />
+                      <Input {...field} placeholder="email" />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -273,15 +280,17 @@ const FormSection = ({ data }: { data: PageSectionContent }) => {
                 name="message"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Message</FormLabel>
+                    <FormLabel>Mesaj</FormLabel>
                     <FormControl>
-                      <Textarea {...field} />
+                      <Textarea {...field} placeholder="mesaj" />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
                 )}
               />
-              <Button type="submit">Submit</Button>
+              <Button type="submit" className="w-28" isLoading={emailMutation.isPending}>
+                Trimite
+              </Button>
             </form>
           </Form>
         </Flex>

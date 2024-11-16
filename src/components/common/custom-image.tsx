@@ -27,9 +27,7 @@ const CustomImage = ({
   const [isImageLoading, setImageLoading] = useState(true);
 
   return src ? (
-    <div
-      className={cn("h-full w-full overflow-hidden", className)}
-    >
+    <div className={cn("h-full w-full overflow-hidden", className)}>
       <Image
         src={urlFor(src).url()}
         alt={alt}
@@ -37,12 +35,15 @@ const CustomImage = ({
         height={height}
         loading={loading}
         priority={priority}
-        className={cn(isImageLoading ? "blur" : "remove-blur", "w-full h-full object-cover")}
+        className={cn(
+          isImageLoading ? "blur" : "remove-blur",
+          "h-full w-full object-cover",
+        )}
         onLoad={() => setImageLoading(false)}
       />
     </div>
   ) : (
-    <Skeleton className={cn("h-full w-full", className)} />
+    <Skeleton className={cn("h-full w-full bg-black", className)} />
   );
 };
 

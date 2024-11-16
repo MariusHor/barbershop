@@ -5,6 +5,7 @@
 @layer base {
   :root {
     --background: hsl(26, 23%, 94%);
+    --background-light: hsl(12, 33%, 97%);
     --foreground: hsl(0, 2%, 22%);
 
     --primary: hsl(103, 40%, 59%);

@@ -9,7 +9,6 @@ import { api } from "@/utils/api";
 import { getPageTitle } from "@/utils/helpers";
 import { getSSGHelper } from "@/utils/getSSGHelper";
 import { GalleryPhotoAlbum, AppointmentsButton } from "@/components";
-import { FollowSection } from "@/components/common/follow-section";
 import { type PageSectionContent } from "@/utils/types";
 import { useWindowSize } from "@uidotdev/usehooks";
 import { Container, Flex, Grid, Section } from "@/components/ui/layout";
@@ -19,6 +18,8 @@ import { ButtonLink } from "@/components/common/button-link";
 import { ArrowRightIcon } from "@radix-ui/react-icons";
 import CustomImage from "@/components/common/custom-image";
 import { usePageSectionsData } from "@/composables/usePageSectionsData";
+import { useRef } from "react";
+import { motion, useScroll, useTransform } from "framer-motion";
 
 export const getServerSideProps = async (
   context: GetServerSidePropsContext,
@@ -60,7 +61,6 @@ const Page: NextPageWithLayout<
 
       {heroSectionData && <HeroSection data={heroSectionData} />}
       {gallerySectionData && <GallerySection data={gallerySectionData} />}
-      <FollowSection className="bg-secondary" />
     </>
   );
 };
@@ -76,15 +76,8 @@ const HeroSection = ({ data }: { data: PageSectionContent }) => {
         heightFull
         className="pt-[var(--header-h)] md:pt-[var(--header-h-md)]"
       >
-        <CustomImage
-          src={data?.image}
-          alt={data?.image?.alt}
-          width={data?.image?.width}
-          height={data?.image?.height}
-          className="hidden lg:block"
-        />
-
-        <Container size="2">
+        <ImageGrid data={data} />
+        <Container size="2" className="z-[30]">
           <Flex
             direction="col"
             justify="center"
@@ -104,7 +97,7 @@ const HeroSection = ({ data }: { data: PageSectionContent }) => {
               {data?.sectionSpecific?.linkButton?.text}
               <ArrowRightIcon style={{ width: "20px", height: "20px" }} />
             </ButtonLink>
-            <AppointmentsButton className="hover:bg-background" />
+            <AppointmentsButton />
           </Flex>
         </Container>
       </Grid>
@@ -112,11 +105,122 @@ const HeroSection = ({ data }: { data: PageSectionContent }) => {
   );
 };
 
+const ImageGrid = ({ data }: { data: PageSectionContent }) => {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ["start end", "end start"],
+  });
+
+  const y1 = useTransform(scrollYProgress, [0, 1], [-50, 50]);
+  const y2 = useTransform(scrollYProgress, [0, 1], [-100, 100]);
+
+  const springConfig = {
+    stiffness: 200,
+    damping: 25,
+    mass: 1.2,
+  };
+
+  const hoverTransition = {
+    type: "spring",
+    ...springConfig,
+    duration: 0.4,
+  };
+
+  return (
+    <div
+      ref={containerRef}
+      className="relative hidden h-[800px] w-full py-20 lg:block"
+    >
+      <motion.div
+        className="absolute inset-0 z-20 h-full w-full bg-gradient-to-r from-green-50 to-blue-50 shadow-sm blur-[2px]"
+        style={{
+          scale: useTransform(scrollYProgress, [0, 0.5, 1], [0.8, 1, 0.8]),
+          rotate: useTransform(scrollYProgress, [0, 1], [45, 90]),
+        }}
+        transition={hoverTransition}
+      />
+
+      <div className="relative z-30 mx-auto max-w-7xl">
+        <div className="relative">
+          <motion.div
+            className="absolute left-[104px] top-0 w-72 xl:left-[204px]"
+            whileHover={{
+              scale: 1.05,
+              rotate: -2,
+              zIndex: 40,
+            }}
+            initial={{ zIndex: 30 }}
+            style={{ y: y1 }}
+            transition={hoverTransition}
+          >
+            <motion.div
+              whileHover={{
+                scale: 1.02,
+              }}
+              transition={{
+                scale: {
+                  type: "spring",
+                  ...springConfig,
+                },
+                layout: true,
+              }}
+              layout
+            >
+              <CustomImage
+                src={data?.image}
+                alt={data?.image?.alt}
+                width={data?.image?.width}
+                height={data?.image?.height}
+                className="object-cover shadow-lg transition-all duration-500"
+              />
+            </motion.div>
+          </motion.div>
+
+          <motion.div
+            className="absolute left-[184px] top-[184px] w-72 xl:left-[324px] 2xl:left-[424px]"
+            whileHover={{
+              scale: 1.05,
+              rotate: 2,
+              zIndex: 40,
+            }}
+            initial={{ zIndex: 30 }}
+            style={{ y: y2 }}
+            transition={hoverTransition}
+          >
+            <motion.div
+              whileHover={{
+                scale: 1.02,
+              }}
+              transition={{
+                scale: {
+                  type: "spring",
+                  ...springConfig,
+                },
+                layout: true,
+              }}
+              layout
+            >
+              <CustomImage
+                src={data?.image}
+                alt={data?.image?.alt}
+                width={data?.image?.width}
+                height={data?.image?.height}
+                className="object-cover shadow-lg transition-all duration-500"
+              />
+            </motion.div>
+          </motion.div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
 const GallerySection = ({ data }: { data: PageSectionContent }) => {
   const { width } = useWindowSize();
 
   return (
-    <Section className="relative bg-white py-16" id="lista-completa">
+    <Section className="relative bg-white py-[184px]" id="lista-completa">
       <Flex direction="col" gap="7">
         <Container size="2">
           <Flex
