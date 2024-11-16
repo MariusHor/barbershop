@@ -4,7 +4,7 @@ import {
 } from "next";
 import { type NextPageWithLayout } from "./_app";
 import Head from "next/head";
-import { z } from "zod";
+import { type z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
@@ -36,6 +36,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import { emailFormSchema } from "@/utils/schemas";
 
 export const getServerSideProps = async (
   context: GetServerSidePropsContext,
@@ -206,14 +207,8 @@ const FaqSection = ({ data }: { data: PageSectionContent }) => {
 };
 
 const FormSection = ({ data }: { data: PageSectionContent }) => {
-  const formSchema = z.object({
-    name: z.string().min(2).max(50),
-    email: z.string().min(2).max(50),
-    message: z.string().min(2).max(500),
-  });
-
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+  const form = useForm<z.infer<typeof emailFormSchema>>({
+    resolver: zodResolver(emailFormSchema),
     defaultValues: {
       name: "",
       email: "",
@@ -221,8 +216,14 @@ const FormSection = ({ data }: { data: PageSectionContent }) => {
     },
   });
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log(values);
+  const emailMutation = api.email.send.useMutation({
+    onSuccess: () => {
+      form.reset();
+    },
+  });
+
+  function onSubmit(data: z.infer<typeof emailFormSchema>) {
+    emailMutation.mutate(data);
   }
 
   return (

@@ -1,10 +1,11 @@
 import { type SanityImageSource } from "@sanity/image-url/lib/types/types";
 import imageUrlBuilder from "@sanity/image-url";
 import { createClient } from "next-sanity";
+import { env } from "../../env";
 
-const projectId = process.env.NEXT_PUBLIC_SANITY_PROJECT_ID;
-const apiVersion = process.env.NEXT_PUBLIC_SANITY_API_VERSION;
-const dataset = process.env.NODE_ENV;
+const projectId = env.NEXT_PUBLIC_SANITY_PROJECT_ID;
+const apiVersion = env.NEXT_PUBLIC_SANITY_API_VERSION;
+const dataset = env.NEXT_PUBLIC_NODE_ENV;
 
 export const client = createClient({
   projectId,
