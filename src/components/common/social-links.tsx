@@ -2,8 +2,9 @@ import { Icon } from "@iconify/react";
 
 import { api } from "@/utils/api";
 import { ButtonLink } from "./button-link";
+import { cn } from "@/utils/helpers";
 
-export const SocialLinks = () => {
+export const SocialLinks = ({ className }: { className?: string }) => {
   const { data: locationData } = api.content.getShopLocation.useQuery();
   const { data: siteSettingsData } = api.content.getSiteSettings.useQuery(
     undefined,
@@ -16,7 +17,7 @@ export const SocialLinks = () => {
   if (!socialPlatforms) return null;
 
   return (
-    <div className="flex w-fit gap-2">
+    <div className={cn("flex w-fit gap-2", className)}>
       {socialPlatforms.map((platform) => (
         <ButtonLink href={platform.link} key={platform.name} variant={"ghost"}>
           <Icon

@@ -319,30 +319,33 @@ const Footer = (): React.JSX.Element => {
     <footer className="bg-secondary">
       <Container size="4">
         <Separator className="bg-border" />
-        <SiteLogo size={"lg"} className="m-auto h-fit py-[96px]" />
+        <SiteLogo
+          size={"lg"}
+          className="m-auto h-fit pb-[48px] pt-[96px] lg:py-[96px]"
+        />
         <Grid
           cols={{
             base: 1,
             lg: 3,
           }}
-          className="gap-12 pb-[124px]"
+          className="gap-12 pb-[96px]"
         >
           <Flex
             direction="col"
             justify="start"
             items="center"
-            className="h-fit text-center lg:items-start lg:text-start"
+            className="m-auto h-fit max-w-[364px] text-center lg:items-start lg:text-start"
           >
             <Text variant={"h5"} className="mb-4 font-black lg:mb-6">
               Vino sa ne cunosti
             </Text>
             <Text variant={"caption"} className="!text-base">
               Am creat în Iași un loc special, unde serviciile de calitate te
-              vor face să te simți ca acasă. Te așteptăm!
+              vor face să te simți ca acasă.
             </Text>
             <ButtonLink
               variant={"ghost"}
-              className="flex gap-2"
+              className="mt-2 flex gap-2"
               href={siteSettings?.locationUrl}
             >
               Vezi mapa
@@ -359,7 +362,7 @@ const Footer = (): React.JSX.Element => {
             justify="start"
             direction="col"
             items="center"
-            className="lg:items-end"
+            className="hidden lg:flex lg:items-end"
           >
             <Text variant={"h5"} className="mb-4 font-black lg:mb-6">
               Contacteaza-ne
@@ -374,7 +377,7 @@ const Footer = (): React.JSX.Element => {
                 {email}
               </Text>
             </ButtonLink>
-            <SocialLinks />
+            <SocialLinks className="mt-2" />
           </Flex>
         </Grid>
 
