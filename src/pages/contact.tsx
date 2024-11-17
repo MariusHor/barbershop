@@ -192,7 +192,7 @@ const FaqSection = ({ data }: { data: PageSectionData }) => {
                 className="border-b-border"
               >
                 <AccordionTrigger className="pt-0 hover:text-primary hover:no-underline">
-                  <Text variant={"h6"} className="font-normal">
+                  <Text variant={"h6"} className="text-left font-normal">
                     {item.question}
                   </Text>
                 </AccordionTrigger>

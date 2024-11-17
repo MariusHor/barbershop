@@ -231,7 +231,7 @@ const ServicesSection = ({ data }: { data: PageSectionData }) => {
                 className="border-b-border"
               >
                 <AccordionTrigger className="pb-4 pt-0 hover:text-primary hover:no-underline">
-                  <div className="flex flex-col text-start">
+                  <div className="flex flex-col text-left">
                     <Text variant={"h6"} className="font-normal">
                       {service.name}
                     </Text>
