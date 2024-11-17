@@ -201,9 +201,18 @@ const ServicesSection = ({ data }: { data: PageSectionContent }) => {
   const { data: servicesListData } = api.content.getServicesData.useQuery();
 
   return (
-    <Section className="bg-primary-foreground" id="lista-completa">
-      <Container className="py-[184px]">
-        <Flex direction="col" items="center" gap="7">
+    <Section
+      className="flex min-h-screen bg-primary-foreground"
+      id="lista-completa"
+    >
+      <Container className="flex grow py-[184px]">
+        <Flex
+          direction="col"
+          items="center"
+          gap="7"
+          justify="center"
+          className="grow"
+        >
           <Text variant="h2">{data?.title}</Text>
           <Text variant="h5">{data?.subtitle}</Text>
           <CustomPortableText value={data?.text} />
