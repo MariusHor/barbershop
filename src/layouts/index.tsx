@@ -327,7 +327,7 @@ const Footer = (): React.JSX.Element => {
   return (
     <footer className="bg-secondary">
       <Container size="5">
-        <Separator className="bg-border" />
+        <Separator />
         <SiteLogo
           size={"lg"}
           className="m-auto h-fit pb-[48px] pt-[96px] lg:py-[96px]"
@@ -387,7 +387,7 @@ const Footer = (): React.JSX.Element => {
           </Flex>
         </Grid>
 
-        <Separator className="bg-border" />
+        <Separator />
 
         <Text
           variant={"caption"}

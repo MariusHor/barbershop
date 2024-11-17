@@ -6,18 +6,18 @@ import { cn } from "@/utils/helpers";
 import { Spinner } from "./spinner";
 
 const buttonVariants = cva(
-  "inline-flex items-center justify-center whitespace-nowrap font-[400] ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50",
+  "inline-flex items-center justify-center  whitespace-nowrap font-[400] ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50",
   {
     variants: {
       variant: {
         default:
-          "bg-primary text-primary-foreground hover:bg-inherit border hover:border-muted-foreground hover:text-foreground",
+          "bg-primary text-primary-foreground hover:bg-inherit border border-primary hover:border-muted-foreground hover:text-foreground shadow-xl",
         destructive:
-          "bg-destructive text-destructive-foreground hover:bg-destructive-foreground hover:text-foreground",
+          "bg-destructive text-destructive-foreground hover:bg-destructive-foreground hover:text-foreground shadow-xl",
         outline:
-          "border border-muted-foreground bg-primary-foreground text-dark hover:bg-background-light hover:text-dark-foreground",
+          "border border-muted-foreground bg-primary-foreground text-dark hover:bg-background-light hover:text-dark-foreground shadow-md",
         secondary:
-          "bg-secondary text-muted-foreground hover:bg-primary hover:text-primary-foreground",
+          "bg-secondary text-muted-foreground hover:bg-primary hover:text-primary-foreground shadow-xl",
         ghost: "text-foreground hover:text-primary !p-0",
         link: "text-foreground underline-offset-4 hover:underline !p-0",
       },

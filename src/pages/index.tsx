@@ -11,7 +11,7 @@ import "react-multi-carousel/lib/styles.css";
 import type { NextPageWithLayout } from "./_app";
 import { usePageSectionsData } from "@/hooks/use-page-sections-data";
 import { getPageTitle } from "@/utils/helpers";
-import { getSSGHelper } from "@/utils/getSsgHelper";
+import { getSSGHelper } from "@/utils/getSSGHelper";
 import { api } from "@/utils/api";
 import { type PageSectionData } from "@/utils/types";
 import {
@@ -120,7 +120,7 @@ const HeroSection = ({ data }: { data: PageSectionData }) => {
           opts={{
             loop: true,
             axis: "y",
-            watchDrag: false
+            watchDrag: false,
           }}
           plugins={[
             Autoplay({
@@ -149,7 +149,7 @@ const HeroSection = ({ data }: { data: PageSectionData }) => {
                 <CustomImage
                   src={item.image}
                   alt={item.image.alt}
-                  className="h-full w-full object-cover grayscale select-none"
+                  className="h-full w-full select-none object-cover grayscale"
                   width={item.image.width}
                   height={item.image.height}
                   priority

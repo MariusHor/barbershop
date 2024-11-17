@@ -10,7 +10,7 @@ import { type NextPageWithLayout } from "./_app";
 import { api } from "@/utils/api";
 import { type PageSectionData } from "@/utils/types";
 import { getPageTitle } from "@/utils/helpers";
-import { getSSGHelper } from "@/utils/getSsgHelper";
+import { getSSGHelper } from "@/utils/getSSGHelper";
 import { usePageSectionsData } from "@/hooks/use-page-sections-data";
 import { urlFor } from "@/lib/sanity/client";
 import {

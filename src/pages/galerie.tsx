@@ -11,7 +11,7 @@ import { useWindowSize } from "@uidotdev/usehooks";
 import { type NextPageWithLayout } from "./_app";
 import { api } from "@/utils/api";
 import { getPageTitle } from "@/utils/helpers";
-import { getSSGHelper } from "@/utils/getSsgHelper";
+import { getSSGHelper } from "@/utils/getSSGHelper";
 import { type PageSectionData } from "@/utils/types";
 import { usePageSectionsData } from "@/hooks/use-page-sections-data";
 import {
@@ -25,6 +25,7 @@ import {
   Section,
   Text,
   CustomPortableText,
+  Separator,
 } from "@/components";
 
 export const getServerSideProps = async (
@@ -226,25 +227,21 @@ const GallerySection = ({ data }: { data: PageSectionData }) => {
   const { width } = useWindowSize();
 
   return (
-    <Section className="relative bg-white py-[184px]" id="lista-completa">
-      <Flex direction="col" gap="7">
-        <Container size="2">
-          <Flex
-            direction="col"
-            justify="center"
-            gap="2"
-            heightFull
-            className="text-center"
-          >
-            <Text variant="h2">{data?.title}</Text>
-            <Text variant="h5" className="mt-2">
-              {data?.subtitle}
-            </Text>
-            <CustomPortableText value={data?.text} />
-          </Flex>
-        </Container>
-        {width && <GalleryPhotoAlbum width={width} />}
-      </Flex>
+    <Section
+      className="relative h-full bg-white pb-[148px]"
+      id="lista-completa"
+    >
+      <Container size="5" className="lg:hidden">
+        <Separator />
+      </Container>
+      <Container size="2" className="py-[148px] text-center">
+        <Text variant="h2">{data?.title}</Text>
+        <Text variant="h5" className="mt-2">
+          {data?.subtitle}
+        </Text>
+        <CustomPortableText value={data?.text} />
+      </Container>
+      {width && <GalleryPhotoAlbum width={width} />}
     </Section>
   );
 };

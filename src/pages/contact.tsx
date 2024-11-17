@@ -15,7 +15,7 @@ import { usePageSectionsData } from "@/hooks/use-page-sections-data";
 import { type PageSectionData } from "@/utils/types";
 import { emailFormSchema } from "@/utils/schemas";
 import { getPageTitle } from "@/utils/helpers";
-import { getSSGHelper } from "@/utils/getSsgHelper";
+import { getSSGHelper } from "@/utils/getSSGHelper";
 import {
   Container,
   Flex,
