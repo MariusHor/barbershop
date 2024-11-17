@@ -3,7 +3,7 @@ import { cn } from "@/utils/helpers";
 import { Button } from "@/components/ui/button";
 import { useScrollPosition } from "@/hooks/use-scroll-position";
 
-export const BackToTop = () => {
+export const BackToTopBtn = () => {
   const { isAboveThreshold } = useScrollPosition({ threshold: 200 });
 
   function handleScrollTop() {
@@ -14,7 +14,7 @@ export const BackToTop = () => {
     <Button
       variant="outline"
       className={cn(
-        "fixed bottom-2 left-2 z-40 h-fit w-fit rounded-full border-border p-2 shadow-xl lg:p-4",
+        "fixed bottom-4 left-4 z-40 h-[48px] w-[48px] rounded-full border-border p-2 shadow-xl md:h-[54px] md:w-[54px] lg:h-[64px] lg:w-[64px]",
         "transform transition duration-300 ease-in-out",
         {
           "-translate-x-20 opacity-0": !isAboveThreshold,

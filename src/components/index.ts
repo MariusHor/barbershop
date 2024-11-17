@@ -36,7 +36,7 @@ export { Toaster } from "./ui/toaster";
 
 export { AnimatedTitle } from "./common/animated-title";
 export { AppointmentsButton } from "./common/appointments-button";
-export { BackToTop } from "./common/back-to-top";
+export { BackToTopBtn } from "./common/back-to-top-btn";
 export { ButtonLink } from "./common/button-link";
 export { CustomImage } from "./common/custom-image";
 export { CustomPortableText } from "./common/custom-portable-text";
@@ -44,3 +44,4 @@ export { GalleryPhotoAlbum } from "./common/gallery-photo-album";
 export { MarqueeText } from "./common/marquee-text";
 export { SiteLogo } from "./common/site-logo";
 export { SocialLinks } from "./common/social-links";
+export { WhatsappBtn } from "./common/whatsapp-btn";

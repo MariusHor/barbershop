@@ -19,16 +19,27 @@ import {
   Text,
   CustomPortableText,
   ButtonLink,
+  BackToTopBtn,
+  WhatsappBtn,
+  Toaster,
 } from "@/components";
 import { useScrollDirection } from "@/hooks/use-scroll-direction";
 import { useScrollPosition } from "@/hooks/use-scroll-position";
 
 export function MainLayout({ children }: { children: React.ReactNode }) {
+  const { data: locationData } = api.content.getShopLocation.useQuery();
+  const { data: siteSettings } = api.content.getSiteSettings.useQuery();
+
+  const phoneNumber = locationData?.phone ?? siteSettings?.phone;
+
   return (
     <>
       <Header />
       <main className="flex-grow">{children}</main>
       <Footer />
+      <BackToTopBtn />
+      {phoneNumber && <WhatsappBtn phoneNumber={phoneNumber} />}
+      <Toaster />
     </>
   );
 }

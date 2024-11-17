@@ -9,7 +9,6 @@ import "@/styles/globals.css";
 import { MainLayout } from "@/layouts";
 import { useStore } from "@/store";
 import { cn } from "@/utils/helpers";
-import { BackToTop, Toaster } from "@/components";
 
 const workSans = Work_Sans({
   subsets: ["latin"],
@@ -50,9 +49,6 @@ const MyApp = ({ Component, pageProps }: AppPropsWithLayout) => {
       <div className={cn("flex min-h-screen flex-col", workSans.className)}>
         <MainLayout>{getLayout(<Component {...pageProps} />)}</MainLayout>
       </div>
-
-      <Toaster />
-      <BackToTop />
     </>
   );
 };
