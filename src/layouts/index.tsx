@@ -20,7 +20,8 @@ import {
   CustomPortableText,
   ButtonLink,
 } from "@/components";
-import useScrollDirection from "@/hooks/use-scroll-direction";
+import { useScrollDirection } from "@/hooks/use-scroll-direction";
+import { useScrollPosition } from "@/hooks/use-scroll-position";
 
 export function MainLayout({ children }: { children: React.ReactNode }) {
   return (
@@ -35,7 +36,8 @@ export function MainLayout({ children }: { children: React.ReactNode }) {
 const Header = (): React.JSX.Element | null => {
   const { data: routes } = api.content.getRoutes.useQuery();
   const currentRoute = usePathname();
-  const { isScrollingUp, isAtTop } = useScrollDirection();
+  const { isScrollingUp } = useScrollDirection();
+  const { isAtTop } = useScrollPosition();
 
   return (
     <header

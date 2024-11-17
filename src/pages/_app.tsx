@@ -9,7 +9,7 @@ import "@/styles/globals.css";
 import { MainLayout } from "@/layouts";
 import { useStore } from "@/store";
 import { cn } from "@/utils/helpers";
-import { Toaster } from "@/components/ui/toaster";
+import { BackToTop, Toaster } from "@/components";
 
 const workSans = Work_Sans({
   subsets: ["latin"],
@@ -52,6 +52,7 @@ const MyApp = ({ Component, pageProps }: AppPropsWithLayout) => {
       </div>
 
       <Toaster />
+      <BackToTop />
     </>
   );
 };

@@ -30,11 +30,13 @@ export { PhotoAlbum } from "./ui/photo-album";
 export { Separator } from "./ui/separator";
 export { Text } from "./ui/text";
 export { Textarea } from "./ui/textarea";
+export { Toaster } from "./ui/toaster";
 
 // Common Components
 
 export { AnimatedTitle } from "./common/animated-title";
 export { AppointmentsButton } from "./common/appointments-button";
+export { BackToTop } from "./common/back-to-top";
 export { ButtonLink } from "./common/button-link";
 export { CustomImage } from "./common/custom-image";
 export { CustomPortableText } from "./common/custom-portable-text";
