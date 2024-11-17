@@ -122,12 +122,12 @@ const HeroSection = ({ data }: { data: PageSectionContent }) => {
             </div>
 
             <Flex direction="col" items="center" className="lg:items-start">
-              <ButtonLink href={`phone:${phoneNumber}`}>
+              <ButtonLink href={`tel:${phoneNumber}`}>
                 <Text variant={"body"} className="!mt-0">
                   {phoneNumber}
                 </Text>
               </ButtonLink>
-              <ButtonLink href={`mail:${email}`}>
+              <ButtonLink href={`mailto:${email}`}>
                 <Text variant={"body"} className="!mt-0">
                   {email}
                 </Text>
@@ -288,7 +288,11 @@ const FormSection = ({ data }: { data: PageSectionContent }) => {
                   </FormItem>
                 )}
               />
-              <Button type="submit" className="w-28" isLoading={emailMutation.isPending}>
+              <Button
+                type="submit"
+                className="w-28"
+                isLoading={emailMutation.isPending}
+              >
                 Trimite
               </Button>
             </form>

@@ -367,12 +367,12 @@ const Footer = (): React.JSX.Element => {
             <Text variant={"h5"} className="mb-4 font-black lg:mb-6">
               Contacteaza-ne
             </Text>
-            <ButtonLink href={`phone:${phoneNumber}`}>
+            <ButtonLink href={`tel:${phoneNumber}`}>
               <Text variant={"caption"} className="!text-base">
                 {phoneNumber}
               </Text>
             </ButtonLink>
-            <ButtonLink href={`mail:${email}`}>
+            <ButtonLink href={`mailto:${email}`}>
               <Text variant={"caption"} className="!text-base">
                 {email}
               </Text>
