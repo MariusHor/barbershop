@@ -20,6 +20,7 @@ import {
   CustomPortableText,
   ButtonLink,
 } from "@/components";
+import useScrollDirection from "@/hooks/use-scroll-direction";
 
 export function MainLayout({ children }: { children: React.ReactNode }) {
   return (
@@ -34,12 +35,18 @@ export function MainLayout({ children }: { children: React.ReactNode }) {
 const Header = (): React.JSX.Element | null => {
   const { data: routes } = api.content.getRoutes.useQuery();
   const currentRoute = usePathname();
+  const { isScrollingUp, isAtTop } = useScrollDirection();
 
   return (
     <header
-      className={
-        "fixed z-50 mx-auto flex h-header w-full items-center bg-white text-lg shadow-md transition md:h-header-md"
-      }
+      className={cn(
+        "fixed z-50 mx-auto flex h-header w-full items-center bg-white text-lg shadow-md md:h-header-md",
+        "transform transition-transform duration-300 ease-in-out",
+        {
+          "-translate-y-full": !isScrollingUp && !isAtTop,
+          "translate-y-0": isScrollingUp || isAtTop,
+        },
+      )}
     >
       <div className="container-lg relative flex h-full items-center justify-between">
         <SiteLogo />
