@@ -1,12 +1,7 @@
-import { loadEnvConfig } from "@next/env";
 import { defineCliConfig } from "sanity/cli";
+import { getSanityConfig } from "./src/env.sanity";
 
-const dev = process.env.NODE_ENV !== "production";
-loadEnvConfig(__dirname, dev, { info: () => null, error: console.error });
-
-const studioHost = process.env.SANITY_STUDIO_HOST;
-const projectId = process.env.SANITY_STUDIO_PROJECT_ID;
-const dataset = process.env.NODE_ENV;
+const { projectId, dataset, studioHost } = getSanityConfig();
 
 export default defineCliConfig({
   api: { projectId, dataset },

@@ -1,14 +1,11 @@
 import { defineConfig } from "sanity";
 import { structureTool } from "sanity/structure";
 import { visionTool } from "@sanity/vision";
-
 import { schemaTypes } from "./src/schemas";
 import { customDeskStructure } from "./src/lib/sanity/deskStructure";
+import { getSanityConfig } from "./src/env.sanity";
 
-const projectId =
-  process.env.SANITY_STUDIO_PROJECT_ID! ||
-  process.env.NEXT_PUBLIC_SANITY_PROJECT_ID!;
-const dataset = process.env.NODE_ENV;
+const { projectId, dataset } = getSanityConfig();
 
 export default defineConfig({
   projectId,
