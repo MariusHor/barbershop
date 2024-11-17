@@ -9,8 +9,6 @@ import Head from "next/head";
 import { useWindowSize } from "@uidotdev/usehooks";
 
 import { type NextPageWithLayout } from "./_app";
-import { api } from "@/utils/api";
-import { getPageTitle } from "@/utils/helpers";
 import { getSSGHelper } from "@/utils/getSSGHelper";
 import { type PageSectionData } from "@/utils/types";
 import { usePageSectionsData } from "@/hooks/use-page-sections-data";
@@ -27,6 +25,7 @@ import {
   CustomPortableText,
   Separator,
 } from "@/components";
+import { usePageMetadata } from "@/hooks/use-page-metadata";
 
 export const getServerSideProps = async (
   context: GetServerSidePropsContext,
@@ -55,19 +54,18 @@ export const getServerSideProps = async (
 const Page: NextPageWithLayout<
   InferGetServerSidePropsType<typeof getServerSideProps>
 > = () => {
-  const { data: siteSettings } = api.content.getSiteSettings.useQuery();
-  const { heroSectionData, gallerySectionData, pageData } =
-    usePageSectionsData();
+  const { title, description } = usePageMetadata();
+  const { heroSectionData, gallerySectionData } = usePageSectionsData();
 
   return (
     <>
       <Head>
-        <title>{getPageTitle(pageData?.title, siteSettings?.title)}</title>
-        <meta name="description" content={siteSettings?.description} />
+        <title>{title}</title>
+        <meta name="description" content={description} />
       </Head>
 
-      {heroSectionData && <HeroSection data={heroSectionData} />}
-      {gallerySectionData && <GallerySection data={gallerySectionData} />}
+      <HeroSection data={heroSectionData} />
+      <GallerySection data={gallerySectionData} />
     </>
   );
 };

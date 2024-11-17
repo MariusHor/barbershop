@@ -14,7 +14,6 @@ import { useToast } from "@/hooks/use-toast";
 import { usePageSectionsData } from "@/hooks/use-page-sections-data";
 import { type PageSectionData } from "@/utils/types";
 import { emailFormSchema } from "@/utils/schemas";
-import { getPageTitle } from "@/utils/helpers";
 import { getSSGHelper } from "@/utils/getSSGHelper";
 import {
   Container,
@@ -39,6 +38,7 @@ import {
   Textarea,
   Input,
 } from "@/components";
+import { usePageMetadata } from "@/hooks/use-page-metadata";
 
 export const getServerSideProps = async (
   context: GetServerSidePropsContext,
@@ -65,15 +65,15 @@ export const getServerSideProps = async (
 const Page: NextPageWithLayout<
   InferGetServerSidePropsType<typeof getServerSideProps>
 > = () => {
-  const { data: siteSettings } = api.content.getSiteSettings.useQuery();
-  const { heroSectionData, faqSectionData, formSectionData, pageData } =
+  const { title, description } = usePageMetadata();
+  const { heroSectionData, faqSectionData, formSectionData } =
     usePageSectionsData();
 
   return (
     <>
       <Head>
-        <title>{getPageTitle(pageData?.title, siteSettings?.title)}</title>
-        <meta name="description" content={siteSettings?.description} />
+        <title>{title}</title>
+        <meta name="description" content={description} />
       </Head>
 
       <HeroSection data={heroSectionData} />

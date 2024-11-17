@@ -1,4 +1,4 @@
-export const DEFAULT_WEBSITE_SETTINGS = Object.freeze({
+export const DEFAULT_SITE_SETTINGS = Object.freeze({
   title: "Barbershop",
   description: "Barbershop website",
 });

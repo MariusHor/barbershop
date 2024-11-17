@@ -9,7 +9,6 @@ import Head from "next/head";
 import { type NextPageWithLayout } from "./_app";
 import { api } from "@/utils/api";
 import { type PageSectionData } from "@/utils/types";
-import { getPageTitle } from "@/utils/helpers";
 import { getSSGHelper } from "@/utils/getSSGHelper";
 import { usePageSectionsData } from "@/hooks/use-page-sections-data";
 import { urlFor } from "@/lib/sanity/client";
@@ -36,6 +35,7 @@ import {
   Grid,
   Section,
 } from "@/components";
+import { usePageMetadata } from "@/hooks/use-page-metadata";
 
 export const getServerSideProps = async (
   context: GetServerSidePropsContext,
@@ -62,15 +62,14 @@ export const getServerSideProps = async (
 const Page: NextPageWithLayout<
   InferGetServerSidePropsType<typeof getServerSideProps>
 > = () => {
-  const { heroSectionData, servicesSectionData, pageData } =
-    usePageSectionsData();
-  const { data: siteSettings } = api.content.getSiteSettings.useQuery();
+  const { title, description } = usePageMetadata();
+  const { heroSectionData, servicesSectionData } = usePageSectionsData();
 
   return (
     <>
       <Head>
-        <title>{getPageTitle(pageData?.title, siteSettings?.title)}</title>
-        <meta name="description" content={siteSettings?.description} />
+        <title>{title}</title>
+        <meta name="description" content={description} />
       </Head>
 
       <HeroSection data={heroSectionData} />

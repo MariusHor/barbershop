@@ -10,7 +10,6 @@ import "react-multi-carousel/lib/styles.css";
 
 import type { NextPageWithLayout } from "./_app";
 import { usePageSectionsData } from "@/hooks/use-page-sections-data";
-import { getPageTitle } from "@/utils/helpers";
 import { getSSGHelper } from "@/utils/getSSGHelper";
 import { api } from "@/utils/api";
 import { type PageSectionData } from "@/utils/types";
@@ -32,6 +31,7 @@ import {
   CarouselItem,
   type CarouselApi,
 } from "@/components";
+import { usePageMetadata } from "@/hooks/use-page-metadata";
 
 export const getServerSideProps = async () => {
   const ssg = getSSGHelper();
@@ -57,28 +57,27 @@ export const getServerSideProps = async () => {
 const Page: NextPageWithLayout<
   InferGetServerSidePropsType<typeof getServerSideProps>
 > = () => {
-  const { data: siteSettings } = api.content.getSiteSettings.useQuery();
+  const { title, description } = usePageMetadata();
   const {
     heroSectionData,
     spotlightSectionData,
     locationSectionData,
     servicesSectionData,
     gallerySectionData,
-    pageData,
   } = usePageSectionsData();
 
   return (
     <>
       <Head>
-        <title>{getPageTitle(pageData?.title, siteSettings?.title)}</title>
-        <meta name="description" content={siteSettings?.description} />
+        <title>{title}</title>
+        <meta name="description" content={description} />
       </Head>
 
-      {heroSectionData && <HeroSection data={heroSectionData} />}
-      {spotlightSectionData && <SpotlightSection data={spotlightSectionData} />}
-      {locationSectionData && <LocationSection data={locationSectionData} />}
-      {servicesSectionData && <ServicesSection data={servicesSectionData} />}
-      {gallerySectionData && <GallerySection data={gallerySectionData} />}
+      <HeroSection data={heroSectionData} />
+      <SpotlightSection data={spotlightSectionData} />
+      <LocationSection data={locationSectionData} />
+      <ServicesSection data={servicesSectionData} />
+      <GallerySection data={gallerySectionData} />
     </>
   );
 };

@@ -1,7 +1,6 @@
-import { usePathname } from "next/navigation";
 import { type Page } from "sanity.types";
-import { api } from "@/utils/api";
 import { type PageSectionData, type PageSectionType } from "@/utils/types";
+import { usePageData } from "./use-page-data";
 
 type usePageSectionsDataReturn = Record<
   `${PageSectionType}SectionData`,
@@ -9,12 +8,7 @@ type usePageSectionsDataReturn = Record<
 > & { pageData: Page };
 
 export function usePageSectionsData() {
-  const pathname = usePathname();
-  const slug = pathname?.slice(1);
-
-  const { data: pageData } = api.content.getPageData.useQuery(
-    !slug ? { isIndex: true } : { slug },
-  );
+  const { pageData } = usePageData();
 
   if (!pageData?.sections?.length) {
     throw new Error(`Missing '${pageData?.title}' page Sanity sections data`);
