@@ -1,6 +1,6 @@
 import { type Rule } from "@sanity/types";
 import { SANITY_DOC_TYPES } from "../utils/constants";
-import { Text } from "./blocks";
+import { PageSectionBase } from "./blocks";
 
 const siteSettings = {
   name: SANITY_DOC_TYPES.siteSettings,
@@ -37,12 +37,10 @@ const siteSettings = {
     },
     {
       type: "object",
-      name: "followCta",
-      title: "Follow CTA",
+      name: "footerCta",
+      title: "Footer CTA",
       group: "defaultContent",
-      fields: [Text],
-      description:
-        "Acts as default but can be overriden by page specific value",
+      fields: PageSectionBase,
     },
     {
       name: "appointmentsUrl",

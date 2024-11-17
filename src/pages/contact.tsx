@@ -229,8 +229,8 @@ const FormSection = ({ data }: { data: PageSectionContent }) => {
     },
   });
 
-  function onSubmit(data: z.infer<typeof emailFormSchema>) {
-    emailMutation.mutate(data);
+  function onSubmit(payload: z.infer<typeof emailFormSchema>) {
+    emailMutation.mutate(payload);
   }
 
   return (

@@ -14,6 +14,7 @@ import { ButtonLink } from "@/components/common/button-link";
 import { Text } from "@/components/ui/text";
 import { Container, Flex, Grid } from "@/components/ui/layout";
 import { ArrowRightIcon } from "@radix-ui/react-icons";
+import CustomPortableText from "@/components/common/custom-portable-text";
 
 export function MainLayout({ children }: { children: React.ReactNode }) {
   return (
@@ -289,16 +290,19 @@ const DesktopNavLinks = ({
       >
         {routes?.map((route, index) => (
           <li key={index}>
-            <ButtonLink href={route.path} className={itemClassName}>
-              <Text
-                variant={"body"}
-                className={cn("!text-xl", {
-                  "text-primary": currentRoute === route.path,
-                })}
+            <Text
+              variant={"body"}
+              className={cn(itemClassName, {
+                "text-primary": currentRoute === route.path,
+              })}
+            >
+              <ButtonLink
+                href={route.path}
+                className="text-inherit ![font-size:inherit] ![font-weight:inherit]"
               >
                 {capitalize(route.name)}
-              </Text>
-            </ButtonLink>
+              </ButtonLink>
+            </Text>
           </li>
         ))}
       </ul>
@@ -317,7 +321,7 @@ const Footer = (): React.JSX.Element => {
 
   return (
     <footer className="bg-secondary">
-      <Container size="4">
+      <Container size="5">
         <Separator className="bg-border" />
         <SiteLogo
           size={"lg"}
@@ -337,12 +341,12 @@ const Footer = (): React.JSX.Element => {
             className="m-auto h-fit max-w-[364px] text-center lg:items-start lg:text-start"
           >
             <Text variant={"h5"} className="mb-4 font-black lg:mb-6">
-              Vino sa ne cunosti
+              {siteSettings?.footerCta?.title}
             </Text>
-            <Text variant={"caption"} className="!text-base">
-              Am creat în Iași un loc special, unde serviciile de calitate te
-              vor face să te simți ca acasă.
-            </Text>
+            <CustomPortableText
+              value={siteSettings?.footerCta?.text}
+              className="!my-0"
+            />
             <ButtonLink
               variant={"ghost"}
               className="mt-2 flex gap-2"
@@ -357,6 +361,7 @@ const Footer = (): React.JSX.Element => {
             currentRoute={currentRoute}
             direction="col"
             className="self-center justify-self-center text-center"
+            itemClassName="!text-xl mb-1 lg:mb-2"
           />
           <Flex
             justify="start"
@@ -368,14 +373,10 @@ const Footer = (): React.JSX.Element => {
               Contacteaza-ne
             </Text>
             <ButtonLink href={`tel:${phoneNumber}`}>
-              <Text variant={"caption"} className="!text-base">
-                {phoneNumber}
-              </Text>
+              <Text variant={"body"}>{phoneNumber}</Text>
             </ButtonLink>
             <ButtonLink href={`mailto:${email}`}>
-              <Text variant={"caption"} className="!text-base">
-                {email}
-              </Text>
+              <Text variant={"body"}>{email}</Text>
             </ButtonLink>
             <SocialLinks className="mt-2" />
           </Flex>
@@ -386,10 +387,21 @@ const Footer = (): React.JSX.Element => {
         <Text
           variant={"caption"}
           align={"center"}
-          className="p-4 text-secondary-foreground"
+          className="pt-4 text-secondary-foreground"
         >
-          ©{new Date().getFullYear()} {siteSettings?.title}. All content is the
-          property of {siteSettings?.title} unless otherwise noted.
+          ©{new Date().getFullYear()} {siteSettings?.title}
+        </Text>
+        <Text
+          variant={"caption"}
+          align={"center"}
+          className="pb-4 text-secondary-foreground"
+        >
+          Website creat de catre{" "}
+          <ButtonLink href={"https://mariushorghidan.vercel.app"}>
+            <Text variant={"caption"} as="span">
+              Marius Horghidan
+            </Text>
+          </ButtonLink>
         </Text>
       </Container>
     </footer>

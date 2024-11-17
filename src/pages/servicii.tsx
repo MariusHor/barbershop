@@ -182,15 +182,17 @@ const HeroSection = ({ data }: { data: PageSectionContent | undefined }) => {
         </Carousel>
 
         <MarqueeText className="!absolute bottom-0 z-40 h-header border-t-[1px] border-solid border-border bg-white py-6 md:h-header-md">
-          <Text variant={"body"} className="mx-40 !text-xl">
-            Relaxare și stil într-un singur loc
-          </Text>
-          <Text variant={"body"} className="mx-40 !text-xl">
-            Stilul tău, viziunea noastră
-          </Text>
-          <Text variant={"body"} className="mx-40 !text-xl">
-            Experiență și profesionalism garantat
-          </Text>
+          {data?.sectionSpecific?.marqueeText
+            ?.split(" | ")
+            .map((part, index) => (
+              <Text
+                key={index}
+                variant={"body"}
+                className="mx-20 !text-xl lg:mx-40"
+              >
+                {part}
+              </Text>
+            ))}
         </MarqueeText>
       </Grid>
     </Section>

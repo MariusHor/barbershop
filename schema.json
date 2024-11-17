@@ -2216,11 +2216,25 @@
         },
         "optional": false
       },
-      "followCta": {
+      "footerCta": {
         "type": "objectAttribute",
         "value": {
           "type": "object",
           "attributes": {
+            "title": {
+              "type": "objectAttribute",
+              "value": {
+                "type": "string"
+              },
+              "optional": true
+            },
+            "subtitle": {
+              "type": "objectAttribute",
+              "value": {
+                "type": "string"
+              },
+              "optional": true
+            },
             "text": {
               "type": "objectAttribute",
               "value": {

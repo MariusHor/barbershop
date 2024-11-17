@@ -367,7 +367,9 @@ export type SiteSettings = {
   _rev: string;
   title: string;
   description: string;
-  followCta?: {
+  footerCta?: {
+    title?: string;
+    subtitle?: string;
     text?: Array<{
       children?: Array<{
         marks?: Array<string>;
