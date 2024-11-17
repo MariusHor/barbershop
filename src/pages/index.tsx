@@ -1,10 +1,11 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { ArrowRightIcon } from "@radix-ui/react-icons";
 import { type InferGetServerSidePropsType } from "next";
 import Head from "next/head";
 import { type Page } from "sanity.types";
 import { useWindowSize } from "@uidotdev/usehooks";
 import { motion, useScroll, useTransform } from "framer-motion";
+import Autoplay from "embla-carousel-autoplay";
 import "react-multi-carousel/lib/styles.css";
 
 import type { NextPageWithLayout } from "./_app";
@@ -26,6 +27,10 @@ import {
   Grid,
   Section,
   ButtonLink,
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  type CarouselApi,
 } from "@/components";
 
 export const getServerSideProps = async () => {
@@ -79,36 +84,87 @@ const Page: NextPageWithLayout<
 };
 
 const HeroSection = ({ data }: { data: PageSectionData }) => {
+  const [carouselApi, setCarouselApi] = useState<CarouselApi>();
   const { data: imagesData } = api.content.getGalleryImages.useQuery({
     limit: data?.title?.length,
   });
 
   const [activeImageIndex, setActiveImageIndex] = useState(0);
 
+  useEffect(() => {
+    if (!carouselApi) {
+      return;
+    }
+
+    carouselApi.on("select", () => {
+      const nextIndex = carouselApi.selectedScrollSnap();
+      setActiveImageIndex(nextIndex);
+    });
+  }, [carouselApi, imagesData]);
+
   function handleImageSelect(index: number) {
+    if (!carouselApi) return;
+    carouselApi.scrollTo(index);
     setActiveImageIndex(index);
   }
 
   return (
-    <Section className="bg-black" heightScreen>
-      <div className="relative h-screen">
-        <div className="absolute left-0 top-0 h-full w-full grayscale">
-          <CustomImage
-            src={imagesData?.items[activeImageIndex]?.image}
-            alt={imagesData?.items[activeImageIndex]?.image?.alt}
-            width={imagesData?.items[activeImageIndex]?.image?.width}
-            height={imagesData?.items[activeImageIndex]?.image?.height}
-            loading="eager"
-            className="pt-[var(--header-h)] opacity-40 md:pt-[var(--header-h-md)]"
-            priority
-          />
-        </div>
+    <Section
+      className="bg-black pt-[var(--header-h)] md:pt-[var(--header-h-md)]"
+      heightScreen
+    >
+      <div className="relative h-full">
+        <Carousel
+          className="h-full opacity-50"
+          setApi={setCarouselApi}
+          opts={{
+            loop: true,
+            axis: "y",
+            watchDrag: false
+          }}
+          plugins={[
+            Autoplay({
+              delay: 5000,
+              stopOnInteraction: false,
+              stopOnMouseEnter: false,
+            }),
+          ]}
+          orientation="vertical"
+        >
+          <CarouselContent
+            className="relative !m-0 h-full flex-col"
+            style={{
+              height: "100%",
+            }}
+          >
+            {imagesData?.items?.map((item, index) => (
+              <CarouselItem
+                key={index}
+                className="relative !p-0"
+                style={{
+                  height: "100%",
+                  minHeight: "100%",
+                }}
+              >
+                <CustomImage
+                  src={item.image}
+                  alt={item.image.alt}
+                  className="h-full w-full object-cover grayscale select-none"
+                  width={item.image.width}
+                  height={item.image.height}
+                  priority
+                  loading="eager"
+                />
+              </CarouselItem>
+            ))}
+          </CarouselContent>
+        </Carousel>
         <Flex
           direction="col"
           items="center"
           justify="center"
           gap="2"
-          className="relative z-40 h-full"
+          className="absolute left-1/2 top-1/2 z-40 -translate-x-1/2 -translate-y-1/2"
         >
           <AnimatedTitle
             activeIndex={activeImageIndex}
