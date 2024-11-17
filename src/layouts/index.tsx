@@ -1,20 +1,25 @@
 import React from "react";
+import { ArrowRightIcon } from "@radix-ui/react-icons";
 import { usePathname } from "next/navigation";
 import { useHover, useMeasure } from "@uidotdev/usehooks";
 import { motion } from "framer-motion";
 import { Icon } from "@iconify/react";
 
-import { Separator } from "@/components/ui/separator";
-import { Button } from "@/components/ui/button";
 import { capitalize, cn } from "@/utils/helpers";
 import { api } from "@/utils/api";
 import { useStore } from "@/store";
-import { SiteLogo, SocialLinks } from "@/components";
-import { ButtonLink } from "@/components/common/button-link";
-import { Text } from "@/components/ui/text";
-import { Container, Flex, Grid } from "@/components/ui/layout";
-import { ArrowRightIcon } from "@radix-ui/react-icons";
-import CustomPortableText from "@/components/common/custom-portable-text";
+import {
+  Button,
+  Separator,
+  SiteLogo,
+  SocialLinks,
+  Container,
+  Flex,
+  Grid,
+  Text,
+  CustomPortableText,
+  ButtonLink,
+} from "@/components";
 
 export function MainLayout({ children }: { children: React.ReactNode }) {
   return (

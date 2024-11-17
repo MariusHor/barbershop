@@ -1,26 +1,32 @@
+import { useRef, useState } from "react";
+import { ArrowRightIcon } from "@radix-ui/react-icons";
 import { type InferGetServerSidePropsType } from "next";
 import Head from "next/head";
 import { type Page } from "sanity.types";
-import "react-multi-carousel/lib/styles.css";
 import { useWindowSize } from "@uidotdev/usehooks";
+import { motion, useScroll, useTransform } from "framer-motion";
+import "react-multi-carousel/lib/styles.css";
 
 import type { NextPageWithLayout } from "./_app";
+import { usePageSectionsData } from "@/hooks/use-page-sections-data";
 import { getPageTitle } from "@/utils/helpers";
-import { getSSGHelper } from "@/utils/getSSGHelper";
+import { getSSGHelper } from "@/utils/getSsgHelper";
 import { api } from "@/utils/api";
-import { type PageSectionContent } from "@/utils/types";
-import { AppointmentsButton, GalleryPhotoAlbum } from "@/components";
-import { useRef, useState } from "react";
-import { AnimatedTitle } from "@/components/common/animated-title";
-import { Text } from "@/components/ui/text";
-import { Container, Flex, Grid, Section } from "@/components/ui/layout";
-import { ButtonLink } from "@/components/common/button-link";
-import { ArrowRightIcon } from "@radix-ui/react-icons";
-import CustomImage from "@/components/common/custom-image";
-import CustomPortableText from "@/components/common/custom-portable-text";
-import MarqueeText from "@/components/common/marquee-text";
-import { usePageSectionsData } from "@/composables/usePageSectionsData";
-import { motion, useScroll, useTransform } from "framer-motion";
+import { type PageSectionData } from "@/utils/types";
+import {
+  AnimatedTitle,
+  AppointmentsButton,
+  GalleryPhotoAlbum,
+  CustomImage,
+  CustomPortableText,
+  MarqueeText,
+  Text,
+  Container,
+  Flex,
+  Grid,
+  Section,
+  ButtonLink,
+} from "@/components";
 
 export const getServerSideProps = async () => {
   const ssg = getSSGHelper();
@@ -72,7 +78,7 @@ const Page: NextPageWithLayout<
   );
 };
 
-const HeroSection = ({ data }: { data: PageSectionContent }) => {
+const HeroSection = ({ data }: { data: PageSectionData }) => {
   const { data: imagesData } = api.content.getGalleryImages.useQuery({
     limit: data?.title?.length,
   });
@@ -129,7 +135,7 @@ const HeroSection = ({ data }: { data: PageSectionContent }) => {
   );
 };
 
-const SpotlightSection = ({ data }: { data: PageSectionContent }) => {
+const SpotlightSection = ({ data }: { data: PageSectionData }) => {
   return (
     <Section className="bg-background text-center" heightScreen>
       <Container heightFull>
@@ -149,7 +155,7 @@ const SpotlightSection = ({ data }: { data: PageSectionContent }) => {
   );
 };
 
-const LocationSection = ({ data }: { data: PageSectionContent }) => {
+const LocationSection = ({ data }: { data: PageSectionData }) => {
   return (
     <Section className="border-t-[1px] border-solid border-border bg-primary-foreground">
       <Grid
@@ -192,7 +198,7 @@ const LocationSection = ({ data }: { data: PageSectionContent }) => {
   );
 };
 
-const ServicesSection = ({ data }: { data: PageSectionContent }) => {
+const ServicesSection = ({ data }: { data: PageSectionData }) => {
   return (
     <Section className="relative z-40 border-y-[1px] border-solid border-border bg-primary-foreground">
       <Grid
@@ -234,7 +240,7 @@ const ServicesSection = ({ data }: { data: PageSectionContent }) => {
   );
 };
 
-const GallerySection = ({ data }: { data: PageSectionContent }) => {
+const GallerySection = ({ data }: { data: PageSectionData }) => {
   const { width } = useWindowSize();
   const containerRef = useRef<HTMLDivElement>(null);
 

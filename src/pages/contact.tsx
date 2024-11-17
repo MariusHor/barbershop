@@ -1,43 +1,44 @@
+import { ArrowRightIcon } from "@radix-ui/react-icons";
 import {
   type GetServerSidePropsContext,
   type InferGetServerSidePropsType,
 } from "next";
-import { type NextPageWithLayout } from "./_app";
 import Head from "next/head";
 import { type z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useToast } from "@/hooks/use-toast";
 
+import { type NextPageWithLayout } from "./_app";
 import { api } from "@/utils/api";
+import { useToast } from "@/hooks/use-toast";
+import { usePageSectionsData } from "@/hooks/use-page-sections-data";
+import { type PageSectionData } from "@/utils/types";
+import { emailFormSchema } from "@/utils/schemas";
 import { getPageTitle } from "@/utils/helpers";
-import { getSSGHelper } from "@/utils/getSSGHelper";
-import { Container, Flex, Grid, Section } from "@/components/ui/layout";
-import { Text } from "@/components/ui/text";
-import { ButtonLink } from "@/components/common/button-link";
-import { SiteLogo } from "@/components";
-import { ArrowRightIcon } from "@radix-ui/react-icons";
-import { type PageSectionContent } from "@/utils/types";
-import { usePageSectionsData } from "@/composables/usePageSectionsData";
-import CustomPortableText from "@/components/common/custom-portable-text";
+import { getSSGHelper } from "@/utils/getSsgHelper";
 import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "@/components/ui/accordion";
-import {
+  Container,
+  Flex,
+  Grid,
+  Section,
+  Text,
+  ButtonLink,
+  SiteLogo,
+  CustomPortableText,
   Form,
   FormControl,
   FormField,
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { emailFormSchema } from "@/utils/schemas";
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+  Button,
+  Textarea,
+  Input,
+} from "@/components";
 
 export const getServerSideProps = async (
   context: GetServerSidePropsContext,
@@ -82,7 +83,7 @@ const Page: NextPageWithLayout<
   );
 };
 
-const HeroSection = ({ data }: { data: PageSectionContent }) => {
+const HeroSection = ({ data }: { data: PageSectionData }) => {
   const { data: locationData } = api.content.getShopLocation.useQuery();
   const { data: siteSettings } = api.content.getSiteSettings.useQuery();
 
@@ -164,7 +165,7 @@ const HeroSection = ({ data }: { data: PageSectionContent }) => {
   );
 };
 
-const FaqSection = ({ data }: { data: PageSectionContent }) => {
+const FaqSection = ({ data }: { data: PageSectionData }) => {
   const { data: faqListData } = api.content.getFaqData.useQuery();
 
   if (!faqListData) return null;
@@ -207,7 +208,7 @@ const FaqSection = ({ data }: { data: PageSectionContent }) => {
   );
 };
 
-const FormSection = ({ data }: { data: PageSectionContent }) => {
+const FormSection = ({ data }: { data: PageSectionData }) => {
   const { toast } = useToast();
 
   const form = useForm<z.infer<typeof emailFormSchema>>({

@@ -4,7 +4,7 @@ import {
   type PortableTextProps,
   type PortableTextReactComponents,
 } from "@portabletext/react";
-import { Text } from "@/components/ui/text";
+import { Text } from "../ui/text";
 import { cn } from "@/utils/helpers";
 
 interface CustomPortableTextProps {
@@ -13,7 +13,7 @@ interface CustomPortableTextProps {
   components?: Partial<PortableTextReactComponents>;
 }
 
-const CustomPortableText = ({
+export const CustomPortableText = ({
   value,
   className,
   components: customComponents,
@@ -103,5 +103,3 @@ const CustomPortableText = ({
 
   return <BasePortableText value={value} components={mergedComponents} />;
 };
-
-export default CustomPortableText;

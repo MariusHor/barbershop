@@ -1,16 +1,15 @@
+import { useEffect } from "react";
 import { type AppProps } from "next/app";
 import { type NextPage } from "next";
 import { Work_Sans } from "next/font/google";
 import Head from "next/head";
-import { Toaster } from "@/components/ui/toaster";
 
 import { api } from "@/utils/api";
-
 import "@/styles/globals.css";
 import { MainLayout } from "@/layouts";
 import { useStore } from "@/store";
 import { cn } from "@/utils/helpers";
-import { useEffect } from "react";
+import { Toaster } from "@/components/ui/toaster";
 
 const workSans = Work_Sans({
   subsets: ["latin"],

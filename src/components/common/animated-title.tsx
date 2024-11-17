@@ -1,5 +1,5 @@
-import { cn } from "@/utils/helpers";
 import { motion } from "framer-motion";
+import { cn } from "@/utils/helpers";
 import { Text } from "@/components/ui/text";
 
 interface AnimatedTitleProps {

@@ -1,8 +1,8 @@
 import { Icon } from "@iconify/react";
 
 import { api } from "@/utils/api";
-import { ButtonLink } from "./button-link";
 import { cn } from "@/utils/helpers";
+import { ButtonLink } from "./button-link";
 
 export const SocialLinks = ({ className }: { className?: string }) => {
   const { data: locationData } = api.content.getShopLocation.useQuery();

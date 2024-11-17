@@ -1,9 +1,9 @@
-import { cn } from "@/utils/helpers";
 import React, { forwardRef } from "react";
 import ReactCarousel, { type CarouselProps } from "react-multi-carousel";
-import "react-multi-carousel/lib/styles.css";
-import CustomImage from "./custom-image";
 import { type GalleryImage } from "sanity.types";
+import { cn } from "@/utils/helpers";
+import { CustomImage } from "./custom-image";
+import "react-multi-carousel/lib/styles.css";
 
 interface CustomCarouselProps {
   images?: GalleryImage[];

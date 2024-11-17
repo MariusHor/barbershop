@@ -1,10 +1,10 @@
+import { type ReactNode } from "react";
 import { type VariantProps } from "class-variance-authority";
 import { type Url } from "next/dist/shared/lib/router/router";
 
-import { type buttonVariants } from "../ui/button";
 import { api } from "@/utils/api";
+import { type buttonVariants } from "../ui/button";
 import { ButtonLink } from "./button-link";
-import { type ReactNode } from "react";
 
 export type AppointmentsButtonProps = {
   children?: ReactNode;

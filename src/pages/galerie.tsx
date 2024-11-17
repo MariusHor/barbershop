@@ -1,25 +1,31 @@
+import { useRef } from "react";
+import { ArrowRightIcon } from "@radix-ui/react-icons";
+import { motion, useScroll, useTransform } from "framer-motion";
 import {
   type GetServerSidePropsContext,
   type InferGetServerSidePropsType,
 } from "next";
-import { type NextPageWithLayout } from "./_app";
 import Head from "next/head";
+import { useWindowSize } from "@uidotdev/usehooks";
 
+import { type NextPageWithLayout } from "./_app";
 import { api } from "@/utils/api";
 import { getPageTitle } from "@/utils/helpers";
-import { getSSGHelper } from "@/utils/getSSGHelper";
-import { GalleryPhotoAlbum, AppointmentsButton } from "@/components";
-import { type PageSectionContent } from "@/utils/types";
-import { useWindowSize } from "@uidotdev/usehooks";
-import { Container, Flex, Grid, Section } from "@/components/ui/layout";
-import { Text } from "@/components/ui/text";
-import CustomPortableText from "@/components/common/custom-portable-text";
-import { ButtonLink } from "@/components/common/button-link";
-import { ArrowRightIcon } from "@radix-ui/react-icons";
-import CustomImage from "@/components/common/custom-image";
-import { usePageSectionsData } from "@/composables/usePageSectionsData";
-import { useRef } from "react";
-import { motion, useScroll, useTransform } from "framer-motion";
+import { getSSGHelper } from "@/utils/getSsgHelper";
+import { type PageSectionData } from "@/utils/types";
+import { usePageSectionsData } from "@/hooks/use-page-sections-data";
+import {
+  ButtonLink,
+  CustomImage,
+  GalleryPhotoAlbum,
+  AppointmentsButton,
+  Container,
+  Flex,
+  Grid,
+  Section,
+  Text,
+  CustomPortableText,
+} from "@/components";
 
 export const getServerSideProps = async (
   context: GetServerSidePropsContext,
@@ -65,7 +71,7 @@ const Page: NextPageWithLayout<
   );
 };
 
-const HeroSection = ({ data }: { data: PageSectionContent }) => {
+const HeroSection = ({ data }: { data: PageSectionData }) => {
   return (
     <Section className="bg-secondary" heightScreen>
       <Grid
@@ -105,7 +111,7 @@ const HeroSection = ({ data }: { data: PageSectionContent }) => {
   );
 };
 
-const ImageGrid = ({ data }: { data: PageSectionContent }) => {
+const ImageGrid = ({ data }: { data: PageSectionData }) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({
     target: containerRef,
@@ -216,7 +222,7 @@ const ImageGrid = ({ data }: { data: PageSectionContent }) => {
   );
 };
 
-const GallerySection = ({ data }: { data: PageSectionContent }) => {
+const GallerySection = ({ data }: { data: PageSectionData }) => {
   const { width } = useWindowSize();
 
   return (

@@ -1,9 +1,9 @@
+import { useState } from "react";
 import { urlFor } from "@/lib/sanity/client";
 import { api } from "@/utils/api";
-import { PhotoAlbum } from "../ui/photo-album";
-import { Button } from "../ui/button";
-import { useState } from "react";
 import { cn } from "@/utils/helpers";
+import { Button } from "../ui/button";
+import { PhotoAlbum } from "../ui/photo-album";
 
 export const GalleryPhotoAlbum = ({
   width,

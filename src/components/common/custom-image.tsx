@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import Image from "next/image";
-import { Skeleton } from "@/components/ui/skeleton";
+import { type SanityImageSource } from "@sanity/image-url/lib/types/types";
 import { cn } from "@/utils/helpers";
 import { urlFor } from "@/lib/sanity/client";
-import { type SanityImageSource } from "@sanity/image-url/lib/types/types";
+import { Skeleton } from "@/components/ui/skeleton";
 
 interface CustomImageProps {
   src?: SanityImageSource;
@@ -15,7 +15,7 @@ interface CustomImageProps {
   priority?: boolean;
 }
 
-const CustomImage = ({
+export const CustomImage = ({
   src,
   width,
   height,
@@ -46,5 +46,3 @@ const CustomImage = ({
     <Skeleton className={cn("h-full w-full bg-black", className)} />
   );
 };
-
-export default CustomImage;

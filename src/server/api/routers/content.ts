@@ -1,3 +1,5 @@
+import { z } from "zod";
+import { TRPCError } from "@trpc/server";
 import type {
   SiteLogo,
   ShopLocation,
@@ -7,10 +9,8 @@ import type {
   Services,
   Faq,
 } from "sanity.types";
-import { createTRPCRouter, publicProcedure } from "../trpc";
-import { TRPCError } from "@trpc/server";
 import { SANITY_DOC_TYPES } from "@/utils/constants";
-import { z } from "zod";
+import { createTRPCRouter, publicProcedure } from "../trpc";
 
 function throwSanityErrorMessage({ dataType }: { dataType: string }) {
   throw new TRPCError({

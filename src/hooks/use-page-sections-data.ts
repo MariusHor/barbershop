@@ -1,11 +1,11 @@
-import { api } from "@/utils/api";
-import { type PageSectionContent, type PageSectionType } from "@/utils/types";
 import { usePathname } from "next/navigation";
 import { type Page } from "sanity.types";
+import { api } from "@/utils/api";
+import { type PageSectionData, type PageSectionType } from "@/utils/types";
 
 type usePageSectionsDataReturn = Record<
   `${PageSectionType}SectionData`,
-  PageSectionContent
+  PageSectionData
 > & { pageData: Page };
 
 export function usePageSectionsData() {

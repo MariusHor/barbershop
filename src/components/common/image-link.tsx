@@ -1,8 +1,8 @@
-import { type Url } from "next/dist/shared/lib/router/router";
-import { type ImageProps } from "next/image";
-import Link from "next/link";
 import { type ComponentPropsWithoutRef } from "react";
-import CustomImage from "./custom-image";
+import Link from "next/link";
+import { type ImageProps } from "next/image";
+import { type Url } from "next/dist/shared/lib/router/router";
+import { CustomImage } from "./custom-image";
 
 type ImageLinkProps = {
   href: Url;

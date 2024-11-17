@@ -1,7 +1,7 @@
 import { type ReactNode } from "react";
 import BaseMarquee from "react-fast-marquee";
-import { Text } from "@/components/ui/text";
 import { cn } from "@/utils/helpers";
+import { Text } from "../ui/text";
 
 interface MarqueeTextProps {
   children?: ReactNode;
@@ -15,7 +15,7 @@ interface MarqueeTextProps {
   textSpacing?: string;
 }
 
-const MarqueeText = ({
+export const MarqueeText = ({
   children,
   text,
   className,
@@ -48,5 +48,3 @@ const MarqueeText = ({
     </BaseMarquee>
   );
 };
-
-export default MarqueeText;

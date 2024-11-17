@@ -1,40 +1,41 @@
+import { useEffect, useState } from "react";
+import { ArrowRightIcon } from "@radix-ui/react-icons";
 import {
   type GetServerSidePropsContext,
   type InferGetServerSidePropsType,
 } from "next";
-import { type NextPageWithLayout } from "./_app";
 import Head from "next/head";
 
+import { type NextPageWithLayout } from "./_app";
 import { api } from "@/utils/api";
+import { type PageSectionData } from "@/utils/types";
 import { getPageTitle } from "@/utils/helpers";
-import { getSSGHelper } from "@/utils/getSSGHelper";
-import { AppointmentsButton } from "@/components";
-import { ArrowRightIcon } from "@radix-ui/react-icons";
+import { getSSGHelper } from "@/utils/getSsgHelper";
+import { usePageSectionsData } from "@/hooks/use-page-sections-data";
 import { urlFor } from "@/lib/sanity/client";
 import {
+  AppointmentsButton,
   Carousel,
   type CarouselApi,
   CarouselContent,
   CarouselItem,
   CarouselNext,
   CarouselPrevious,
-} from "@/components/ui/carousel";
-import {
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
-} from "@/components/ui/accordion";
-import { AspectRatio } from "@/components/ui/aspect-ratio";
-import { ButtonLink } from "@/components/common/button-link";
-import { Text } from "@/components/ui/text";
-import { type PageSectionContent } from "@/utils/types";
-import CustomPortableText from "@/components/common/custom-portable-text";
-import MarqueeText from "@/components/common/marquee-text";
-import { Container, Flex, Grid, Section } from "@/components/ui/layout";
-import CustomImage from "@/components/common/custom-image";
-import { useEffect, useState } from "react";
-import { usePageSectionsData } from "@/composables/usePageSectionsData";
+  AspectRatio,
+  ButtonLink,
+  Text,
+  CustomPortableText,
+  CustomImage,
+  MarqueeText,
+  Container,
+  Flex,
+  Grid,
+  Section,
+} from "@/components";
 
 export const getServerSideProps = async (
   context: GetServerSidePropsContext,
@@ -78,7 +79,7 @@ const Page: NextPageWithLayout<
   );
 };
 
-const HeroSection = ({ data }: { data: PageSectionContent | undefined }) => {
+const HeroSection = ({ data }: { data: PageSectionData | undefined }) => {
   const { data: servicesData } = api.content.getServicesData.useQuery();
   const imagesData = servicesData?.map((service) => ({
     image: service.image,
@@ -199,7 +200,7 @@ const HeroSection = ({ data }: { data: PageSectionContent | undefined }) => {
   );
 };
 
-const ServicesSection = ({ data }: { data: PageSectionContent }) => {
+const ServicesSection = ({ data }: { data: PageSectionData }) => {
   const { data: servicesListData } = api.content.getServicesData.useQuery();
 
   return (

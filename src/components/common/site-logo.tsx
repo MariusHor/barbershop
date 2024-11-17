@@ -1,10 +1,11 @@
 import { useMemo, type ReactNode } from "react";
+import { cva, type VariantProps } from "class-variance-authority";
+
 import { api } from "@/utils/api";
 import { urlFor } from "@/lib/sanity/client";
-import { ImageLink } from "./image-link";
 import { cn } from "@/utils/helpers";
-import { Skeleton } from "@/components/ui/skeleton";
-import { cva, type VariantProps } from "class-variance-authority";
+import { ImageLink } from "./image-link";
+import { Skeleton } from "../ui/skeleton";
 
 const siteLogoVariants = cva("transition-all duration-200 block", {
   variants: {
